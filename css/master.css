@@ -9,25 +9,39 @@
 	color: white;
 }
 
-.score {
-	top: 1vh;
-	left: 1vw;
+/* ======================= */
+.feedback {
+	top: 5vh;
+	left: 12vw;
 	position: fixed;
-	width: 10vw;
-	height: 20vh;
-	border: 2px dashed blue;
-	text-align: center;
+	height: 55vh;
+	width: 25vw;
+	border: 2px dashed pink;
 }
 
-.trace {
-	top: 5vh;
-	left: 20vw;
-	position: fixed;
-	height: 50vh;
-	width: 15vw;
-	border: 2px dashed red;
-	align-content: center;
+.score {
+	width: 30%; /* I don't know why it doesn't work when greater than 37%... */
+	height: 30%;
+	border: 2px dashed blue;
+	float: left;
+	margin-right: 10%;
+	margin-top: 35%;
+	display: inline;
 }
+
+.traceContainer {
+	height: 100%;
+	width: 50%;
+	border: 2px dashed red;
+	overflow-y: scroll;
+	margin: 0px;
+	display: inline-block;
+}
+
+#trace {
+	border: 1px solid red;
+}
+/* ======================= */
 
 .commands {
 	bottom: 5vh;

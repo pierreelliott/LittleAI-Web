@@ -5,9 +5,6 @@
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 
-		<!-- Bootstrap import -->
-		<link href="css/bootstrap.min.css" type="text/css" rel="stylesheet">
-
 		<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
 	    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
 	    <!--[if lt IE 9]>
@@ -15,27 +12,48 @@
 	      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 	    <![endif]-->
 
+		<!-- Import of Font Awesome library -->
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
 		<title>LittleAI</title>
 		<link rel="stylesheet" type="text/css" href="css/master.css">
+		<script src="js/main.js"></script>
 	</head>
 
 	<body>
+
+		<!-- The level menu's overlay
+		<div id="myNav" class="overlay">
+
+		  <!-- Button to close the overlay navigation
+		  <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+
+		  <!-- Overlay content
+		  <div class="overlay-content">
+		    <a href="#">About</a>
+		    <a href="#">Services</a>
+		    <a href="#">Clients</a>
+		    <a href="#">Contact</a>
+		  </div>
+
+	  </div>-->
+
 		<div class="container">
 			<div class="level center">
 				<a href="#">Level 0</a>
 			</div>
 
-			<div class="score center">
-				Score
-			</div>
-
-			<div class="trace center">
-				Trace
+			<div class="feedback">
+				<div class="score center">
+					Score
+				</div>
+				<div id="traceContainer" class="traceContainer">
+					<!--<canvas id="trace">Your browser doesn't support HTML5's canvas tag.<br>Please upgrade it to the last version.</canvas>-->
+				</div>
 			</div>
 
 			<div class="commands center">
-				Commands
+				<button type="button" name="button" id="btn">Add shape</button>
 			</div>
 
 			<div class="informations center">
@@ -49,9 +67,7 @@
 
 
 		<!-- Loaded at the end to load the page quicker (normally) -->
-		<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+		<!-- jQuery -->
 	    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-	    <!-- Include all compiled plugins (below), or include individual files as needed -->
-	    <script src="js/bootstrap.min.js"></script>
 	</body>
 </html>
