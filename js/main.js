@@ -31,17 +31,21 @@ window.addEventListener("load", function() {
 	ctx.stroke();*/
 
 	function addObsel(type) {
+		// Just in case something goes wrong
 		if(type == null)
 			type = 1;
 
-		console.log("hello");
+		// Create the element which will host the icon
 		var obsel = document.createElement("div");
+		// It uses font awesome library and double its size
 		obsel.className = "fa fa-2x";
+		// The different icons used
 		switch (type) {
 			case SQUARE :
 				obsel.className += " fa-stop";
 				break;
 			case TRIANGLE:
+				// Need to rotate it to look like a triangle
 				obsel.className += " fa-play fa-rotate-270"
 				break;
 			case CIRCLE:
@@ -49,6 +53,8 @@ window.addEventListener("load", function() {
 				obsel.className += " fa-circle";
 				break;
 		}
+		// Add the icon to the trace
 		container.append(obsel);
+		container.scrollTop = container.scrollHeight;
 	}
 });
