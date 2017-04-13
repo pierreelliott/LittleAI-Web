@@ -15,14 +15,6 @@ window.addEventListener("load", function() {
 	for(i = 0; i < 3; i++) {
 		createButtons(i+1);
 	}
-	var btn1 = document.getElementById('btn1');
-	var btn2 = document.getElementById('btn2');
-	var btn3 = document.getElementById('btn3');
-	btn1.addEventListener("click", function() { addObsel(this, CIRCLE); });
-	btn2.addEventListener("click", function() { addObsel(this, SQUARE); });
-	btn3.addEventListener("click", function() { addObsel(this, TRIANGLE); });
-
-	btn1.addEventListener("contextmenu", function(e) { e.preventDefault(); changeShape(btn1); })
 
 	function createButtons(btnId) {
 		var span = document.createElement("span");
