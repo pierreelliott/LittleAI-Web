@@ -17,7 +17,7 @@
 
 		<title>LittleAI</title>
 		<link rel="stylesheet" type="text/css" href="css/master.css">
-		<script src="js/main.js"></script>
+		<script type="text/javascript" src="js/main.js"></script>
 	</head>
 
 	<body>
@@ -44,7 +44,7 @@
 			</div>
 
 			<div class="feedback">
-				<div class="score center">
+				<div id="score" class="score center">
 					Score
 				</div>
 				<div id="traceContainer" class="traceContainer">
@@ -52,8 +52,13 @@
 				</div>
 			</div>
 
-			<div class="commands center">
-				<button type="button" name="button" id="btn">Add shape</button>
+			<div class="commands">
+				<span class="shape fa fa-5x fa-circle" id="btn1">
+				</span>
+				<span class="shape fa fa-5x fa-stop" id="btn2">
+				</span>
+				<span class="shape fa fa-5x fa-play fa-rotate-270" id="btn3">
+				</span>
 			</div>
 
 			<div class="informations center">

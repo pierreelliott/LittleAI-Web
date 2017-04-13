@@ -4,15 +4,20 @@ window.addEventListener("load", function() {
 	var SQUARE = 2;
 	var TRIANGLE = 3;
 	var container = document.getElementById('traceContainer');
-	var btn = document.getElementById('btn'); // Just for test
-	btn.addEventListener("click", addObsel)
+	var score = document.getElementById('score');
+	var btn1 = document.getElementById('btn1');
+	var btn2 = document.getElementById('btn2');
+	var btn3 = document.getElementById('btn3');
+	btn1.addEventListener("click", function() { addObsel(CIRCLE); });
+	btn2.addEventListener("click", function() { addObsel(SQUARE); });
+	btn3.addEventListener("click", function() { addObsel(TRIANGLE); });
 
 	/*var canvas = document.getElementById('trace');
 	var ctx = canvas.getContext('2d');
 
 	// Make sure the canvas get the width size of its parent
 	ctx.canvas.width = container.getBoundingClientRect().width;
-	ctx.canvas.height = container.getBoundingClientRect().height;
+	ctx.canvas.height = 0;
 
 	ctx.rect(10, 10, 150, 100);
 	ctx.strokeStyle = '#003300';
@@ -30,14 +35,18 @@ window.addEventListener("load", function() {
 			type = 1;
 
 		console.log("hello");
-		var obsel = document.createElement("i");
-		obsel.className = "fa";
+		var obsel = document.createElement("div");
+		obsel.className = "fa fa-2x";
 		switch (type) {
-			case CIRCLE: obsel.className += "fa-circle";
+			case SQUARE :
+				obsel.className += " fa-stop";
 				break;
-			case SQUARE : obsel.className += "fa-stop";
+			case TRIANGLE:
+				obsel.className += " fa-play fa-rotate-270"
 				break;
-			case TRIANGLE: obsel.className += "fa-play fa-rotate-270"
+			case CIRCLE:
+			default:
+				obsel.className += " fa-circle";
 				break;
 		}
 		container.append(obsel);

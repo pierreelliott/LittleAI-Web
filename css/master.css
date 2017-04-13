@@ -37,7 +37,12 @@
 	margin: 0px;
 	display: inline-block;
 }
+.traceContainer div {
+	display: block;
+	text-align: center;
+}
 
+/* ie, the canvas */
 #trace {
 	border: 1px solid red;
 }
@@ -50,6 +55,12 @@
 	height: 30vh;
 	width: 40vw;
 	border: 2px dashed green;
+}
+.shape {
+	cursor: pointer;
+}
+.shape:hover {
+	color: green;
 }
 
 .informations {
