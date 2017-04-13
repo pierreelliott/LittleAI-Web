@@ -1,3 +1,7 @@
+body {
+	background-color: #252;
+}
+
 .replay-mode {
 	top: 50vh;
 	right: 5vw;
@@ -58,9 +62,14 @@
 }
 .shape {
 	cursor: pointer;
+	color: white;
 }
 .shape:hover {
-	color: green;
+	color: lightblue;
+}
+
+.obsel {
+	color: white;
 }
 
 .informations {

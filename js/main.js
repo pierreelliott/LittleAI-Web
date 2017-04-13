@@ -1,6 +1,8 @@
 window.addEventListener("load", function() {
 	/* ======== Initialize all global variables ======== */
 	var CIRCLE = 1, SQUARE = 2, TRIANGLE = 3; // Define the shapes' value
+	var CIRCLE_SHAPE = "fa-circle", SQUARE_SHAPE = "fa-stop", TRIANGLE_SHAPE = "fa-play fa-rotate-270"; // Define the shapes
+	var SHAPES = [CIRCLE_SHAPE, SQUARE_SHAPE, TRIANGLE_SHAPE];
 
 	// Important elements in the DOM (which will be used later)
 	var container = document.getElementById('traceContainer'),
@@ -11,16 +13,7 @@ window.addEventListener("load", function() {
 	var i;
 	// Create the buttons
 	for(i = 0; i < 3; i++) {
-		var span = document.createElement("span");
-		var btn = {"element": span, "shape": CIRCLE};
-		// A button is an element in the DOM + a shape
-		btn.element.id = "btn"+(i+5);
-		btn.element.className = "shape fa fa-5x fa-circle";
-		// On click, print its shape in the trace
-		btn.element.addEventListener("click", function() { addObsel(btn.element, btn.shape); });
-
-		btns[i] = btn;
-		commands.append(btn.element); // Add the button element in the DOM
+		createButtons(i+1);
 	}
 	var btn1 = document.getElementById('btn1');
 	var btn2 = document.getElementById('btn2');
@@ -31,53 +24,77 @@ window.addEventListener("load", function() {
 
 	btn1.addEventListener("contextmenu", function(e) { e.preventDefault(); changeShape(btn1); })
 
-	/*var canvas = document.getElementById('trace');
-	var ctx = canvas.getContext('2d');
+	function createButtons(btnId) {
+		var span = document.createElement("span");
+		var btn = {element: span, shape: btnId}; // To test all shapes
+		// A button is an element in the DOM + a shape
+		btn.element.id = "btnn"+btnId;
+		btn.element.className = "shape fa fa-5x " + getShape(btnId);
+		// On click, print its shape in the trace
+		btn.element.addEventListener("click", function() { addObsel(btn.element, btn.shape); });
+		btn.element.addEventListener("contextmenu", function(e) { e.preventDefault(); console.log("Hello1"); changeShape(btn, (btn.shape+1)%3+1); })
 
-	// Make sure the canvas get the width size of its parent
-	ctx.canvas.width = container.getBoundingClientRect().width;
-	ctx.canvas.height = 0;
+		commands.append(btn.element); // Add the button element in the DOM
+	}
 
-	ctx.rect(10, 10, 150, 100);
-	ctx.strokeStyle = '#003300';
-	ctx.stroke();*/
-
-	/*var centerX = ctx.canvas.width / 2;
-	var posY = ctx.canvas.height / 2;
-	btn.addEventListener("click", addItem);
-	ctx.rect(centerX - 80, posY - 50, 150, 100);
-	ctx.strokeStyle = '#003300';
-	ctx.stroke();*/
-
+	// # need to handle the case where the type is undefined
 	function addObsel(btn, type) {
-
 		if(type == null) // Just in case something goes wrong
 			type = 1;
 
 		// Put a class with the button's id to track its shapes in the trace
-		var classbtn = btn.id + " fa fa-2x ";
+		var classbtn = btn.id + " obsel fa fa-2x " + getShape(type);
 
 		// Create the element which will host the icon
 		var obsel = document.createElement("div");
-		// The different icons used
-		switch (type) {
-			case SQUARE :
-				classbtn += "fa-stop";
-				break;
-			case TRIANGLE:
-				classbtn += "fa-play fa-rotate-270"; // Need to rotate it to look like a triangle
-				break;
-			case CIRCLE:
-			default:
-				classbtn += "fa-circle";
-				break;
-		}
-		obsel.className = classbtn;
+		var icon = document.createElement("span");
+		icon.className = classbtn;
+		obsel.append(icon); // Add the icon to the trace
 		container.append(obsel); // Add the icon to the trace
 		container.scrollTop = container.scrollHeight; // To scroll down the trace
 	}
 
-	function changeShape(btn) {
+	function changeShape(btnObject, newShape) {
 		// Function to change buttons' shape
+		console.log("Hello2");
+		if(btnObject.shape == newShape)
+			{ return; }
+		console.log("Hello3"); // Test
+		console.log("CurrShape: "+getShape(btnObject.shape)+ " /NewShape: "+getShape(newShape));
+
+		btnObject.element.className = btnObject.element.className.replace(getShape(btnObject.shape), getShape(newShape)); // Change its visual shape
+		btnObject.shape = newShape; // Change the value of its shape
+
+		updateObsels(btnObject); // Update all obsels related to this button
+	}
+
+	function updateObsels(btnObject) {
+		var obsels = traceContainer.querySelectorAll("."+btnObject.element.id);
+		obsels.forEach(function(obsel, index, array) {
+
+			array[index] = obsel;
+		});
+	}
+
+	/* ================ Utility functions ============== */
+
+	// Quick way to return the shape
+	function getShape(shapeNumber) {
+		var shape = "";
+		switch(shapeNumber) {
+			case CIRCLE:
+				shape = CIRCLE_SHAPE;
+				break;
+			case SQUARE :
+				shape = SQUARE_SHAPE;
+				break;
+			case TRIANGLE:
+				shape = TRIANGLE_SHAPE;
+				break;
+			default:
+				shape = "undefined";
+				break;
+		}
+		return shape;
 	}
 });
