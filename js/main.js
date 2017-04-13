@@ -1,16 +1,35 @@
 window.addEventListener("load", function() {
-	// Initialize all global variables
-	var CIRCLE = 1;
-	var SQUARE = 2;
-	var TRIANGLE = 3;
-	var container = document.getElementById('traceContainer');
-	var score = document.getElementById('score');
+	/* ======== Initialize all global variables ======== */
+	var CIRCLE = 1, SQUARE = 2, TRIANGLE = 3; // Define the shapes' value
+
+	// Important elements in the DOM (which will be used later)
+	var container = document.getElementById('traceContainer'),
+	score = document.getElementById('score'),
+	commands = document.getElementById('commands');
+
+	var btns = []; // To store all the commands' buttons
+	var i;
+	// Create the buttons
+	for(i = 0; i < 3; i++) {
+		var span = document.createElement("span");
+		var btn = {"element": span, "shape": CIRCLE};
+		// A button is an element in the DOM + a shape
+		btn.element.id = "btn"+(i+5);
+		btn.element.className = "shape fa fa-5x fa-circle";
+		// On click, print its shape in the trace
+		btn.element.addEventListener("click", function() { addObsel(btn.element, btn.shape); });
+
+		btns[i] = btn;
+		commands.append(btn.element); // Add the button element in the DOM
+	}
 	var btn1 = document.getElementById('btn1');
 	var btn2 = document.getElementById('btn2');
 	var btn3 = document.getElementById('btn3');
-	btn1.addEventListener("click", function() { addObsel(CIRCLE); });
-	btn2.addEventListener("click", function() { addObsel(SQUARE); });
-	btn3.addEventListener("click", function() { addObsel(TRIANGLE); });
+	btn1.addEventListener("click", function() { addObsel(this, CIRCLE); });
+	btn2.addEventListener("click", function() { addObsel(this, SQUARE); });
+	btn3.addEventListener("click", function() { addObsel(this, TRIANGLE); });
+
+	btn1.addEventListener("contextmenu", function(e) { e.preventDefault(); changeShape(btn1); })
 
 	/*var canvas = document.getElementById('trace');
 	var ctx = canvas.getContext('2d');
@@ -30,31 +49,35 @@ window.addEventListener("load", function() {
 	ctx.strokeStyle = '#003300';
 	ctx.stroke();*/
 
-	function addObsel(type) {
-		// Just in case something goes wrong
-		if(type == null)
+	function addObsel(btn, type) {
+
+		if(type == null) // Just in case something goes wrong
 			type = 1;
+
+		// Put a class with the button's id to track its shapes in the trace
+		var classbtn = btn.id + " fa fa-2x ";
 
 		// Create the element which will host the icon
 		var obsel = document.createElement("div");
-		// It uses font awesome library and double its size
-		obsel.className = "fa fa-2x";
 		// The different icons used
 		switch (type) {
 			case SQUARE :
-				obsel.className += " fa-stop";
+				classbtn += "fa-stop";
 				break;
 			case TRIANGLE:
-				// Need to rotate it to look like a triangle
-				obsel.className += " fa-play fa-rotate-270"
+				classbtn += "fa-play fa-rotate-270"; // Need to rotate it to look like a triangle
 				break;
 			case CIRCLE:
 			default:
-				obsel.className += " fa-circle";
+				classbtn += "fa-circle";
 				break;
 		}
-		// Add the icon to the trace
-		container.append(obsel);
-		container.scrollTop = container.scrollHeight;
+		obsel.className = classbtn;
+		container.append(obsel); // Add the icon to the trace
+		container.scrollTop = container.scrollHeight; // To scroll down the trace
+	}
+
+	function changeShape(btn) {
+		// Function to change buttons' shape
 	}
 });
