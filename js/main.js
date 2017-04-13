@@ -20,7 +20,7 @@ window.addEventListener("load", function() {
 		var span = document.createElement("span");
 		var btn = {element: span, shape: btnId}; // To test all shapes
 		// A button is an element in the DOM + a shape
-		btn.element.id = "btnn"+btnId;
+		btn.element.id = "btn"+btnId;
 		btn.element.className = "shape fa fa-5x " + getShape(btnId);
 		// On click, print its shape in the trace
 		btn.element.addEventListener("click", function() { addObsel(btn.element, btn.shape); });
