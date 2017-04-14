@@ -1,5 +1,5 @@
 body {
-	background-color: #252;
+	background-color: #777;
 }
 
 .replay-mode {
@@ -65,12 +65,18 @@ body {
 	color: white;
 }
 .shape:hover {
-	color: lightblue;
+	color: yellow;
 }
 
 .obsel {
-	color: white;
+	cursor: pointer;
 }
+
+.white { color: white; }
+.green { color: green; }
+.red { color: red; }
+.blue { color: blue; }
+.orange { color: orange; }
 
 .informations {
 	top: 10vh;
