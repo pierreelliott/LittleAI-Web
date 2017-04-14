@@ -13,10 +13,10 @@ window.addEventListener("load", function() {
 	var i;
 	// Create the buttons
 	for(i = 0; i < 3; i++) {
-		createButtons(i+1);
+		createButton(i+1);
 	}
 
-	function createButtons(btnId) {
+	function createButton(btnId) {
 		var span = document.createElement("span");
 		var btn = {element: span, shape: btnId}; // To test all shapes
 		// A button is an element in the DOM + a shape
@@ -48,23 +48,18 @@ window.addEventListener("load", function() {
 
 	function changeShape(btnObject, newShape) {
 		// Function to change buttons' shape
-		console.log("Hello2");
 		if(btnObject.shape == newShape)
 			{ return; }
-		console.log("Hello3"); // Test
-		console.log("CurrShape: "+getShape(btnObject.shape)+ " /NewShape: "+getShape(newShape));
 
 		btnObject.element.className = btnObject.element.className.replace(getShape(btnObject.shape), getShape(newShape)); // Change its visual shape
+		updateObsels(btnObject, newShape); // Update all obsels related to this button
 		btnObject.shape = newShape; // Change the value of its shape
-
-		updateObsels(btnObject); // Update all obsels related to this button
 	}
 
-	function updateObsels(btnObject) {
+	function updateObsels(btnObject, newShape) {
 		var obsels = traceContainer.querySelectorAll("."+btnObject.element.id);
-		obsels.forEach(function(obsel, index, array) {
-
-			array[index] = obsel;
+		obsels.forEach(function(obsel) {
+			obsel.className = obsel.className.replace(getShape(btnObject.shape), getShape(newShape));
 		});
 	}
 
