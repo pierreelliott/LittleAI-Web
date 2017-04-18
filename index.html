@@ -24,29 +24,40 @@
 		<link rel="stylesheet" type="text/css" href="css/replayMode.css">
 
 		<script type="text/javascript" src="js/main.js"></script>
+		<script type="text/javascript" src="js/levelMenu.js"></script>
 	</head>
 
 	<body>
 
-		<!-- The level menu's overlay
-		<div id="myNav" class="overlay">
+		<!-- The level menu's overlay -->
+		<div id="levelMenu" class="overlay">
 
-		  <!-- Button to close the overlay navigation
-		  <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+		  <!-- Button to close the overlay navigation -->
+			<a onclick="closeNav()" href="#" class="closebtn">&times;</a>
 
-		  <!-- Overlay content
-		  <div class="overlay-content">
-		    <a href="#">About</a>
-		    <a href="#">Services</a>
-		    <a href="#">Clients</a>
-		    <a href="#">Contact</a>
-		  </div>
+			<!-- Overlay content -->
+			<div class="overlay-content">
+				<div class="tab">
+					<button id="defaultOpen" class="tablinks" onclick="openTab(event, 'group1')">Groupe 1</button>
+				   	<button class="tablinks" onclick="openTab(event, 'group2')">Groupe 2 (Multijoueur)</button>
+				   	<button class="tablinks" onclick="openTab(event, 'group3')">Groupe 3</button>
+				 </div>
 
-	  </div>-->
+				 <div id="group1" class="tabcontent">
+				 </div>
+
+				 <div id="group2" class="tabcontent">
+				 </div>
+
+				 <div id="group3" class="tabcontent">
+				 </div>
+			</div>
+
+	  </div>
 
 		<div class="container">
-			<div class="level center">
-				<a href="#">Level 0</a>
+			<div onclick="openNav()" class="level">
+				<span>Level 0</span>
 			</div>
 
 			<div class="feedback">
