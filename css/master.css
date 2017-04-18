@@ -2,107 +2,11 @@ body {
 	background-color: #777;
 }
 
-.replay-mode {
-	top: 50vh;
-	right: 5vw;
-	border: 1px solid black;
-	background-color: black;
-	width: 20vw;
-	height: 30vh;
-	position: fixed;
-	color: white;
-}
-
-/* ======================= */
-.feedback {
-	top: 5vh;
-	left: 12vw;
-	position: fixed;
-	height: 55vh;
-	width: 25vw;
-	border: 2px dashed pink;
-}
-
-.valence {
-	margin-left: 2vw;
-	font-size: 150%;
-}
-
-.score {
-	width: 30%; /* I don't know why it doesn't work when greater than 37%... */
-	height: 30%;
-	border: 2px dashed blue;
-	float: left;
-	margin-right: 10%;
-	margin-top: 35%;
-	display: inline;
-}
-
-.traceContainer {
-	height: 100%;
-	width: 50%;
-	border: 2px dashed red;
-	overflow-y: scroll;
-	margin: 0px;
-	display: inline-block;
-}
-.traceContainer div {
-	display: block;
-	text-align: center;
-}
-
-/* ie, the canvas */
-#trace {
-	border: 1px solid red;
-}
-/* ======================= */
-
-.commands {
-	bottom: 5vh;
-	left: 12vw;
-	position: fixed;
-	height: 30vh;
-	width: 40vw;
-	border: 2px dashed green;
-}
-.shape {
-	cursor: pointer;
-	color: white;
-}
-.shape:hover {
-	color: yellow;
-}
-
-.obsel {
-	cursor: pointer;
-}
-
-.obselContainer {
-	display: table-cell;
-	vertical-align: bottom;
-}
-
 .white { color: white; }
 .green { color: green; }
 .red { color: red; }
 .blue { color: blue; }
 .orange { color: orange; }
-
-.informations {
-	top: 10vh;
-	right: 5vh;
-	position: fixed;
-	height: 30vh;
-	width: 40vw;
-	border: 2px dashed yellow;
-}
-
-.level {
-	top: 1vh;
-	right: 1vw;
-	position: fixed;
-	text-decoration: none;
-}
 
 .center {
 	text-align: center;

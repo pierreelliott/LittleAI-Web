@@ -1,0 +1,8 @@
+.informations {
+	top: 10vh;
+	right: 5vh;
+	position: fixed;
+	height: 30vh;
+	width: 40vw;
+	border: 2px dashed yellow;
+}

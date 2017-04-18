@@ -49,7 +49,6 @@ window.addEventListener("load", function() {
 
 		obsel.element.addEventListener("contextmenu", function(e) { e.preventDefault(); changeColor(obsel, (obsel.color+1)%5+1); });
 
-		obselContainer.className = "obselContainer";
 		obselContainer.append(obsel.element);
 		obselContainer.append(valence); console.log("Valence added");
 		obsels.push(obsel); // Add the obsel to the global array, repertoring all obsels in the trace
