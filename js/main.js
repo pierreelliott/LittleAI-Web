@@ -5,9 +5,9 @@ window.addEventListener("load", function() {
 	var WHITE = 1, GREEN = 2, RED = 3, BLUE = 4, ORANGE = 5;
 
 	// Important elements in the DOM (which will be used later)
-	var container = document.getElementById('traceContainer'),
-		score = document.getElementById('score'),
-		commands = document.getElementById('commands');
+	var traceContainer = document.getElementById("traceContainer"),
+		score = document.getElementById("score"),
+		commands = document.getElementById("commands");
 
 	var btns = []; // To store all the commands' buttons
 	var obsels = []; // To store all obsels currently in the trace
@@ -26,15 +26,16 @@ window.addEventListener("load", function() {
 		btn.element.className = "shape fa fa-5x " + getShape(btnId);
 		// On click, print its shape in the trace
 		btn.element.addEventListener("click", function() { addObsel(btn.element, btn.shape); });
-		btn.element.addEventListener("contextmenu", function(e) { e.preventDefault(); changeShape(btn, (btn.shape+1)%3+1); })
+		btn.element.addEventListener("contextmenu", function(e) { e.preventDefault(); changeShape(btn, (btn.shape+1)%3+1); });
 
 		commands.append(btn.element); // Add the button element in the DOM
 	}
 
 	// # need to handle the case where the type is undefined
 	function addObsel(btn, type) {
-		if(type == null) // Just in case something goes wrong
+		if(type == null) { // Just in case something goes wrong
 			type = 1;
+		}
 
 		// Create the element which will host the icon
 		var obselContainer = document.createElement("div");
@@ -53,8 +54,8 @@ window.addEventListener("load", function() {
 		obselContainer.append(valence); console.log("Valence added");
 		obsels.push(obsel); // Add the obsel to the global array, repertoring all obsels in the trace
 
-		container.append(obselContainer); // Add the obsel to the trace
-		container.scrollTop = container.scrollHeight; // To scroll down the trace
+		traceContainer.append(obselContainer); // Add the obsel to the trace
+		traceContainer.scrollTop = traceContainer.scrollHeight; // To scroll down the trace
 	}
 
 	function getSameObselsColor(id) {
@@ -69,7 +70,7 @@ window.addEventListener("load", function() {
 		});
 		console.log("Color : "+color);
 		if(color < WHITE || color > ORANGE || color == undefined) { 		// If there's no similar obsel in the trace, the color will be white
-			color = WHITE
+			color = WHITE;
 		}
 		console.log("Before return : "+color);
 		return color;
