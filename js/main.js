@@ -39,12 +39,19 @@ window.addEventListener("load", function() {
 		// Create the element which will host the icon
 		var obselContainer = document.createElement("div");
 		var icon = document.createElement("span");
+		var valence = document.createElement("span");
 
 		// Put a class with the button's id to track its shapes in the trace
 		icon.className = btn.id + " obsel fa fa-2x " + getShape(type) + " " + getColor(getSameObselsColor(btn.id));
-		var obsel = {element: icon, color: WHITE, group: btn.id};
+		valence.textContent = -1;
+		valence.className = "valence " + checkValence(-1); // Change the color of the text depending of the valence (positive, negative or null)
+		var obsel = {element: icon, color: WHITE, group: btn.id, valence: -1};
+
 		obsel.element.addEventListener("contextmenu", function(e) { e.preventDefault(); changeColor(obsel, (obsel.color+1)%5+1); });
+
+		obselContainer.className = "obselContainer";
 		obselContainer.append(obsel.element);
+		obselContainer.append(valence); console.log("Valence added");
 		obsels.push(obsel); // Add the obsel to the global array, repertoring all obsels in the trace
 
 		container.append(obselContainer); // Add the obsel to the trace
@@ -148,6 +155,20 @@ window.addEventListener("load", function() {
 				color = "undefined";
 				break;
 		}
+		return color;
+	}
+
+	function checkValence(valence) {
+		var color = "";
+
+		if(valence < 0) {
+			color = "red";
+		} else if (valence > 0) {
+			color = "green";
+		} else {
+			color = "white";
+		}
+
 		return color;
 	}
 });

@@ -23,6 +23,11 @@ body {
 	border: 2px dashed pink;
 }
 
+.valence {
+	margin-left: 2vw;
+	font-size: 150%;
+}
+
 .score {
 	width: 30%; /* I don't know why it doesn't work when greater than 37%... */
 	height: 30%;
@@ -70,6 +75,11 @@ body {
 
 .obsel {
 	cursor: pointer;
+}
+
+.obselContainer {
+	display: table-cell;
+	vertical-align: bottom;
 }
 
 .white { color: white; }
