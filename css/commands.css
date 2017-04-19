@@ -1,9 +1,10 @@
 .commands {
 	bottom: 5vh;
-	left: 12vw;
+	left: 10vw;
 	position: fixed;
-	height: 30vh;
-	width: 40vw;
+	height: 20vh;
+	width: 80vw;
+	min-width: 250px;
 	border: 2px dashed green;
 }
 .shape {

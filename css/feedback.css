@@ -1,9 +1,10 @@
 .feedback {
 	top: 5vh;
-	left: 12vw;
+	left: 10vw;
 	position: fixed;
-	height: 55vh;
-	width: 25vw;
+	height: 65vh;
+	width: 40vw;
+	min-width: 130px;
 	border: 2px dashed pink;
 }
 
@@ -42,4 +43,5 @@
 
 .obsel {
 	cursor: pointer;
+	font-size: 23px;
 }
