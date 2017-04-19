@@ -10,7 +10,7 @@ window.addEventListener("load", function() {
 		commands = document.getElementById("commands");
 
 	var btns = []; // To store all the commands' buttons
-	var obsels = []; // To store all obsels currently in the trace
+	var obsels = new Map(); // To store all obsels currently in the trace
 					 // it is the only way to store obsels' objects and not just the DOM elements
 	var i;
 	// Create the buttons
@@ -27,6 +27,8 @@ window.addEventListener("load", function() {
 		// On click, print its shape in the trace
 		btn.element.addEventListener("click", function() { addObsel(btn.element, btn.shape); });
 		btn.element.addEventListener("contextmenu", function(e) { e.preventDefault(); changeShape(btn, (btn.shape+1)%3+1); });
+
+		obsels.set(btn.element.id, []);
 
 		commands.append(btn.element); // Add the button element in the DOM
 	}
@@ -50,9 +52,12 @@ window.addEventListener("load", function() {
 
 		obsel.element.addEventListener("contextmenu", function(e) { e.preventDefault(); changeColor(obsel, (obsel.color+1)%5+1); });
 
+		var sameGroupObsels = obsels.get(btn.id);
+		sameGroupObsels.push(obsel);
+		obsels.set(btn.id, sameGroupObsels);
+
 		obselContainer.append(obsel.element);
-		obselContainer.append(valence); console.log("Valence added");
-		obsels.push(obsel); // Add the obsel to the global array, repertoring all obsels in the trace
+		obselContainer.append(valence);
 
 		traceContainer.append(obselContainer); // Add the obsel to the trace
 		traceContainer.scrollTop = traceContainer.scrollHeight; // To scroll down the trace
@@ -60,19 +65,15 @@ window.addEventListener("load", function() {
 
 	function getSameObselsColor(id) {
 		var color = -1;
-		color = obsels.forEach(function(obsel) {
-			var color1 = -1;
-			if(obsel.group == id) {
-				color = obsel.color;
-				console.log("color (fe) : "+color);
-				return color1;
-			}
-		});
-		console.log("Color : "+color);
-		if(color < WHITE || color > ORANGE || color == undefined) { 		// If there's no similar obsel in the trace, the color will be white
+		var obselsGroup = obsels.get(id);
+		var firstObsel = obselsGroup[0];
+		if(firstObsel != undefined) {
+			color = firstObsel.color;
+		}
+
+		if(color < WHITE || color > ORANGE || color == undefined) { 	// If there's no similar obsel in the trace, the color will be white
 			color = WHITE;
 		}
-		console.log("Before return : "+color);
 		return color;
 	}
 
@@ -85,11 +86,17 @@ window.addEventListener("load", function() {
 		obsel.color = newColor; // Change the value of its color
 	}
 
+	// # Need to refactor, there might be a better way to do it
 	function updateObselsColor(obselObject, newColor) {
-		var obsels = traceContainer.querySelectorAll("."+obselObject.group);
-		obsels.forEach(function(obsel) {
+		var traceObsels = traceContainer.querySelectorAll("."+obselObject.group);
+		traceObsels.forEach(function(obsel) {
 			obsel.className = obsel.className.replace(getColor(obselObject.color), getColor(newColor));
 		});
+
+		var tabObsels = obsels.get(obselObject.group);
+		tabObsels.forEach(function(obsel) {
+			obsel.color = newColor;
+		})
 	}
 
 
