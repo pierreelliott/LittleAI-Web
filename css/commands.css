@@ -1,0 +1,15 @@
+.commands {
+	bottom: 5vh;
+	left: 12vw;
+	position: fixed;
+	height: 30vh;
+	width: 40vw;
+	border: 2px dashed green;
+}
+.shape {
+	cursor: pointer;
+	color: white;
+}
+.shape:hover {
+	color: yellow;
+}
