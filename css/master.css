@@ -9,6 +9,7 @@
 
 body, html {
 	height: 100%;
+	margin: 0;
 }
 
 .bg {
@@ -25,6 +26,8 @@ body, html {
 
 	-webkit-filter: blur(5px); /* Safari 6.0 - 9.0 */
     filter: blur(5px);
+
+	overflow: hidden;
 }
 
 .white { color: white; }

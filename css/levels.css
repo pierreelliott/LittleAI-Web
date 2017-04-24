@@ -1,4 +1,4 @@
-.level {
+.openbtn {
 	top: 2vh;
 	right: 2vw;
 	position: fixed;
@@ -8,11 +8,11 @@
 	cursor: pointer;
 	transition: 0.3s;
 }
-.level:hover {
+.openbtn:hover {
 	background-color: green;
 }
 
-.level * {
+.openbtn * {
 	color: white;
 	text-decoration: none;
 }
@@ -27,6 +27,8 @@
 	height: 30%;
 	margin: 2%;
 	cursor: pointer;
+	display: inline-block;
+	text-align: center;
 }
 .levelLink:hover {
 	background-color: magenta;
@@ -68,6 +70,7 @@ div.tab button.active {
    padding: 2vh 3vw;
    border: 1px solid #ccc;
    border-top: none;
+   text-align: left;
 }
 
 /* ########################################################### */
@@ -114,7 +117,7 @@ div.tab button.active {
 }
 
 /* When you mouse over the navigation links, change their color */
-.overlay a:hover, .overlay a:focus {
+.overlay .closebtn:hover, .overlay .closebtn:focus {
    color: #f1f1f1;
 }
 
@@ -124,6 +127,15 @@ div.tab button.active {
    top: 1vh;
    right: 2vw;
    font-size: 60px;
+
+   cursor: pointer;
+
+   padding: 8px;
+   text-decoration: none;
+   font-size: 36px;
+   color: #818181;
+   display: block; /* Display block instead of inline */
+   transition: 0.3s; /* Transition effects on hover (color) */
 }
 
 /* When the height of the screen is less than 450 pixels, change the font-size of the links and position the close button again, so they don't overlap */
