@@ -6,12 +6,13 @@ window.addEventListener("load", function() {
 
 	// Important elements in the DOM (which will be used later)
 	var traceContainer = document.getElementById("traceContainer"),
-		score = document.getElementById("score"),
+		scoreContainer = document.getElementById("score"),
 		commands = document.getElementById("commands");
 
 	var btns = []; // To store all the commands' buttons
 	var obsels = new Map(); // To store all obsels currently in the trace
 					 // it is the only way to store obsels' objects and not just the DOM elements
+	var score = [];
 	var i;
 	// Create the buttons
 	for(i = 0; i < 3; i++) {
@@ -60,6 +61,8 @@ window.addEventListener("load", function() {
 		var sameGroupObsels = obsels.get(btn.id);
 		sameGroupObsels.push(obsel);
 		obsels.set(btn.id, sameGroupObsels);
+
+		updateScore(obsel);
 
 		obselContainer.append(obsel.element);
 		obselContainer.append(valence);
@@ -120,6 +123,24 @@ window.addEventListener("load", function() {
 		obsels.forEach(function(obsel) {
 			obsel.className = obsel.className.replace(getShape(btnObject.shape), getShape(newShape));
 		});
+	}
+
+	function updateScore(newObsel) {
+		var scoreSum = 0;
+		var scoreColor = "";
+
+		score.push(newObsel);
+		while(score.length > 10) {
+			score.shift();	// This method isn't a perfect implementation for a queue
+							// but it's more practical and works well with small size arrays
+		}
+
+		for (var obsel of score) {
+			scoreSum += obsel.valence;
+		}
+		scoreContainer.textContent = scoreSum;
+
+		scoreColor = checkValence(scoreSum);
 	}
 
 
