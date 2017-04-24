@@ -52,9 +52,9 @@ window.addEventListener("load", function() {
 
 		// Put a class with the button's id to track its shapes in the trace
 		icon.className = btn.id + " obsel fa fa-2x " + getShape(type) + " " + getColor(getSameObselsColor(btn.id));
-		valence.textContent = -1;
-		valence.className = "valence " + checkValence(-1); // Change the color of the text depending of the valence (positive, negative or null)
-		var obsel = {element: icon, color: WHITE, group: btn.id, valence: -1};
+		var obsel = {element: icon, color: WHITE, group: btn.id, valence: Math.pow(-1,type)};
+		valence.textContent = obsel.valence;
+		valence.className = "valence " + checkValence(obsel.valence); // Change the color of the text depending of the valence (positive, negative or null)
 
 		obsel.element.addEventListener("contextmenu", function(e) { e.preventDefault(); changeColor(obsel, (obsel.color+1)%5+1); });
 
