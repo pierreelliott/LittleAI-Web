@@ -20,6 +20,8 @@ window.addEventListener("load", function() {
 
 	function createButton(btnId) {
 		var span = document.createElement("span");
+		var div = document.createElement("div");
+
 		var btn = {element: span, shape: btnId}; // To see all shapes
 		// A button is an element in the DOM + a shape
 		btn.element.id = "btn"+btnId;
@@ -30,7 +32,10 @@ window.addEventListener("load", function() {
 
 		obsels.set(btn.element.id, []);
 
-		commands.append(btn.element); // Add the button element in the DOM
+		div.className = "command";
+
+		div.append(btn.element);
+		commands.append(div); // Add the button element in the DOM
 	}
 
 	// # need to handle the case where the type is undefined
