@@ -42,7 +42,7 @@ window.onload = function () {
     }
 
 	function createLinkLevel(j) {
-		var levelLink = document.createElement("span");
+		var levelLink = document.createElement("div");
 		levelLink.textContent = j;
 		levelLink.className = "levelLink";
 		return levelLink;
