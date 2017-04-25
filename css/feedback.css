@@ -8,6 +8,13 @@
 	border: 2px dashed pink;
 }
 
+.tracetip {
+	color: blue;
+	cursor: pointer;
+	float: right;
+	top: 50%;
+}
+
 .valence {
 	margin-left: 2vw;
 	font-size: 150%;
