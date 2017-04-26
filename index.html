@@ -27,8 +27,9 @@
 	</head>
 
 	<body>
-		<div class="bg">
 
+		<!-- The full page background image -->
+		<div class="bg">
 		</div>
 
 		<!-- The level menu's overlay -->
@@ -55,43 +56,55 @@
 				 </div>
 			</div>
 
-	  </div>
+	  	</div>
 
+		<!-- The "game's field" -->
 		<div class="container">
+			<!-- The link to open the level menu -->
 			<div onclick="openNav()" class="openbtn">
-				<span>Level 0</span>
+				<span id="menuLink">Level 0</span>
 			</div>
 
 			<div class="feedback">
+				<!-- Display of the player's score -->
 				<div id="score" class="score center">
 					0
 				</div>
 
+				<!-- The trace, i.e where will pop the obsels -->
 				<div id="traceContainer" class="traceContainer">
-					<!--<canvas id="trace">Your browser doesn't support HTML5's canvas tag.<br>Please upgrade it to the last version.</canvas>-->
 				</div>
+
+				<!-- Tips for the trace -->
 				<span class="fa fa-question-circle tooltip tracetip">
 					<span class="tooltiptext">Clic droit pour changer la couleur des obsels</span>
 				</span>
 			</div>
 
+			<!-- Place of the commands
+		 		Level's buttons will be create here -->
 			<div class="commands" id="commands">
+
+				<!-- Tips for the commands -->
 				<span class="fa fa-question-circle tooltip commandtip">
 					<span class="tooltiptext">Clic droit pour changer la forme du bouton</span>
 				</span>
 			</div>
 
+			<!-- Toggleable panel displaying informations about a level -->
 			<div class="informations center">
 				Informations
 			</div>
 
+			<!-- A 3D (possible) representation of the level, to help players understand
+					It is only available after the player finished the level -->
 			<div class="replay-mode center">
 				World...
 			</div>
 		</div>
 
 
-		<!-- Loaded at the end to load the page quicker (normally) -->
+		<!-- Loaded at the end to load the page quicker -->
 		<!-- jQuery -->
 	    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 

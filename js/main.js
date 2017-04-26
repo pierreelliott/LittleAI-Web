@@ -3,16 +3,19 @@ var CIRCLE = 1, SQUARE = 2, TRIANGLE = 3; // Define the shapes' value
 var CIRCLE_SHAPE = "fa-circle", SQUARE_SHAPE = "fa-stop", TRIANGLE_SHAPE = "fa-play fa-rotate-270"; // Define the shapes
 var WHITE = 1, GREEN = 2, RED = 3, BLUE = 4, ORANGE = 5;
 
-// Important elements in the DOM (which will be used later)
+// Important elements in the DOM (which will often be used later)
 var traceContainer = document.getElementById("traceContainer"),
 	scoreContainer = document.getElementById("score");
 
 var obsels = new Map(); // To store all obsels currently in the trace
 				 		// it is the only way to store obsels' objects and not just the DOM elements
+						// Obsels are stored by groups (a group is the button which created the obsel and the interaction associated)
+
+// Some sort of queue, to store the last 10 obsels
 var score = [];
 
 window.addEventListener("load", function () {
-	// This will be the function which will handle the levels and their initialization
+	// This will be the function which will handle the levels and their initialization in the game's field
 	var i;
 	// Create the buttons
 	for(i = 0; i < 3; i++) {
@@ -25,14 +28,17 @@ function createButton(btnId) {
 	var span = document.createElement("span");
 	var div = document.createElement("div");
 
-	var btn = {element: span, shape: btnId}; // To see all shapes
+	var btn = {element: span, shape: btnId}; // To see all shapes (just for tests)
 	// A button is an element in the DOM + a shape
 	btn.element.id = "btn"+btnId;
 	btn.element.className = "shape fa fa-5x " + getShape(btnId);
+
 	// On click, print its shape in the trace
 	btn.element.addEventListener("click", function() { addObsel(btn.element, btn.shape); });
+	// On right click, change the shape of the button
 	btn.element.addEventListener("contextmenu", function(e) { e.preventDefault(); changeShape(btn, (btn.shape+1)%3+1); });
 
+	// Initialize the obsel's Map
 	obsels.set(btn.element.id, []);
 
 	div.className = "command";
