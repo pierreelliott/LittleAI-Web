@@ -1,6 +1,15 @@
-/* ================ Utility functions ============== */
-
-/** Return the shape associated with the specified number */
+/**
+ * @file Provides utility functions
+ * @name Utility
+ * @author Pierre-Elliott Thiboud <pierreelliott.thiboud@gmail.com>
+ */
+ 
+/**
+ * getShape - Return the shape associated with the specified number
+ *
+ * @param  {number} shapeNumber Global variable defining a shape
+ * @returns {string}             A CSS class specifying the shape requested
+ */
 function getShape(shapeNumber) {
 	var shape = "";
 	switch(shapeNumber) {
@@ -20,7 +29,13 @@ function getShape(shapeNumber) {
 	return shape;
 }
 
-/** Return the class corresponding to the color number passed in parameter */
+/**
+ * getColor - Return the class corresponding to the color number passed in parameter
+ *
+ * @param  {number} colorNumber Global variable defining a color
+ * @returns {string}             A CSS class specyfing the color requested
+ */
+
 function getColor(colorNumber) {
 	var color = "";
 	switch(colorNumber) {
@@ -46,7 +61,12 @@ function getColor(colorNumber) {
 	return color;
 }
 
-/** Check the value of the valence (and the score too) to return green if its positive, red if negative, and white if not */
+/**
+ * checkValence - Check the value of the valence (and the score too) to return green if its positive, red if negative, and white if not
+ *
+ * @param  {number} valence The value to check (if positive, negative or null)
+ * @returns {string}         The color corresponding to its type (positive, negative or null)
+ */
 function checkValence(valence) {
 	var color = "";
 

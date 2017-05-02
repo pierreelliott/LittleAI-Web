@@ -1,10 +1,10 @@
-#Little AI
+# Little AI
 
 *This readme is still under development*
 
 The game is available at : [pierreelliott.github.io/LittleAI-Web](pierreelliott.github.io/LittleAI-Web)
 
-##Brief description
+## Brief description
 
 Discover the founding concepts of Artificial Intelligence (AI) with this free game developed at the computer science department of the University of Lyon!
 
@@ -16,7 +16,7 @@ If you are a robot designer, playing Little AI will help you understand some of 
 
 *This description come from the website [little-ai.com](http://little-ai.com/)*
 
-##Technical part
+## Technical part
 
 This project uses HTML, CSS and JavaScript. The goal is to make the game available for many platforms (computers, smartphones) and browsers.
 
@@ -25,7 +25,7 @@ It can be divided into 3 main parts :
 * The creation of the playground
 * The levels' description
 
-###The menu
+### The menu
 
 Levels are divided in 3 categories.
 
@@ -35,10 +35,10 @@ The second category regroups multiplayer levels.
 
 The third category...
 
-###The creation of the playground
+### The creation of the playground
 
 The file *main.js* contains all methods to create and manage the playground. From creation of the buttons, to the management of obsels in the trace.
 
-###The levels' description
+### The levels' description
 
 *This part is still under development*
