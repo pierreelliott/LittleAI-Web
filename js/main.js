@@ -23,12 +23,20 @@ window.addEventListener("load", function () {
 	}
 });
 
-/** Create the buttons (DOM element and the object)
-* btnId : integer representing the number of the button */
+/**
+ * createButton - Creates the buttons (the DOM element and the object)
+ *
+ * @param  {type} btnId The number of the button (1-> the first button, 2 -> the second, ...)
+ * @returns {void}       Nothing
+ */
 function createButton(btnId) {
 	var icon = document.createElement("span"); // Node which will hold the FA icon
 	var div = document.createElement("div"); //
 
+	/**
+	 * @name {button} button
+	 * @description JS object containing informations about a button like : its DOM element, its shape
+	 */
 	var btn = {element: icon, shape: btnId}; // To see all shapes, shape is initialized with btnId (just for tests)
 	// A button is an element in the DOM + a shape
 
@@ -49,10 +57,17 @@ function createButton(btnId) {
 	document.getElementById("commands").append(div); // Add the button element in the DOM
 }
 
-/** Create obsels in the trace
-* btn : the object representing the button (the DOM element and its shape) */
+/**
+* btn :  */
+
+/**
+ * addObsel - Creates obsels in the trace
+ *
+ * @param  {type} btn The object representing the button (the DOM element and its shape)
+ * @returns {void}     Nothing
+ */
 function addObsel(btn) {
-	// # need to handle the case where the shape is undefined
+	// # need to handle the case where the shape is undefined, it shouldn't happen but we never know
 	/*if(btn.shape == null) { // Just in case something goes wrong
 		btn.shape = 1;
 	}*/
@@ -64,6 +79,11 @@ function addObsel(btn) {
 
 	// Put a class with the button's id to track its shapes in the trace
 	icon.className = btn.element.id + " obsel fa fa-2x " + getShape(btn.shape) + " " + getColor(getSameObselsColor(btn.element.id));
+
+	/**
+	 * @name {obsel} obsel
+	 * @description JS object containing informations about an obsel like : its DOM element, its color, its group (ie, which button created it), its valence
+	 */
 	var obsel = {element: icon, color: WHITE, group: btn.element.id, valence: Math.pow(-1,btn.shape)}; // Test value for the valence
 	valence.textContent = obsel.valence;
 	valence.className = "valence " + checkValence(obsel.valence); // Change the color of the text depending of the valence (positive, negative or null)
@@ -87,8 +107,12 @@ function addObsel(btn) {
 	traceContainer.scrollTop = traceContainer.scrollHeight; // To scroll down the trace
 }
 
-/** Return the color of obsels which belong to the same group
-* id : the id of the group to check */
+/**
+ * getSameObselsColor - Return the color of obsels which belong to the same group
+ *
+ * @param  {type} id The id of the group to check
+ * @returns {type}    The number of the color of same group obsels or WHITE otherwise
+ */
 function getSameObselsColor(id) {
 	var color = -1;
 	var obselsGroup = obsels.get(id);
@@ -104,7 +128,13 @@ function getSameObselsColor(id) {
 	return color;
 }
 
-/** Change the color of an obsel */
+/**
+ * changeColor - Change the color of an obsel
+ *
+ * @param  {obsel} obsel    [Obsel object]{@link obsel}
+ * @param  {number} newColor The new color the obsel will be
+ * @returns {void}          Nothing
+ */
 function changeColor(obsel, newColor) {
 	// If the new color is the same than the old, do nothing
 	if(obsel.color == newColor)
@@ -116,8 +146,14 @@ function changeColor(obsel, newColor) {
 	obsel.color = newColor; // Change the value of its color
 }
 
-/** Update all obsels color in the same group as the one in parameter */
-// # Need to refactor, there might be a better way to do it
+/**
+ * updateObselsColor - Update all obsels color in the same group as the one in parameter
+ *
+ * @param  {obsel} obselObject [Obsel object]{@link obsel}
+ * @param  {number} newColor    The new color obsels will be
+ * @returns {void}             Nothing
+ */
+// There might be a better way to do it
 function updateObselsColor(obselObject, newColor) {
 	var traceObsels = traceContainer.querySelectorAll("."+obselObject.group);
 	traceObsels.forEach(function(obsel) {
@@ -130,9 +166,15 @@ function updateObselsColor(obselObject, newColor) {
 	})
 }
 
-/** Change the shape of a button */
+/**
+ * changeShape - Change the shape of a button
+ *
+ * @param  {button} btnObject [Button object]{@link button}
+ * @param  {number} newShape  The new shape the button will be
+ * @returns {void}           Nothing
+ */
 function changeShape(btnObject, newShape) {
-	// If the new shape is the same than the old, do nothing
+	// If the new shape is the same than the old, then do nothing
 	if(btnObject.shape == newShape)
 		{ return; }
 
@@ -141,7 +183,13 @@ function changeShape(btnObject, newShape) {
 	btnObject.shape = newShape; // Change the value of its shape
 }
 
-/** Update all obsels related to the button passed in parameter */
+/**
+ * updateObselsShape - Update all obsels related to the button passed in parameter
+ *
+ * @param  {button} btnObject [Button object]{@link button}
+ * @param  {number} newShape  The new shape obsels related to this button will be
+ * @returns {void}           Nothing
+ */
 function updateObselsShape(btnObject, newShape) {
 	var obsels = traceContainer.querySelectorAll("."+btnObject.element.id);
 	obsels.forEach(function(obsel) {
@@ -149,7 +197,12 @@ function updateObselsShape(btnObject, newShape) {
 	});
 }
 
-/** Update the player's score, based on the last 10 obsels and their valence */
+/**
+ * updateScore - Update the player's score, based on the last 10 obsels and their valence
+ *
+ * @param  {obsel} newObsel The last obsel that will be added to the queue
+ * @returns {void}          Nothing
+ */
 function updateScore(newObsel) {
 	var scoreSum = 0;
 	var scoreColor = "";

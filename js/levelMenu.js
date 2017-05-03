@@ -1,14 +1,34 @@
-/* Open the menu when the user click on the level's link */
+/**
+ * @file Provides functions to manage the menu overlay
+ * @name Menu Management
+ * @author Pierre-Elliott Thiboud <pierreelliott.thiboud@gmail.com>
+ */
+
+/**
+ * openNav - Open the menu when the user click on the level's link
+ *
+ * @returns {void}  Nothing
+ */
 function openNav() {
 	document.getElementById("levelMenu").style.height = "100%";
 }
 
-/* Close the menu when someone clicks on the "x" symbol inside the menu overlay */
+/**
+ * closeNav - Close the menu when someone clicks on the "x" symbol inside the menu overlay
+ *
+ * @returns {void}  Nothing
+ */
 function closeNav() {
 	document.getElementById("levelMenu").style.height = "0%";
 }
 
-/* Open a tab (corresponding to a group of levels) in the menu overlay */
+/**
+ * openTab - Open a tab (corresponding to a group of levels) in the menu overlay
+ *
+ * @param  {event} evt   The triggered event
+ * @param  {string} group The ID of the tabcontent it will display
+ * @returns {void}       Nothing
+ */
 function openTab(evt, group) {
     // Declare all variables
     var i, tabcontent, tablinks;
@@ -30,7 +50,11 @@ function openTab(evt, group) {
     evt.currentTarget.className += " active";
 }
 
-/* Function which create fake buttons (just for testing) */
+/**
+ * anonymous function - Creates fake buttons (just for testing)
+ *
+ * @returns {void}  Nothing
+ */
 window.onload = function () {
 	// To load directly the "group1" tab
 	document.getElementById("defaultOpen").click();
