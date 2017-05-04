@@ -5,7 +5,7 @@
 Little A.I. is a free game (developed at the computer science department of the University of Lyon) which helps understand some of the challenges involved in developmental artificial intelligence.
 
 The goal of the game is to achieve each level without knowing its "physical" representation.  
-You only have access to few buttons which produce "bad" and "good" interactions, it is up to you to understand the world based on their result!
+You only have access to few buttons which produce "bad" and "good" interactions (actually, it's a little bit more complex than that), it is up to you to understand the world based on their result!
 
 ## Useful links
 

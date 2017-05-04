@@ -1,0 +1,11 @@
+{
+    "name": "littleAI",
+    "author" : "Pierre-Elliott Thiboud",
+	"version": "0.1.0",
+	"devDependencies": {
+		"qunitjs": "2.3.2"
+	},
+	"scripts": {
+		"test": "./tests utility.test.js"
+	}
+}
