@@ -44,7 +44,9 @@ function createButton(btnId) {
 	btn.element.className = "shape fa fa-5x " + getShape(btn.shape);
 
 	// On click, print its shape in the trace
-	btn.element.addEventListener("click", function() { addObsel(btn); });
+	btn.element.addEventListener("click", function() {
+		addObsel({ group: btn.element.id, shape: btn.shape, color: WHITE, valence: Math.pow(-1,btn.shape) });
+	 });
 	// On right click, change the shape of the button
 	btn.element.addEventListener("contextmenu", function(e) { e.preventDefault(); changeShape(btn, (btn.shape+1)%3+1); });
 
@@ -63,10 +65,10 @@ function createButton(btnId) {
 /**
  * addObsel - Creates obsels in the trace
  *
- * @param  {type} btn The object representing the button (the DOM element and its shape)
+ * @param  {type} reaction An object representing the informations needed for the obsel (the group, the shape, the color, the valence)
  * @returns {void}     Nothing
  */
-function addObsel(btn) {
+function addObsel(reaction) {
 	// # need to handle the case where the shape is undefined, it shouldn't happen but we never know
 	/*if(btn.shape == null) { // Just in case something goes wrong
 		btn.shape = 1;
@@ -78,13 +80,13 @@ function addObsel(btn) {
 	var valence = document.createElement("span");
 
 	// Put a class with the button's id to track its shapes in the trace
-	icon.className = btn.element.id + " obsel fa fa-2x " + getShape(btn.shape) + " " + getColor(getSameObselsColor(btn.element.id));
+	icon.className = reaction.group + " obsel fa fa-2x " + getShape(reaction.shape) + " " + getColor(getSameObselsColor(reaction.group));
 
 	/**
 	 * @name {obsel} obsel
 	 * @description JS object containing informations about an obsel like : its DOM element, its color, its group (ie, which button created it), its valence
 	 */
-	var obsel = {element: icon, color: WHITE, group: btn.element.id, valence: Math.pow(-1,btn.shape)}; // Test value for the valence
+	var obsel = {element: icon, color: reaction.color, group: reaction.group, valence: reaction.valence}; // Test value for the valence
 	valence.textContent = obsel.valence;
 	valence.className = "valence " + checkValence(obsel.valence); // Change the color of the text depending of the valence (positive, negative or null)
 
@@ -92,9 +94,9 @@ function addObsel(btn) {
 	obsel.element.addEventListener("contextmenu", function(e) { e.preventDefault(); changeColor(obsel, (obsel.color+1)%5+1); });
 
 	// Add the obsel to its group (i.e, obsels which come from the same button and the same interaction)
-	var sameGroupObsels = obsels.get(btn.element.id);
+	var sameGroupObsels = obsels.get(obsel.group);
 	sameGroupObsels.push(obsel);
-	obsels.set(btn.element.id, sameGroupObsels);
+	obsels.set(obsel.group, sameGroupObsels);
 
 	// Update the score of the player, with the new obsel added
 	updateScore(obsel);

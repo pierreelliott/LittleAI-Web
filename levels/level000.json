@@ -1,0 +1,28 @@
+{
+	buttons : [
+		{ id: 'btn1', shape: SQUARE },
+		{ id: 'btn2', shape: CIRCLE }
+	],
+
+	stateMachine: {
+		initial: 'e1',
+		events: [
+			{ name: 'btn1', from: 'e1', to: 'e1' },
+			{ name: 'btn2', from: 'e1', to: 'e1' }
+		],
+		callbacks: {
+			onbtn1: function(eventName, from, to, btn) {
+				addObsel({ 	group: eventName,
+							shape: btn.shape,
+							color: ORANGE,
+							valence: 0 });
+			},
+			onbtn2: function(eventName, from, to, btn) {
+				addObsel({ 	group: eventName,
+							shape: btn.shape,
+							color: GREEN,
+							valence: 1 });
+			}
+		}
+	}
+}
