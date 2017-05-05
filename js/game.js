@@ -16,42 +16,45 @@ var score = [];
 
 window.addEventListener("load", function () {
 	// This will be the function which will handle the levels and their initialization in the game's field
-	var i;
+	/*var i;
 	// Create the buttons
 	for(i = 0; i < 3; i++) {
 		createButton(i+1);
-	}
+	}*/
+	loadLevel();
 });
 
 /**
  * createButton - Creates the buttons (the DOM element and the object)
  *
- * @param  {type} btnId The number of the button (1-> the first button, 2 -> the second, ...)
+ * @param  {type} buttonInfo The number of the button (1-> the first button, 2 -> the second, ...)
  * @returns {void}       Nothing
  */
-function createButton(btnId) {
+function createButton(buttonInfo, fsm) {
 	var icon = document.createElement("span"); // Node which will hold the FA icon
-	var div = document.createElement("div"); //
+	var div = document.createElement("div");
+	var func = buttonInfo.id;
 
 	/**
 	 * @name {button} button
 	 * @description JS object containing informations about a button like : its DOM element, its shape
 	 */
-	var btn = {element: icon, shape: btnId}; // To see all shapes, shape is initialized with btnId (just for tests)
+	var btn = {id: buttonInfo.id, element: icon, shape: buttonInfo.shape}; // To see all shapes, shape is initialized with btnId (just for tests)
 	// A button is an element in the DOM + a shape
 
-	btn.element.id = "btn"+btnId;
+	btn.element.id = btn.id;
 	btn.element.className = "shape fa fa-5x " + getShape(btn.shape);
 
 	// On click, print its shape in the trace
 	btn.element.addEventListener("click", function() {
-		addObsel({ group: btn.element.id, shape: btn.shape, color: WHITE, valence: Math.pow(-1,btn.shape) });
+		//addObsel({ group: btn.id, shape: btn.shape, color: WHITE, valence: Math.pow(-1,btn.shape) });
+		fsm.func(btn);
 	 });
 	// On right click, change the shape of the button
 	btn.element.addEventListener("contextmenu", function(e) { e.preventDefault(); changeShape(btn, (btn.shape+1)%3+1); });
 
 	// Initialize the obsel's Map
-	obsels.set(btn.element.id, []);
+	obsels.set(btn.id, []);
 
 	div.className = "command";
 
