@@ -1,50 +1,35 @@
-function loadLevel() {
-	console.log(leveltest);
-	//var level = JSON.parse(leveltest);
+window.addEventListener("load", function () {
+	//loadLevel();
+	ajax("levels/level001.json");
+});
 
+function loadLevel(level) {
 	var levelsButtons, levelsFsm;
 
-	levelsButtons = leveltest.buttons;
-	levelsFsm = leveltest.stateMachine;
+	levelsButtons = level.buttons;
+	levelsFsm = level.stateMachine;
 
 	fsm = new StateMachine(levelsFsm);
 
 	for (var button of levelsButtons) {
-		console.log("Create btn "+button.id+", shape: "+button.shape);
 		createButton(button, fsm);
 	}
 }
 
-
-// Representation of level 0, the json doesn't work yet
-// This level is hardcoded for testing purposes
-var leveltest = {
-    buttons: [
-        {
-            id: "btn1",
-            shape: 2
-        },
-        {
-            id: "btn2",
-            shape: 1
-        },
-		{
-            id: "btn3",
-            shape: 3
-        }
-    ],
-    stateMachine: {
-        "e1": [
-            { event: "btn1", to: "e1", action: {f: "createObsel", a: {group: "btn1", shape: 2, color: 3, valence: -1} } },
-			{ event: "btn2", to: "e2", action: {f: "createObsel", a: {group: "btn2", shape: 1, color: 5, valence: 0} } },
-			{ event: "btn3", to: "e1", action: {f: "createObsel", a: {group: "btn3", shape: 3, color: 2, valence: 1} } }
-        ],
-		"e2": [
-			{ event: "btn1", to: "e2", action: {f: "createObsel", a: {group: "btn1", shape: 2, color: 2, valence: 1} } },
-			{ event: "btn2", to: "e1", action: {f: "createObsel", a: {group: "btn2", shape: 1, color: 5, valence: 0} } },
-			{ event: "btn3", to: "e2", action: {f: "createObsel", a: {group: "btn3", shape: 3, color: 3, valence: -1} } }
-		],
-
-		"initial": "e1"
-    }
-};
+function ajax(url) {
+	var req = new XMLHttpRequest();
+	req.open("GET", url);
+	req.onerror = function() {
+		console.log("Échec de chargement "+url);
+	};
+	req.onload = function() {
+		if (req.status === 200) {
+			var data = JSON.parse(req.responseText);
+			//callback(data);
+			loadLevel(data);
+		} else {
+			console.log("Erreur " + req.status);
+		}
+	};
+	req.send();
+}

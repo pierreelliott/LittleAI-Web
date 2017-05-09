@@ -14,16 +14,6 @@ var obsels = new Map(); // To store all obsels currently in the trace
 // Some sort of queue, to store the last 10 obsels
 var score = [];
 
-window.addEventListener("load", function () {
-	// This will be the function which will handle the levels and their initialization in the game's field
-	/*var i;
-	// Create the buttons
-	for(i = 0; i < 3; i++) {
-		createButton(i+1);
-	}*/
-	loadLevel();
-});
-
 /**
  * createButton - Creates the buttons (the DOM element and the object)
  *
