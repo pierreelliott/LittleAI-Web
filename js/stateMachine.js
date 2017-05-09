@@ -316,7 +316,8 @@
      * @return string current state's name
      */
     createObsel: function(arg){
-	  addObsel(arg);
+		arg.state = this.stmGetStatus();
+	  	addObsel(arg);
     },
 
     /**

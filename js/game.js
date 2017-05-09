@@ -54,7 +54,7 @@ function createButton(buttonInfo, fsm) {
 	btn.element.addEventListener("contextmenu", function(e) { e.preventDefault(); changeShape(btn, (btn.shape+1)%3+1); });
 
 	// Initialize the obsel's Map
-	obsels.set(btn.id, []);
+	obsels.set(btn.id, new Map() );
 
 	div.className = "command";
 
@@ -81,15 +81,21 @@ function addObsel(reaction) {
 	var obselContainer = document.createElement("div");
 	var icon = document.createElement("span");
 	var valence = document.createElement("span");
+	var color = getSameObselsColor(reaction.group, reaction.state);
+
+	if(color == undefined) {
+		color = reaction.color;
+		obsels.get(reaction.group).set(reaction.state, []);
+	}
 
 	// Put a class with the button's id to track its shapes in the trace
-	icon.className = reaction.group + " obsel fa fa-2x " + getShape(reaction.shape) + " " + getColor(reaction.color);
+	icon.className = reaction.group + " " + reaction.state + " obsel fa fa-2x " + getShape(reaction.shape) + " " + getColor(color);
 
 	/**
 	 * @name {obsel} obsel
 	 * @description JS object containing informations about an obsel like : its DOM element, its color, its group (ie, which button created it), its valence
 	 */
-	var obsel = {element: icon, color: reaction.color, group: reaction.group, valence: reaction.valence}; // Test value for the valence
+	var obsel = {element: icon, color: color, group: reaction.group, state: reaction.state, valence: reaction.valence};
 	valence.textContent = obsel.valence;
 	valence.className = "valence " + checkValence(obsel.valence); // Change the color of the text depending of the valence (positive, negative or null)
 
@@ -97,9 +103,7 @@ function addObsel(reaction) {
 	obsel.element.addEventListener("contextmenu", function(e) { e.preventDefault(); changeColor(obsel, (obsel.color+1)%5+1); });
 
 	// Add the obsel to its group (i.e, obsels which come from the same button and the same interaction)
-	var sameGroupObsels = obsels.get(obsel.group);
-	sameGroupObsels.push(obsel);
-	obsels.set(obsel.group, sameGroupObsels);
+	obsels.get(obsel.group).get(obsel.state).push(obsel);
 
 	// Update the score of the player, with the new obsel added
 	updateScore(obsel);
@@ -118,19 +122,21 @@ function addObsel(reaction) {
  * @param  {type} id The id of the group to check
  * @returns {type}    The number of the color of same group obsels or WHITE otherwise
  */
-function getSameObselsColor(id) {
-	var color = -1;
-	var obselsGroup = obsels.get(id);
-	var firstObsel = obselsGroup[0];
-	if(firstObsel != undefined) {
-		color = firstObsel.color;
-	}
+function getSameObselsColor(id, state) {
+	var groupObsels = obsels.get(id), sameObsels, firstObsel;
 
-	// If there's no similar obsel in the trace, the color will be white
-	if(color < WHITE || color > ORANGE || color == undefined) {
-		color = WHITE;
+	if(typeof groupObsels !== 'undefined') {
+		sameObsels = groupObsels.get(state);
+
+		if(typeof sameObsels !== 'undefined' && sameObsels.length > 0) {
+			firstObsel = sameObsels[0];
+			return firstObsel.color;
+		} else {
+			return undefined;
+		}
+	} else {
+		return undefined;
 	}
-	return color;
 }
 
 /**
@@ -160,12 +166,12 @@ function changeColor(obsel, newColor) {
  */
 // There might be a better way to do it
 function updateObselsColor(obselObject, newColor) {
-	var traceObsels = traceContainer.querySelectorAll("."+obselObject.group);
+	var traceObsels = traceContainer.querySelectorAll("."+obselObject.group+"."+obselObject.state);
 	traceObsels.forEach(function(obsel) {
 		obsel.className = obsel.className.replace(getColor(obselObject.color), getColor(newColor));
 	});
 
-	var tabObsels = obsels.get(obselObject.group);
+	var tabObsels = obsels.get(obselObject.group).get(obselObject.state);
 	tabObsels.forEach(function(obsel) {
 		obsel.color = newColor;
 	})
@@ -228,9 +234,9 @@ function updateScore(newObsel) {
 
 	// If the score doesn't have the proper color, removes all its possible colors and add the proper one
 	if(!scoreContainer.classList.contains(scoreColor)) {
-		if(scoreContainer.classList.contains(".white")) { scoreContainer.classList.toggle(".white"); }
-		if(scoreContainer.classList.contains(".red")) { scoreContainer.classList.toggle(".red"); }
-		if(scoreContainer.classList.contains(".green")) { scoreContainer.classList.toggle(".green"); }
+		if(scoreContainer.classList.contains("white")) { scoreContainer.classList.toggle("white"); }
+		if(scoreContainer.classList.contains("red")) { scoreContainer.classList.toggle("red"); }
+		if(scoreContainer.classList.contains("green")) { scoreContainer.classList.toggle("green"); }
 
 		scoreContainer.classList.toggle(scoreColor);
 	}
