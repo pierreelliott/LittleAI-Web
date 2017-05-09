@@ -51,27 +51,76 @@ function openTab(evt, group) {
 }
 
 /**
- * anonymous function - Creates fake buttons (just for testing)
+ * anonymous function - Load the json configuration of the menu
  *
  * @returns {void}  Nothing
  */
 window.onload = function () {
-	// To load directly the "group1" tab
-	document.getElementById("defaultOpen").click();
+	ajax("levels/levels.json", initializeMenu);
+}
 
-	// Create uneven fake buttons in the tab (just for testing)
-	var i, j, groups = document.getElementsByClassName("tabcontent");
-	for (i = 0; i < groups.length; i++) {
-		for (j = 1; j <= 17-(i+1)*3; j++) {
-	        groups[i].append(createLinkLevel(j));
-	    }
-    }
 
-	// Create a link to a level in the menu
-	function createLinkLevel(k) {
-		var levelLink = document.createElement("div");
-		levelLink.textContent = k;
-		levelLink.className = "levelLink";
-		return levelLink;
+/**
+ * initializeMenu - Creates the tab navigation of the menu based on the configuration file
+ *
+ * @param  {json} levels Configuration file. It describes the groups and the levels inside each of them
+ * @returns {type}        Nothing
+ */
+function initializeMenu(levels) {
+	var index = document.getElementById("menuTabIndex"),
+		container = document.getElementById("menuTab");
+
+	for(var group of levels.groups) {
+		createGroup(group, index, container);
 	}
+
+	// Open the tab content of the first group
+	index.querySelector(".tablinks").click();
+}
+
+/**
+ * createGroup - Creates a group in the tab navigation
+ *
+ * @param  {type} group     Information about the group (name, levels inside)
+ * @param  {type} index     Reference to the index of the tab DOM element
+ * @param  {type} container Reference to tab DOM element
+ * @returns {type}           Nothing
+ */
+function createGroup(group, index, container) {
+	var button = document.createElement("button"),
+		content = document.createElement("div");
+
+	button.className = "tablinks";
+	button.onclick = function(event) { openTab(event, group.id); };
+	button.textContent = group.id;
+	index.append(button);
+
+	content.id = group.id;
+	content.className = "tabcontent";
+
+	for(var level of group.levels) {
+		content.append(createLinkLevel(group.id, level));
+	}
+
+	container.append(content);
+}
+
+/**
+ * createLinkLevel - Creates a link to load a level
+ *
+ * @param  {type} groupName Name of the parent group
+ * @param  {type} levelName Name of the level's file
+ * @returns {type}           Nothing
+ */
+function createLinkLevel(groupName, levelName) {
+	var levelLink = document.createElement("div");
+
+	levelLink.textContent = levelName.replace("_"," ");
+	levelLink.className = "levelLink";
+	levelLink.onclick = function() {
+		ajax("levels/"+groupName+"/"+levelName, loadLevel);
+		closeNav();
+	};
+
+	return levelLink;
 }
