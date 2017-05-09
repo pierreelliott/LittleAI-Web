@@ -1,56 +1,30 @@
 {
-	buttons : [
-		{ id: 'btn1', shape: SQUARE },
-		{ id: 'btn2', shape: CIRCLE },
-		{ id: 'btn3', shape: TRIANGLE }
-	],
-	
-	stateMachine: {
-		initial: 'e1',
-		events: [
-			{ name: 'btn1', from: 'e1', to: 'e1' },
-			{ name: 'btn1', from: 'e2', to: 'e2' },
-			
-			{ name: 'btn2', from: 'e1', to: 'e2' },
-			{ name: 'btn2', from: 'e2', to: 'e1' },
-			
-			{ name: 'btn3', from: 'e1', to: 'e1' },
-			{ name: 'btn3', from: 'e2', to: 'e2' }
+    "buttons": [
+        {
+            "id": "btn1",
+            "shape": 2
+        },
+        {
+            "id": "btn2",
+            "shape": 1
+        },
+		{
+            "id": "btn3",
+            "shape": 3
+        }
+    ],
+    "stateMachine": {
+        "e1": [
+            { "event": "btn1", "to": "e1", "action": {"f": "createObsel", "a": {"group": "btn1", "shape": 2, "color": 3, "valence": -1} } },
+			{ "event": "btn2", "to": "e2", "action": {"f": "createObsel", "a": {"group": "btn2", "shape": 1, "color": 5, "valence": 0} } },
+			{ "event": "btn3", "to": "e1", "action": {"f": "createObsel", "a": {"group": "btn3", "shape": 3, "color": 2, "valence": 1} } }
+        ],
+		"e2": [
+			{ "event": "btn1", "to": "e2", "action": {"f": "createObsel", "a": {"group": "btn1", "shape": 2, "color": 2, "valence": 1} } },
+			{ "event": "btn2", "to": "e1", "action": {"f": "createObsel", "a": {"group": "btn2", "shape": 1, "color": 5, "valence": 0} } },
+			{ "event": "btn3", "to": "e2", "action": {"f": "createObsel", "a": {"group": "btn3", "shape": 3, "color": 3, "valence": -1} } }
 		],
-		
-		callbacks: {
-			onbtn1: function(eventName, from, to, btn) {
-				var vale, col;
-				switch(from) {
-					case 'e1': vale = -1; col = RED; break;
-					case 'e2': vale = 1; col = GREEN; break;
-				}
-				
-				addObsel({ 	group: eventName,
-							shape: btn.shape,
-							color: col,
-							valence: vale });
-			},
-			
-			onbtn2: function(eventName, from, to, btn) {
-				addObsel({ 	group: eventName,
-							shape: btn.shape,
-							color: ORANGE,
-							valence: 0 });
-			},
-			
-			onbtn3: function(eventName, from, to, btn) {
-				var vale, col;
-				switch(from) {
-					case 'e2': vale = -1; col = RED; break;
-					case 'e1': vale = 1; col = GREEN; break;
-				}
-				
-				addObsel({ 	group: eventName,
-							shape: btn.shape,
-							color: ORANGE,
-							valence: 0 });
-			}
-		}
-	}
+
+		"initial": "e1"
+    }
 }
