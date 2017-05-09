@@ -1,14 +1,17 @@
 function loadLevel() {
 	console.log(leveltest);
-	var level = JSON.parse(leveltest);
+	//var level = JSON.parse(leveltest);
 
 	var levelsButtons, levelsFsm;
 
-	levelsButtons = level.buttons;
-	levelsFsm = level.stateMachine;
+	levelsButtons = leveltest.buttons;
+	levelsFsm = leveltest.stateMachine;
+
+	fsm = new StateMachine(levelsFsm);
 
 	for (var button of levelsButtons) {
-		createButton(button);
+		console.log("Create btn "+button.id+", shape: "+button.shape);
+		createButton(button, fsm);
 	}
 }
 
@@ -16,30 +19,44 @@ function loadLevel() {
 // Representation of level 0, the json doesn't work yet
 // This level is hardcoded for testing purposes
 var leveltest = {
-	"buttons" : [
-		{ "id": "btn1", "shape": 2 },
-		{ "id": "btn2", "shape": 1 }
-	],
-
-	"stateMachine": {
-		"initial": "e1",
-		"events": [
-			{ "name": "btn1", "from": "e1", "to": "e1" },
-			{ "name": "btn2", "from": "e1", "to": "e1" }
-		],
-		"callbacks": {
-			"onbtn1": function(eventName, from, to, btn) {
-				addObsel({ 	group: eventName,
-							shape: btn.shape,
-							color: ORANGE,
-							valence: 0 });
-			},
-			"onbtn2": function(eventName, from, to, btn) {
-				addObsel({ 	group: eventName,
-							shape: btn.shape,
-							color: GREEN,
-							valence: 1 });
+    "buttons": [
+        {
+            id: "btn1",
+            shape: SQUARE
+        },
+        {
+            id: "btn2",
+            shape: CIRCLE
+        }
+    ],
+    "stateMachine": {
+        "e1": [
+            {
+                event: "btn1",
+                to: "e1",
+                action: {
+					f: "test",
+					a: {
+						group: "btn1",
+						color: "orange",
+						valence: 0
+					}
+				}
+            },
+			{
+				event: "btn2",
+                to: "e1",
+                action: {
+					f: "test",
+					a: {
+						group: "btn2",
+						color: "green",
+						valence: 1
+					}
+				}
 			}
-		}
-	}
+        ],
+
+		"initial": "e1"
+    }
 };
