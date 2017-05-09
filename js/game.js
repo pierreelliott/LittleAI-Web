@@ -14,42 +14,37 @@ var obsels = new Map(); // To store all obsels currently in the trace
 // Some sort of queue, to store the last 10 obsels
 var score = [];
 
-window.addEventListener("load", function () {
-	// This will be the function which will handle the levels and their initialization in the game's field
-	var i;
-	// Create the buttons
-	for(i = 0; i < 3; i++) {
-		createButton(i+1);
-	}
-});
-
 /**
  * createButton - Creates the buttons (the DOM element and the object)
  *
- * @param  {type} btnId The number of the button (1-> the first button, 2 -> the second, ...)
+ * @param  {type} buttonInfo The number of the button (1-> the first button, 2 -> the second, ...)
  * @returns {void}       Nothing
  */
-function createButton(btnId) {
+function createButton(buttonInfo, fsm) {
 	var icon = document.createElement("span"); // Node which will hold the FA icon
-	var div = document.createElement("div"); //
+	var div = document.createElement("div");
+	var func = buttonInfo.id;
 
 	/**
 	 * @name {button} button
 	 * @description JS object containing informations about a button like : its DOM element, its shape
 	 */
-	var btn = {element: icon, shape: btnId}; // To see all shapes, shape is initialized with btnId (just for tests)
+	var btn = {id: buttonInfo.id, element: icon, shape: buttonInfo.shape}; // To see all shapes, shape is initialized with btnId (just for tests)
 	// A button is an element in the DOM + a shape
 
-	btn.element.id = "btn"+btnId;
+	btn.element.id = btn.id;
 	btn.element.className = "shape fa fa-5x " + getShape(btn.shape);
 
 	// On click, print its shape in the trace
-	btn.element.addEventListener("click", function() { addObsel(btn); });
+	btn.element.addEventListener("click", function() {
+		//addObsel({ group: btn.id, shape: btn.shape, color: WHITE, valence: Math.pow(-1,btn.shape) });
+		fsm.stmOnEvent(btn.id);
+	 });
 	// On right click, change the shape of the button
 	btn.element.addEventListener("contextmenu", function(e) { e.preventDefault(); changeShape(btn, (btn.shape+1)%3+1); });
 
 	// Initialize the obsel's Map
-	obsels.set(btn.element.id, []);
+	obsels.set(btn.id, new Map() );
 
 	div.className = "command";
 
@@ -63,10 +58,10 @@ function createButton(btnId) {
 /**
  * addObsel - Creates obsels in the trace
  *
- * @param  {type} btn The object representing the button (the DOM element and its shape)
+ * @param  {type} reaction An object representing the informations needed for the obsel (the group, the shape, the color, the valence)
  * @returns {void}     Nothing
  */
-function addObsel(btn) {
+function addObsel(reaction) {
 	// # need to handle the case where the shape is undefined, it shouldn't happen but we never know
 	/*if(btn.shape == null) { // Just in case something goes wrong
 		btn.shape = 1;
@@ -76,15 +71,21 @@ function addObsel(btn) {
 	var obselContainer = document.createElement("div");
 	var icon = document.createElement("span");
 	var valence = document.createElement("span");
+	var color = getSameObselsColor(reaction.group, reaction.state);
+
+	if(color == undefined) {
+		color = reaction.color;
+		obsels.get(reaction.group).set(reaction.state, []);
+	}
 
 	// Put a class with the button's id to track its shapes in the trace
-	icon.className = btn.element.id + " obsel fa fa-2x " + getShape(btn.shape) + " " + getColor(getSameObselsColor(btn.element.id));
+	icon.className = reaction.group + " " + reaction.state + " obsel fa fa-2x " + getShape(reaction.shape) + " " + getColor(color);
 
 	/**
 	 * @name {obsel} obsel
 	 * @description JS object containing informations about an obsel like : its DOM element, its color, its group (ie, which button created it), its valence
 	 */
-	var obsel = {element: icon, color: WHITE, group: btn.element.id, valence: Math.pow(-1,btn.shape)}; // Test value for the valence
+	var obsel = {element: icon, color: color, group: reaction.group, state: reaction.state, valence: reaction.valence};
 	valence.textContent = obsel.valence;
 	valence.className = "valence " + checkValence(obsel.valence); // Change the color of the text depending of the valence (positive, negative or null)
 
@@ -92,9 +93,7 @@ function addObsel(btn) {
 	obsel.element.addEventListener("contextmenu", function(e) { e.preventDefault(); changeColor(obsel, (obsel.color+1)%5+1); });
 
 	// Add the obsel to its group (i.e, obsels which come from the same button and the same interaction)
-	var sameGroupObsels = obsels.get(btn.element.id);
-	sameGroupObsels.push(obsel);
-	obsels.set(btn.element.id, sameGroupObsels);
+	obsels.get(obsel.group).get(obsel.state).push(obsel);
 
 	// Update the score of the player, with the new obsel added
 	updateScore(obsel);
@@ -113,19 +112,21 @@ function addObsel(btn) {
  * @param  {type} id The id of the group to check
  * @returns {type}    The number of the color of same group obsels or WHITE otherwise
  */
-function getSameObselsColor(id) {
-	var color = -1;
-	var obselsGroup = obsels.get(id);
-	var firstObsel = obselsGroup[0];
-	if(firstObsel != undefined) {
-		color = firstObsel.color;
-	}
+function getSameObselsColor(id, state) {
+	var groupObsels = obsels.get(id), sameObsels, firstObsel;
 
-	// If there's no similar obsel in the trace, the color will be white
-	if(color < WHITE || color > ORANGE || color == undefined) {
-		color = WHITE;
+	if(typeof groupObsels !== 'undefined') {
+		sameObsels = groupObsels.get(state);
+
+		if(typeof sameObsels !== 'undefined' && sameObsels.length > 0) {
+			firstObsel = sameObsels[0];
+			return firstObsel.color;
+		} else {
+			return undefined;
+		}
+	} else {
+		return undefined;
 	}
-	return color;
 }
 
 /**
@@ -155,12 +156,12 @@ function changeColor(obsel, newColor) {
  */
 // There might be a better way to do it
 function updateObselsColor(obselObject, newColor) {
-	var traceObsels = traceContainer.querySelectorAll("."+obselObject.group);
+	var traceObsels = traceContainer.querySelectorAll("."+obselObject.group+"."+obselObject.state);
 	traceObsels.forEach(function(obsel) {
 		obsel.className = obsel.className.replace(getColor(obselObject.color), getColor(newColor));
 	});
 
-	var tabObsels = obsels.get(obselObject.group);
+	var tabObsels = obsels.get(obselObject.group).get(obselObject.state);
 	tabObsels.forEach(function(obsel) {
 		obsel.color = newColor;
 	})
@@ -223,9 +224,9 @@ function updateScore(newObsel) {
 
 	// If the score doesn't have the proper color, removes all its possible colors and add the proper one
 	if(!scoreContainer.classList.contains(scoreColor)) {
-		if(scoreContainer.classList.contains(".white")) { scoreContainer.classList.toggle(".white"); }
-		if(scoreContainer.classList.contains(".red")) { scoreContainer.classList.toggle(".red"); }
-		if(scoreContainer.classList.contains(".green")) { scoreContainer.classList.toggle(".green"); }
+		if(scoreContainer.classList.contains("white")) { scoreContainer.classList.toggle("white"); }
+		if(scoreContainer.classList.contains("red")) { scoreContainer.classList.toggle("red"); }
+		if(scoreContainer.classList.contains("green")) { scoreContainer.classList.toggle("green"); }
 
 		scoreContainer.classList.toggle(scoreColor);
 	}

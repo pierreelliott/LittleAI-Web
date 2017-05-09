@@ -1,0 +1,22 @@
+{
+	"groups": [
+		{
+			"id": "group1",
+			"levels": [
+				"level_0.json", "level_1.json"
+			]
+		},
+		{
+			"id": "group2",
+			"levels": [
+
+			]
+		},
+		{
+			"id": "group3",
+			"levels": [
+
+			]
+		}
+	]
+}
