@@ -48,7 +48,7 @@ function createButton(buttonInfo, fsm) {
 	// On click, print its shape in the trace
 	btn.element.addEventListener("click", function() {
 		//addObsel({ group: btn.id, shape: btn.shape, color: WHITE, valence: Math.pow(-1,btn.shape) });
-		fsm.func(btn);
+		fsm.stmOnEvent(btn.id);
 	 });
 	// On right click, change the shape of the button
 	btn.element.addEventListener("contextmenu", function(e) { e.preventDefault(); changeShape(btn, (btn.shape+1)%3+1); });
@@ -83,7 +83,7 @@ function addObsel(reaction) {
 	var valence = document.createElement("span");
 
 	// Put a class with the button's id to track its shapes in the trace
-	icon.className = reaction.group + " obsel fa fa-2x " + getShape(reaction.shape) + " " + getColor(getSameObselsColor(reaction.group));
+	icon.className = reaction.group + " obsel fa fa-2x " + getShape(reaction.shape) + " " + getColor(reaction.color);
 
 	/**
 	 * @name {obsel} obsel

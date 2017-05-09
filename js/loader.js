@@ -35,10 +35,11 @@ var leveltest = {
                 event: "btn1",
                 to: "e1",
                 action: {
-					f: "test",
+					f: "createObsel",
 					a: {
 						group: "btn1",
-						color: "orange",
+						shape: SQUARE,
+						color: ORANGE,
 						valence: 0
 					}
 				}
@@ -47,10 +48,11 @@ var leveltest = {
 				event: "btn2",
                 to: "e1",
                 action: {
-					f: "test",
+					f: "createObsel",
 					a: {
 						group: "btn2",
-						color: "green",
+						shape: CIRCLE,
+						color: GREEN,
 						valence: 1
 					}
 				}

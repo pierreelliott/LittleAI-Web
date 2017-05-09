@@ -315,8 +315,8 @@
 	/**
      * @return string current state's name
      */
-    test: function(arg){
-      console.log(arg[0]);;
+    createObsel: function(arg){
+	  addObsel(arg);
     },
 
     /**
