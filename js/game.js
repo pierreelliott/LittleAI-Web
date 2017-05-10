@@ -37,11 +37,14 @@ function createButton(buttonInfo, fsm) {
 
 	// On click, print its shape in the trace
 	btn.element.addEventListener("click", function() {
-		//addObsel({ group: btn.id, shape: btn.shape, color: WHITE, valence: Math.pow(-1,btn.shape) });
+		console.log("button shape : "+btn.shape);
 		fsm.stmOnEvent(btn.id);
 	 });
 	// On right click, change the shape of the button
-	btn.element.addEventListener("contextmenu", function(e) { e.preventDefault(); changeShape(btn, (btn.shape+1)%3+1); });
+	btn.element.addEventListener("contextmenu", function(e) {
+		e.preventDefault();
+		changeShape(btn, (btn.shape+1)%3+1);
+	});
 
 	// Initialize the obsel's Map
 	obsels.set(btn.id, new Map() );
@@ -53,29 +56,26 @@ function createButton(buttonInfo, fsm) {
 }
 
 /**
-* btn :  */
-
-/**
  * addObsel - Creates obsels in the trace
  *
  * @param  {type} reaction An object representing the informations needed for the obsel (the group, the shape, the color, the valence)
  * @returns {void}     Nothing
  */
 function addObsel(reaction) {
-	// # need to handle the case where the shape is undefined, it shouldn't happen but we never know
-	/*if(btn.shape == null) { // Just in case something goes wrong
-		btn.shape = 1;
-	}*/
-
 	// Create the element which will host the icon
 	var obselContainer = document.createElement("div");
 	var icon = document.createElement("span");
 	var valence = document.createElement("span");
-	var color = getSameObselsColor(reaction.group, reaction.state);
+	var color = getSameObselsColor(reaction.group, reaction.state),
+		shape = getSameObselsShape(reaction.group);
+		console.log("same obsels shape : "+shape+", reaction shape : "+reaction.shape);
 
 	if(color == undefined) {
 		color = reaction.color;
 		obsels.get(reaction.group).set(reaction.state, []);
+	}
+	if(shape == undefined) {
+		shape = reaction.shape;
 	}
 
 	// Put a class with the button's id to track its shapes in the trace
@@ -85,7 +85,8 @@ function addObsel(reaction) {
 	 * @name {obsel} obsel
 	 * @description JS object containing informations about an obsel like : its DOM element, its color, its group (ie, which button created it), its valence
 	 */
-	var obsel = {element: icon, color: color, group: reaction.group, state: reaction.state, valence: reaction.valence};
+	var obsel = {element: icon, color: color, shape: shape, group: reaction.group, state: reaction.state, valence: reaction.valence};
+	console.log("obsel shape : "+obsel.shape+"(passed : "+reaction.shape+")");
 	valence.textContent = obsel.valence;
 	valence.className = "valence " + checkValence(obsel.valence); // Change the color of the text depending of the valence (positive, negative or null)
 
@@ -129,6 +130,23 @@ function getSameObselsColor(id, state) {
 	}
 }
 
+function getSameObselsShape(id) {
+	var groupObsels = obsels.get(id), firstObsel;
+
+	if(typeof groupObsels !== 'undefined') {
+		for(var firstState of groupObsels.values()) {
+			if(typeof firstState !== 'undefined' && firstState.length > 0) {
+				firstObsel = firstState[0];
+				return firstObsel.shape;
+			} else {
+				return undefined;
+			}
+		}
+	} else {
+		return undefined;
+	}
+}
+
 /**
  * changeColor - Change the color of an obsel
  *
@@ -164,7 +182,7 @@ function updateObselsColor(obselObject, newColor) {
 	var tabObsels = obsels.get(obselObject.group).get(obselObject.state);
 	tabObsels.forEach(function(obsel) {
 		obsel.color = newColor;
-	})
+	});
 }
 
 /**
@@ -192,9 +210,16 @@ function changeShape(btnObject, newShape) {
  * @returns {void}           Nothing
  */
 function updateObselsShape(btnObject, newShape) {
-	var obsels = traceContainer.querySelectorAll("."+btnObject.element.id);
-	obsels.forEach(function(obsel) {
+	var traceObsels = traceContainer.querySelectorAll("."+btnObject.id);
+	traceObsels.forEach(function(obsel) {
 		obsel.className = obsel.className.replace(getShape(btnObject.shape), getShape(newShape));
+	});
+
+	var tabObsels = obsels.get(btnObject.id);
+	tabObsels.forEach(function(value, key) {
+		value.forEach(function(obsel) {
+			obsel.shape = newShape;
+		});
 	});
 }
 
