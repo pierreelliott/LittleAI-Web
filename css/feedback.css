@@ -8,6 +8,11 @@
 	border: 2px dashed pink;
 }
 
+#tracePositionner {
+	position: relative;
+	height: 100%;
+}
+
 .tracetip {
 	color: blue;
 	cursor: pointer;
@@ -31,7 +36,9 @@
 }
 
 .traceContainer {
-	height: 100%;
+	max-height: 100%;
+	bottom: 0;
+	position: absolute;
 	width: 50%;
 	border: 2px dashed red;
 	overflow-y: scroll;
@@ -41,11 +48,6 @@
 .traceContainer > div {
 	display: block;
 	text-align: center;
-}
-
-/* ie, the canvas */
-#trace {
-	border: 1px solid red;
 }
 
 .obsel {
