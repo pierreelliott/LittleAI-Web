@@ -5,12 +5,14 @@
 	height: 65vh;
 	width: 40vw;
 	min-width: 130px;
-	border: 2px dashed pink;
+	/*border: 2px dashed pink;*/
 }
 
 #tracePositionner {
 	position: relative;
 	height: 100%;
+	float: right;
+	width: 50%;
 }
 
 .tracetip {
@@ -26,21 +28,27 @@
 }
 
 .score {
-	width: 30%; /* I don't know why it doesn't work when greater than 37%... */
-	height: 30%;
-	border: 2px dashed blue;
+	/*width: 30%; /* I don't know why it doesn't work when greater than 37%... */
 	float: left;
+	background-color: #fff;
+	border-radius: 0.5em;
+	padding: 0.5em;
+	/*border: 2px dashed blue;*/
 	margin-right: 10%;
 	margin-top: 35%;
 	display: inline;
+
+	font-size: 130%;
+	font-weight: bold;
+	min-width: 8vw;
 }
 
 .traceContainer {
 	max-height: 100%;
+	width: 100%;
 	bottom: 0;
 	position: absolute;
-	width: 50%;
-	border: 2px dashed red;
+	/*border: 2px dashed red;*/
 	overflow-y: scroll;
 	margin: 0px;
 	display: inline-block;
