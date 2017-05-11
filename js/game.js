@@ -100,6 +100,7 @@ function addObsel(reaction) {
 	updateScore(obsel);
 
 	// Add the obsel and the valence to their container in the trace
+	obselContainer.className = "interactionResult";
 	obselContainer.append(obsel.element);
 	obselContainer.append(valence);
 
@@ -245,7 +246,7 @@ function updateScore(newObsel) {
 	scoreContainer.textContent = scoreSum;
 
 	// Change the color of the score depending of its value
-	scoreColor = checkValence(scoreSum);
+	/*scoreColor = checkValence(scoreSum);
 
 	// If the score doesn't have the proper color, removes all its possible colors and add the proper one
 	if(!scoreContainer.classList.contains(scoreColor)) {
@@ -254,5 +255,5 @@ function updateScore(newObsel) {
 		if(scoreContainer.classList.contains("green")) { scoreContainer.classList.toggle("green"); }
 
 		scoreContainer.classList.toggle(scoreColor);
-	}
+	}*/
 }

@@ -5,7 +5,14 @@
 	height: 65vh;
 	width: 40vw;
 	min-width: 130px;
-	border: 2px dashed pink;
+	/*border: 2px dashed pink;*/
+}
+
+#tracePositionner {
+	position: relative;
+	height: 100%;
+	float: right;
+	width: 50%;
 }
 
 .tracetip {
@@ -21,19 +28,27 @@
 }
 
 .score {
-	width: 30%; /* I don't know why it doesn't work when greater than 37%... */
-	height: 30%;
-	border: 2px dashed blue;
+	/*width: 30%; /* I don't know why it doesn't work when greater than 37%... */
 	float: left;
+	background-color: #fff;
+	border-radius: 0.5em;
+	padding: 0.5em;
+	/*border: 2px dashed blue;*/
 	margin-right: 10%;
 	margin-top: 35%;
 	display: inline;
+
+	font-size: 130%;
+	font-weight: bold;
+	min-width: 8vw;
 }
 
 .traceContainer {
-	height: 100%;
-	width: 50%;
-	border: 2px dashed red;
+	max-height: 100%;
+	width: 100%;
+	bottom: 0;
+	position: absolute;
+	/*border: 2px dashed red;*/
 	overflow-y: scroll;
 	margin: 0px;
 	display: inline-block;
@@ -43,12 +58,20 @@
 	text-align: center;
 }
 
-/* ie, the canvas */
-#trace {
-	border: 1px solid red;
-}
-
 .obsel {
 	cursor: pointer;
 	font-size: 23px;
+}
+
+.interactionResult {
+	animation-name: popin;
+	animation-duration: 1s ;
+	animation-iteration-count: 1;
+	animation-direction: alternate;
+}
+
+@keyframes popin {
+    0%  { background-color: yellow; }
+	50% { background-color: yellow; }
+    100% { background-color: inherit; }
 }
