@@ -100,6 +100,7 @@ function addObsel(reaction) {
 	updateScore(obsel);
 
 	// Add the obsel and the valence to their container in the trace
+	obselContainer.className = "interactionResult";
 	obselContainer.append(obsel.element);
 	obselContainer.append(valence);
 

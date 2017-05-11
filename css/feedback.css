@@ -62,3 +62,16 @@
 	cursor: pointer;
 	font-size: 23px;
 }
+
+.interactionResult {
+	animation-name: popin;
+	animation-duration: 1s ;
+	animation-iteration-count: 1;
+	animation-direction: alternate;
+}
+
+@keyframes popin {
+    0%  { background-color: yellow; }
+	50% { background-color: yellow; }
+    100% { background-color: inherit; }
+}
