@@ -15,6 +15,8 @@ function loadLevel(level) {
 	for (var button of levelsButtons) {
 		createButton(button, fsm);
 	}
+
+	console.log(level);
 }
 
 /**
@@ -23,15 +25,17 @@ function loadLevel(level) {
  * @returns {type}  description
  */
 function resetPlayground() {
-	var score = document.getElementById("score"),
+	var scoreContainer = document.getElementById("score"),
 		trace = document.getElementById("traceContainer"),
 		commands = document.getElementById("commands"),
 		commandtip = document.getElementById("commandtip");
 
-	score.textContent = "0";
-	if(score.classList.contains("white")) { score.classList.toggle("white"); }
-	if(score.classList.contains("red")) { score.classList.toggle("red"); }
-	if(score.classList.contains("green")) { score.classList.toggle("green"); }
+	scoreContainer.textContent = "0";
+	if(scoreContainer.classList.contains("white")) { scoreContainer.classList.toggle("white"); }
+	if(scoreContainer.classList.contains("red")) { scoreContainer.classList.toggle("red"); }
+	if(scoreContainer.classList.contains("green")) { scoreContainer.classList.toggle("green"); }
+	// Empty the queue of the score to reset the score's count
+	score.length = 0;
 
 	trace.textContent = "";
 
