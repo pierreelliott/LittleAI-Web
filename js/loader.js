@@ -52,7 +52,7 @@ function loadLevel(level) {
 function resetPlayground() {
 	var scoreContainer = document.getElementById("score"),
 		trace = document.getElementById("traceContainer"),
-		commands = document.getElementById("commands"),
+		commandsContainer = document.getElementById("commands"),
 		commandtip = document.getElementById("commandtip");
 
 	scoreContainer.textContent = "0";
@@ -62,10 +62,13 @@ function resetPlayground() {
 	// Empty the queue of the score to reset the score's count
 	score.length = 0;
 
+	commands.clear();
+	obsels.clear();
+
 	trace.textContent = "";
 
-	commands.textContent = "";
-	commands.append(commandtip);
+	commandsContainer.textContent = "";
+	commandsContainer.append(commandtip);
 
 	/* To do : reset informations panel + world panel */
 }
@@ -85,7 +88,7 @@ function ajax(url, callback) {
 	};
 	req.onload = function() {
 		if (req.status === 200) {
-			console.log("Rep : "+req.responseText);
+			//console.log("Rep : "+req.responseText);
 			var data = JSON.parse(req.responseText);
 			callback(data);
 		} else {
