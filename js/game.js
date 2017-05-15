@@ -128,23 +128,6 @@ function getSameObselsColor(id, state) {
 	}
 }
 
-/*function getSameObselsShape(id) {
-	var groupObsels = obsels.get(id), firstObsel;
-
-	if(typeof groupObsels !== 'undefined') {
-		for(var firstState of groupObsels.values()) {
-			if(typeof firstState !== 'undefined' && firstState.length > 0) {
-				firstObsel = firstState[0];
-				return firstObsel.shape;
-			} else {
-				return undefined;
-			}
-		}
-	} else {
-		return undefined;
-	}
-}*/
-
 /**
  * changeColor - Change the color of an obsel
  *

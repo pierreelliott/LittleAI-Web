@@ -12,8 +12,8 @@
     ],
     "stateMachine": {
         "e1": [
-            {"event": "btn1", "to": "e1", "action": { "f": "createObsel", "a": { "group": "btn1", "shape": 2, "color": 5, "valence": 0 } }},
-			{"event": "btn2", "to": "e1", "action": { "f": "createObsel", "a": { "group": "btn2", "shape": 1, "color": 2, "valence": 1 } }}
+            {"event": "btn1", "to": "e1", "action": { "f": "createObsel", "a": { "group": "btn1", "color": 5, "valence": 0 } }},
+			{"event": "btn2", "to": "e1", "action": { "f": "createObsel", "a": { "group": "btn2", "color": 2, "valence": 1 } }}
         ],
 
 		"initial": "e1"
