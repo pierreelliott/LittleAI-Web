@@ -1,22 +1,47 @@
 window.addEventListener("load", function () {
+	var userLang = navigator.language || navigator.userLanguage;
+	setLanguage(userLang);
+	ajax("levels/levels.json", initializeMenu);
 	ajax("levels/group1/level_0.json", loadLevel);
 });
 
+/**
+ * setLanguage - Define the language of the game
+ * 					If the language isn't known, english language will be loaded
+ *
+ * @param  {type} lang The string code of the language to set (like "fr", "en", ...)
+ * @returns {void}      Nothing
+ */
+function setLanguage(lang) {
+	if(!/(fr|en)/.test(lang)) {
+		lang = "en";
+	}
+
+	ajax("i18n/"+lang+".json", i18n.translator.add);
+}
+
+/**
+ * loadLevel - Load the given level in the playground
+ * 				After playground's reset, create the buttons and the state machine
+ *
+ * @param  {type} level JSON object (already parsed) with buttons and state machine data
+ * @returns {void}       Nothing
+ */
 function loadLevel(level) {
-	var levelsButtons, levelsFsm;
+	var levelsButtons, levelsFsm,
+		menuLink = document.getElementById("menuLink");
 
 	resetPlayground();
 
 	levelsButtons = level.buttons;
 	levelsFsm = level.stateMachine;
+	menuLink.textContent = level.id;
 
 	fsm = new StateMachine(levelsFsm);
 
 	for (var button of levelsButtons) {
 		createButton(button, fsm);
 	}
-
-	console.log(level);
 }
 
 /**
@@ -56,14 +81,15 @@ function ajax(url, callback) {
 	var req = new XMLHttpRequest();
 	req.open("GET", url);
 	req.onerror = function() {
-		console.log("Échec de chargement "+url);
+		console.log("Fail to load "+url);
 	};
 	req.onload = function() {
 		if (req.status === 200) {
+			console.log("Rep : "+req.responseText);
 			var data = JSON.parse(req.responseText);
 			callback(data);
 		} else {
-			console.log("Erreur " + req.status);
+			console.log("Error " + req.status);
 		}
 	};
 	req.send();
