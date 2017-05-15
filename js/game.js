@@ -1,20 +1,3 @@
-/* ======== Initialize all global variables ======== */
-var CIRCLE = 1, SQUARE = 2, TRIANGLE = 3; // Define the shapes' value
-var CIRCLE_SHAPE = "fa-circle", SQUARE_SHAPE = "fa-stop", TRIANGLE_SHAPE = "fa-play fa-rotate-270"; // Define the shapes
-var WHITE = 1, GREEN = 2, RED = 3, BLUE = 4, ORANGE = 5;
-
-// Important elements in the DOM (which will often be used later)
-var traceContainer = document.getElementById("traceContainer"),
-	scoreContainer = document.getElementById("score");
-
-var obsels = new Map(); // To store all obsels currently in the trace
-				 		// it is the only way to store obsels' objects and not just the DOM elements
-						// Obsels are stored by groups (a group is the button which created the obsel and the interaction associated)
-var commands = new Map();
-
-// Some sort of queue, to store the last 10 obsels
-var score = [];
-
 /**
  * createButton - Creates the buttons (the DOM element and the object)
  *
@@ -64,6 +47,8 @@ function createButton(buttonInfo, fsm) {
  * @returns {void}     Nothing
  */
 function addObsel(reaction) {
+	var traceContainer = document.getElementById("traceContainer");
+
 	// Create the element which will host the icon
 	var obselContainer = document.createElement("div");
 	var icon = document.createElement("span");
@@ -155,6 +140,7 @@ function changeColor(obsel, newColor) {
  */
 // There might be a better way to do it
 function updateObselsColor(obselObject, newColor) {
+	var traceContainer = document.getElementById("traceContainer");
 	var traceObsels = traceContainer.querySelectorAll("."+obselObject.group+"."+obselObject.state);
 	traceObsels.forEach(function(obsel) {
 		obsel.className = obsel.className.replace(getColor(obselObject.color), getColor(newColor));
@@ -191,6 +177,7 @@ function changeShape(btnObject, newShape) {
  * @returns {void}           Nothing
  */
 function updateObselsShape(btnObject, newShape) {
+	var traceContainer = document.getElementById("traceContainer");
 	var traceObsels = traceContainer.querySelectorAll("."+btnObject.id);
 	traceObsels.forEach(function(obsel) {
 		obsel.className = obsel.className.replace(getShape(btnObject.shape), getShape(newShape));
@@ -211,6 +198,7 @@ function updateObselsShape(btnObject, newShape) {
  * @returns {void}          Nothing
  */
 function updateScore(newObsel) {
+	var scoreContainer = document.getElementById("score");
 	var scoreSum = 0;
 	var scoreColor = "";
 
@@ -225,15 +213,23 @@ function updateScore(newObsel) {
 	}
 	scoreContainer.textContent = scoreSum;
 
-	// Change the color of the score depending of its value
-	/*scoreColor = checkValence(scoreSum);
 
-	// If the score doesn't have the proper color, removes all its possible colors and add the proper one
-	if(!scoreContainer.classList.contains(scoreColor)) {
-		if(scoreContainer.classList.contains("white")) { scoreContainer.classList.toggle("white"); }
-		if(scoreContainer.classList.contains("red")) { scoreContainer.classList.toggle("red"); }
-		if(scoreContainer.classList.contains("green")) { scoreContainer.classList.toggle("green"); }
+	if(scoreSum >= 10) { // Might be replaced by "currentLevel.winningScore"
+		scoreContainer.classList.toggle("finished", true);
+		scoreContainer.classList.toggle("alreadyFinished", false);
 
-		scoreContainer.classList.toggle(scoreColor);
-	}*/
+		if(!currentLevel.finished) {
+			currentLevel.finished = true;
+			winLevel();
+		}
+	} else {
+		if(currentLevel.finished) {
+			scoreContainer.classList.toggle("alreadyFinished", true);
+			scoreContainer.classList.toggle("finished", false);
+		}
+	}
+}
+
+function winLevel() {
+	userSave.finished.push(currentLevel.id);
 }

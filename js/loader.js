@@ -35,13 +35,16 @@ function loadLevel(level) {
 
 	levelsButtons = level.buttons;
 	levelsFsm = level.stateMachine;
-	menuLink.textContent = level.id;
 
 	fsm = new StateMachine(levelsFsm);
 
 	for (var button of levelsButtons) {
 		createButton(button, fsm);
 	}
+
+	menuLink.textContent = level.id;
+	currentLevel = level;
+	currentLevel.finished = false;
 }
 
 /**
@@ -56,9 +59,8 @@ function resetPlayground() {
 		commandtip = document.getElementById("commandtip");
 
 	scoreContainer.textContent = "0";
-	if(scoreContainer.classList.contains("white")) { scoreContainer.classList.toggle("white"); }
-	if(scoreContainer.classList.contains("red")) { scoreContainer.classList.toggle("red"); }
-	if(scoreContainer.classList.contains("green")) { scoreContainer.classList.toggle("green"); }
+	scoreContainer.classList.toggle("finished", false);
+	scoreContainer.classList.toggle("alreadyFinished", false);
 	// Empty the queue of the score to reset the score's count
 	score.length = 0;
 
