@@ -10,6 +10,7 @@ var traceContainer = document.getElementById("traceContainer"),
 var obsels = new Map(); // To store all obsels currently in the trace
 				 		// it is the only way to store obsels' objects and not just the DOM elements
 						// Obsels are stored by groups (a group is the button which created the obsel and the interaction associated)
+var commands = new Map();
 
 // Some sort of queue, to store the last 10 obsels
 var score = [];
@@ -32,12 +33,13 @@ function createButton(buttonInfo, fsm) {
 	var btn = {id: buttonInfo.id, element: icon, shape: buttonInfo.shape}; // To see all shapes, shape is initialized with btnId (just for tests)
 	// A button is an element in the DOM + a shape
 
+	commands.set(btn.id, btn);
+
 	btn.element.id = btn.id;
 	btn.element.className = "shape fa fa-5x " + getShape(btn.shape);
 
 	// On click, print its shape in the trace
 	btn.element.addEventListener("click", function() {
-		console.log("button shape : "+btn.shape);
 		fsm.stmOnEvent(btn.id);
 	 });
 	// On right click, change the shape of the button
@@ -67,26 +69,21 @@ function addObsel(reaction) {
 	var icon = document.createElement("span");
 	var valence = document.createElement("span");
 	var color = getSameObselsColor(reaction.group, reaction.state),
-		shape = getSameObselsShape(reaction.group);
-		console.log("same obsels shape : "+shape+", reaction shape : "+reaction.shape);
+		shape = commands.get(reaction.group).shape;
 
 	if(color == undefined) {
 		color = reaction.color;
 		obsels.get(reaction.group).set(reaction.state, []);
 	}
-	if(shape == undefined) {
-		shape = reaction.shape;
-	}
 
 	// Put a class with the button's id to track its shapes in the trace
-	icon.className = reaction.group + " " + reaction.state + " obsel fa fa-2x " + getShape(reaction.shape) + " " + getColor(color);
+	icon.className = reaction.group + " " + reaction.state + " obsel fa fa-2x " + getShape(shape) + " " + getColor(color);
 
 	/**
 	 * @name {obsel} obsel
 	 * @description JS object containing informations about an obsel like : its DOM element, its color, its group (ie, which button created it), its valence
 	 */
 	var obsel = {element: icon, color: color, shape: shape, group: reaction.group, state: reaction.state, valence: reaction.valence};
-	console.log("obsel shape : "+obsel.shape+"(passed : "+reaction.shape+")");
 	valence.textContent = obsel.valence;
 	valence.className = "valence " + checkValence(obsel.valence); // Change the color of the text depending of the valence (positive, negative or null)
 
@@ -125,23 +122,6 @@ function getSameObselsColor(id, state) {
 			return firstObsel.color;
 		} else {
 			return undefined;
-		}
-	} else {
-		return undefined;
-	}
-}
-
-function getSameObselsShape(id) {
-	var groupObsels = obsels.get(id), firstObsel;
-
-	if(typeof groupObsels !== 'undefined') {
-		for(var firstState of groupObsels.values()) {
-			if(typeof firstState !== 'undefined' && firstState.length > 0) {
-				firstObsel = firstState[0];
-				return firstObsel.shape;
-			} else {
-				return undefined;
-			}
 		}
 	} else {
 		return undefined;
