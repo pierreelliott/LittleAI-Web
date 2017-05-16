@@ -61,9 +61,16 @@
 	margin: 0px;
 	display: inline-block;
 }
-.traceContainer > div {
+.traceContainer > .interactionResult {
 	display: block;
 	text-align: center;
+	filter: opacity(50%);
+}
+.traceContainer > .interactionResult:nth-last-child(-n+10) {
+	filter: none;
+}
+.traceContainer > .interactionResult:nth-last-child(10) {
+	border-top: 2px solid #333;
 }
 
 .obsel {
