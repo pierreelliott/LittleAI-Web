@@ -36,6 +36,13 @@ function loadLevel(level) {
 	levelsButtons = level.buttons;
 	levelsFsm = level.stateMachine;
 
+	StateMachine.prototype.createObsel = function(arg){
+		console.log(level.states);
+		console.log("state : "+this.stmGetStatus());
+		arg.state = level.states[arg.group][this.stmGetStatus()];
+	  	addObsel(arg);
+    };
+
 	fsm = new StateMachine(levelsFsm);
 
 	for (var button of levelsButtons) {

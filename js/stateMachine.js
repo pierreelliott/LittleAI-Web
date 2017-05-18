@@ -312,14 +312,6 @@
       return this._stmCurrentState._stmName;
     },
 
-	/**
-     * @return string current state's name
-     */
-    createObsel: function(arg){
-		arg.state = this.stmGetStatus();
-	  	addObsel(arg);
-    },
-
     /**
      * PRIVATE
      * Check call a transition action

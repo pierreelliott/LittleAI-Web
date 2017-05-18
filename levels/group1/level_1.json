@@ -1,5 +1,5 @@
 {
-	"id": "level1",
+	"id": "group1level1",
     "buttons": [
         {
             "id": "btn1",
@@ -14,6 +14,20 @@
             "shape": 3
         }
     ],
+	"states": {
+		"btn1": {
+			"e1": "e1",
+			"e2": "e2"
+		},
+		"btn2": {
+			"e1": "e1",
+			"e2": "e1"
+		},
+		"btn3": {
+			"e1": "e1",
+			"e2": "e2"
+		}
+	},
     "stateMachine": {
         "e1": [
             { "event": "btn1", "to": "e1", "action": {"f": "createObsel", "a": {"group": "btn1", "color": 3, "valence": -1} } },
