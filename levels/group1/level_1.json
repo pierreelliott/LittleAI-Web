@@ -1,5 +1,5 @@
 {
-	"id": "level1",
+	"id": "group1level1",
     "buttons": [
         {
             "id": "btn1",
@@ -15,8 +15,18 @@
         }
     ],
 	"states": {
-		"e1btn1": "e1",
-		"e2": "e2"
+		"btn1": {
+			"e1": "e1",
+			"e2": "e2"
+		},
+		"btn2": {
+			"e1": "e1",
+			"e2": "e1"
+		},
+		"btn3": {
+			"e1": "e1",
+			"e2": "e2"
+		}
 	},
     "stateMachine": {
         "e1": [

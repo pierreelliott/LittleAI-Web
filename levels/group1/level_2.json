@@ -1,5 +1,5 @@
 {
-	"id": "level2",
+	"id": "group1level2",
     "buttons": [
         {
             "id": "btn1",
@@ -8,36 +8,32 @@
         {
             "id": "btn2",
             "shape": 1
-        },
-		{
-            "id": "btn3",
-            "shape": 3
         }
     ],
 	"states": {
-		"e1btn1": "e1",
-		"e1btn3": "e1",
-		"e3btn1": "e1",
-		"e2btn3": "e1",
-
-		"e1btn1": "e2",
-		"e3btn3": "e1"
+		"btn1": {
+			"e1": "e1",
+			"e3": "e1",
+			"e2": "e2"
+		},
+		"btn2": {
+			"e1": "e1",
+			"e2": "e1",
+			"e3": "e2"
+		}
 	},
     "stateMachine": {
         "e1": [
             { "event": "btn1", "to": "e2", "action": {"f": "createObsel", "a": {"group": "btn1", "color": 2, "valence": 1} } },
-			{ "event": "btn2", "to": "e1", "action": {"f": "createObsel", "a": {"group": "btn2", "color": 5, "valence": 0} } },
-			{ "event": "btn3", "to": "e3", "action": {"f": "createObsel", "a": {"group": "btn3", "color": 2, "valence": 1} } }
+			{ "event": "btn2", "to": "e3", "action": {"f": "createObsel", "a": {"group": "btn2", "color": 2, "valence": 1} } }
         ],
 		"e2": [
 			{ "event": "btn1", "to": "e2", "action": {"f": "createObsel", "a": {"group": "btn1", "color": 3, "valence": -1} } },
-			{ "event": "btn2", "to": "e1", "action": {"f": "createObsel", "a": {"group": "btn2", "color": 5, "valence": 0} } },
-			{ "event": "btn3", "to": "e3", "action": {"f": "createObsel", "a": {"group": "btn3", "color": 2, "valence": 1} } }
+			{ "event": "btn2", "to": "e3", "action": {"f": "createObsel", "a": {"group": "btn2", "color": 2, "valence": 1} } }
 		],
 		"e3": [
 			{ "event": "btn1", "to": "e2", "action": {"f": "createObsel", "a": {"group": "btn1", "color": 2, "valence": 1} } },
-			{ "event": "btn2", "to": "e1", "action": {"f": "createObsel", "a": {"group": "btn2", "color": 5, "valence": 0} } },
-			{ "event": "btn3", "to": "e3", "action": {"f": "createObsel", "a": {"group": "btn3", "color": 3, "valence": -1} } }
+			{ "event": "btn2", "to": "e3", "action": {"f": "createObsel", "a": {"group": "btn2", "color": 3, "valence": -1} } }
 		],
 
 		"initial": "e1"
