@@ -14,7 +14,9 @@ var commands = new Map();
 var score = [];
 
 var userSave = {
-	finished: []
+	levelid: "",
+	score: 0,
+	trace: []
 };
 
 var currentLevel;

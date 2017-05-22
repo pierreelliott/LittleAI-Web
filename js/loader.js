@@ -51,7 +51,8 @@ function loadLevel(level) {
 
 	menuLink.textContent = level.id;
 	currentLevel = level;
-	currentLevel.finished = false;
+	userSave.finished = false;
+	userSave.levelid = level.id;
 }
 
 /**
@@ -80,6 +81,13 @@ function resetPlayground() {
 	commandsContainer.append(commandtip);
 
 	/* To do : reset informations panel + world panel */
+
+	userSave.trace.length = 0;
+	userSave.score = 0;
+}
+
+function exportSave() {
+	console.log(userSave);
 }
 
 /**
