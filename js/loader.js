@@ -16,8 +16,10 @@ function setLanguage(lang) {
 	if(!/(fr|en)/.test(lang)) {
 		lang = "en";
 	}
-
-	ajax("i18n/"+lang+".json", i18n.translator.add);
+	console.log("'i18n/"+lang+".json'");
+	ajax("i18n/"+lang+".json", function (d) {
+		translate = i18n.create(d);
+	});
 }
 
 /**
@@ -37,8 +39,6 @@ function loadLevel(level) {
 	levelsFsm = level.stateMachine;
 
 	StateMachine.prototype.createObsel = function(arg){
-		console.log(level.states);
-		console.log("state : "+this.stmGetStatus());
 		arg.state = level.states[arg.group][this.stmGetStatus()];
 	  	addObsel(arg);
     };
@@ -49,7 +49,7 @@ function loadLevel(level) {
 		createButton(button, fsm);
 	}
 
-	menuLink.textContent = level.id;
+	menuLink.textContent = translate(level.id);
 	currentLevel = level;
 	userSave.finished = false;
 	userSave.levelid = level.id;

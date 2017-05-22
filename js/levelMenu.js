@@ -82,10 +82,10 @@ function createGroup(group, index, container) {
 
 	button.className = "tablinks";
 	button.onclick = function(event) { openTab(event, group.id); };
-	button.textContent = group.id;
+	button.textContent = translate(group.id);
 	index.append(button);
 
-	content.id = i18n(group.id);
+	content.id = group.id;
 	content.className = "tabcontent";
 
 	for(var level of group.levels) {
@@ -102,14 +102,14 @@ function createGroup(group, index, container) {
  * @param  {type} levelName Name of the level's file
  * @returns {type}           Nothing
  */
-function createLinkLevel(groupName, levelName) {
+function createLinkLevel(groupName, level) {
 	var levelLink = document.createElement("div");
 
-	levelLink.textContent = i18n(levelName.replace(".json",""));
+	levelLink.textContent = translate(level.id);
 	levelLink.className = "levelLink";
-	levelLink.id = groupName + "|" + levelName.replace(".json","");
+	levelLink.id = groupName + level.id;
 	levelLink.onclick = function() {
-		ajax("levels/"+groupName+"/"+levelName, loadLevel);
+		ajax("levels/"+groupName+"/"+level.file, loadLevel);
 		closeNav();
 	};
 
