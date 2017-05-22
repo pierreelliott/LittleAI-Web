@@ -3,7 +3,11 @@
 		{
 			"id": "group1",
 			"levels": [
-				"level_0.json", "level_1.json", "level_2.json", "level_3.json", "level_4.json"
+				{"id": "group1level0", "file": "level_0.json"},
+				{"id": "group1level1", "file": "level_1.json"},
+				{"id": "group1level2", "file": "level_2.json"},
+				{"id": "group1level3", "file": "level_3.json"},
+				{"id": "group1level4", "file": "level_4.json"}
 			]
 		},
 		{
