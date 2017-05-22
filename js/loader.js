@@ -88,6 +88,7 @@ function resetPlayground() {
 
 function exportSave() {
 	console.log(userSave);
+	window.prompt(translate("saveLevelInstructions"), JSON.stringify(userSave));
 }
 
 /**

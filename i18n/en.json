@@ -8,6 +8,8 @@
 	"group1level1": "Level 1",
 	"group1level2": "Level 2",
 	"group1level3": "Level 3",
-	"group1level4": "Level 4"
+	"group1level4": "Level 4",
+
+	"saveLevelInstructions": "Copy the save to clipboard (JSON file): Ctrl+C, Enter"
   }
 }
