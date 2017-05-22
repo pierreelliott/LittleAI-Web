@@ -8,6 +8,8 @@
 	"group1level1": "Niveau 1",
 	"group1level2": "Niveau 2",
 	"group1level3": "Niveau 3",
-	"group1level4": "Niveau 4"
+	"group1level4": "Niveau 4",
+
+	"saveLevelInstructions": "Copiez dans le presse-papiers votre sauvegarde (fichier JSON): Ctrl+C, puis Entrée"
   }
 }
