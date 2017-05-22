@@ -44,13 +44,15 @@
 				</div>
 			</div>
 
+			<a onclick="exportSave()" class="exportbtn fa fa-download fa-3x"></a>
+
 	  	</div>
 
 		<!-- The "game's field" -->
 		<div class="container">
 			<!-- The link to open the level menu -->
 			<div onclick="openNav()" class="openbtn">
-				<span id="menuLink">Level 0</span>
+				<span id="menuLink"></span>
 			</div>
 
 			<div class="feedback">
@@ -98,10 +100,12 @@
 		<!-- jQuery -->
 	    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 
+		<script type="text/javascript" src="js/variables.js"></script>
 		<script type="text/javascript" src="js/utility.js"></script>
 		<script type="text/javascript" src="js/game.js"></script>
 		<script type="text/javascript" src="js/loader.js"></script>
 		<script type="text/javascript" src="js/levelMenu.js"></script>
 		<script type="text/javascript" src="js/stateMachine.js"></script>
+		<script type="text/javascript" src="js/i18n.js"></script>
 	</body>
 </html>

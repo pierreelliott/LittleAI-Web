@@ -117,7 +117,7 @@ div.tab button.active {
 }
 
 /* When you mouse over the navigation links, change their color */
-.overlay .closebtn:hover, .overlay .closebtn:focus {
+.overlay .closebtn:hover, .overlay .closebtn:focus, .overlay .exportbtn:hover, .overlay .exportbtn:focus {
    color: #f1f1f1;
 }
 
@@ -138,12 +138,34 @@ div.tab button.active {
    transition: 0.3s; /* Transition effects on hover (color) */
 }
 
+/* Position the export button (bottom right corner) */
+.overlay .exportbtn {
+   position: absolute;
+   bottom: 1vh;
+   right: 2vw;
+   font-size: 60px;
+
+   cursor: pointer;
+
+   padding: 8px;
+   text-decoration: none;
+   font-size: 36px;
+   color: #818181;
+   display: block; /* Display block instead of inline */
+   transition: 0.3s; /* Transition effects on hover (color) */
+}
+
 /* When the height of the screen is less than 450 pixels, change the font-size of the links and position the close button again, so they don't overlap */
 @media screen and (max-height: 450px) {
    .overlay a {font-size: 20px}
    .overlay .closebtn {
 	   font-size: 40px;
 	   top: 15px;
+	   right: 35px;
+   }
+   .overlay .exportbtn {
+	   font-size: 40px;
+	   bottom: 15px;
 	   right: 35px;
    }
 }

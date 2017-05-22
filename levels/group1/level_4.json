@@ -1,0 +1,47 @@
+{
+	"id": "group1level4",
+    "buttons": [
+        {
+            "id": "btn1",
+            "shape": 1
+        },
+        {
+            "id": "btn2",
+            "shape": 1
+        }
+    ],
+	"states": {
+		"btn1": {
+			"e1": "e3",
+			"e2": "e2",
+			"e3": "e2",
+			"e4": "e1"
+		},
+		"btn2": {
+			"e1": "e2",
+			"e2": "e1",
+			"e3": "e3",
+			"e4": "e2"
+		}
+	},
+    "stateMachine": {
+        "e1": [
+            { "event": "btn1", "to": "e1", "action": {"f": "createObsel", "a": {"group": "btn1", "color": 1, "valence": -4} } },
+			{ "event": "btn2", "to": "e2", "action": {"f": "createObsel", "a": {"group": "btn2", "color": 1, "valence": -1} } }
+        ],
+		"e2": [
+			{ "event": "btn1", "to": "e4", "action": {"f": "createObsel", "a": {"group": "btn1", "color": 1, "valence": -1} } },
+			{ "event": "btn2", "to": "e3", "action": {"f": "createObsel", "a": {"group": "btn2", "color": 1, "valence": 3} } }
+		],
+		"e3": [
+			{ "event": "btn1", "to": "e4", "action": {"f": "createObsel", "a": {"group": "btn1", "color": 1, "valence": -1} } },
+			{ "event": "btn2", "to": "e3", "action": {"f": "createObsel", "a": {"group": "btn2", "color": 1, "valence": -4} } }
+		],
+		"e4": [
+			{ "event": "btn1", "to": "e1", "action": {"f": "createObsel", "a": {"group": "btn1", "color": 1, "valence": 3} } },
+			{ "event": "btn2", "to": "e2", "action": {"f": "createObsel", "a": {"group": "btn2", "color": 1, "valence": -1} } }
+		],
+
+		"initial": "e1"
+    }
+}

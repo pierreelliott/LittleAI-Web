@@ -1,14 +1,47 @@
 window.addEventListener("load", function () {
+	var userLang = navigator.language || navigator.userLanguage;
+	setLanguage(userLang);
+	ajax("levels/levels.json", initializeMenu);
 	ajax("levels/group1/level_0.json", loadLevel);
 });
 
+/**
+ * setLanguage - Define the language of the game
+ * 					If the language isn't known, english language will be loaded
+ *
+ * @param  {type} lang The string code of the language to set (like "fr", "en", ...)
+ * @returns {void}      Nothing
+ */
+function setLanguage(lang) {
+	if(!/(fr|en)/.test(lang)) {
+		lang = "en";
+	}
+	console.log("'i18n/"+lang+".json'");
+	ajax("i18n/"+lang+".json", function (d) {
+		translate = i18n.create(d);
+	});
+}
+
+/**
+ * loadLevel - Load the given level in the playground
+ * 				After playground's reset, create the buttons and the state machine
+ *
+ * @param  {type} level JSON object (already parsed) with buttons and state machine data
+ * @returns {void}       Nothing
+ */
 function loadLevel(level) {
-	var levelsButtons, levelsFsm;
+	var levelsButtons, levelsFsm,
+		menuLink = document.getElementById("menuLink");
 
 	resetPlayground();
 
 	levelsButtons = level.buttons;
 	levelsFsm = level.stateMachine;
+
+	StateMachine.prototype.createObsel = function(arg){
+		arg.state = level.states[arg.group][this.stmGetStatus()];
+	  	addObsel(arg);
+    };
 
 	fsm = new StateMachine(levelsFsm);
 
@@ -16,7 +49,10 @@ function loadLevel(level) {
 		createButton(button, fsm);
 	}
 
-	console.log(level);
+	menuLink.textContent = translate(level.id);
+	currentLevel = level;
+	userSave.finished = false;
+	userSave.levelid = level.id;
 }
 
 /**
@@ -27,22 +63,31 @@ function loadLevel(level) {
 function resetPlayground() {
 	var scoreContainer = document.getElementById("score"),
 		trace = document.getElementById("traceContainer"),
-		commands = document.getElementById("commands"),
+		commandsContainer = document.getElementById("commands"),
 		commandtip = document.getElementById("commandtip");
 
 	scoreContainer.textContent = "0";
-	if(scoreContainer.classList.contains("white")) { scoreContainer.classList.toggle("white"); }
-	if(scoreContainer.classList.contains("red")) { scoreContainer.classList.toggle("red"); }
-	if(scoreContainer.classList.contains("green")) { scoreContainer.classList.toggle("green"); }
+	scoreContainer.classList.toggle("finished", false);
+	scoreContainer.classList.toggle("alreadyFinished", false);
 	// Empty the queue of the score to reset the score's count
 	score.length = 0;
 
+	commands.clear();
+	obsels.clear();
+
 	trace.textContent = "";
 
-	commands.textContent = "";
-	commands.append(commandtip);
+	commandsContainer.textContent = "";
+	commandsContainer.append(commandtip);
 
 	/* To do : reset informations panel + world panel */
+
+	userSave.trace.length = 0;
+	userSave.score = 0;
+}
+
+function exportSave() {
+	console.log(userSave);
 }
 
 /**
@@ -56,14 +101,15 @@ function ajax(url, callback) {
 	var req = new XMLHttpRequest();
 	req.open("GET", url);
 	req.onerror = function() {
-		console.log("Échec de chargement "+url);
+		console.log("Fail to load "+url);
 	};
 	req.onload = function() {
 		if (req.status === 200) {
+			//console.log("Rep : "+req.responseText);
 			var data = JSON.parse(req.responseText);
 			callback(data);
 		} else {
-			console.log("Erreur " + req.status);
+			console.log("Error " + req.status);
 		}
 	};
 	req.send();

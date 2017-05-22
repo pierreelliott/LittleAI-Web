@@ -1,0 +1,13 @@
+{
+  "values":{
+    "group1": "Groupe 1",
+    "group2": "Groupe 2",
+    "group3": "Groupe 3",
+
+    "group1level0": "Niveau 0",
+	"group1level1": "Niveau 1",
+	"group1level2": "Niveau 2",
+	"group1level3": "Niveau 3",
+	"group1level4": "Niveau 4"
+  }
+}

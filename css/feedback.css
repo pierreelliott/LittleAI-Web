@@ -43,6 +43,14 @@
 	min-width: 8vw;
 }
 
+.finished {
+	background-color: green;
+}
+
+.alreadyFinished {
+	background-color: lightgreen;
+}
+
 .traceContainer {
 	max-height: 100%;
 	width: 100%;
@@ -53,9 +61,16 @@
 	margin: 0px;
 	display: inline-block;
 }
-.traceContainer > div {
+.traceContainer > .interactionResult {
 	display: block;
 	text-align: center;
+	filter: opacity(50%);
+}
+.traceContainer > .interactionResult:nth-last-child(-n+10) {
+	filter: none;
+}
+.traceContainer > .interactionResult:nth-last-child(10) {
+	border-top: 2px solid #333;
 }
 
 .obsel {

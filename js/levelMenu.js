@@ -51,16 +51,6 @@ function openTab(evt, group) {
 }
 
 /**
- * anonymous function - Load the json configuration of the menu
- *
- * @returns {void}  Nothing
- */
-window.onload = function () {
-	ajax("levels/levels.json", initializeMenu);
-}
-
-
-/**
  * initializeMenu - Creates the tab navigation of the menu based on the configuration file
  *
  * @param  {json} levels Configuration file. It describes the groups and the levels inside each of them
@@ -92,7 +82,7 @@ function createGroup(group, index, container) {
 
 	button.className = "tablinks";
 	button.onclick = function(event) { openTab(event, group.id); };
-	button.textContent = group.id;
+	button.textContent = translate(group.id);
 	index.append(button);
 
 	content.id = group.id;
@@ -112,13 +102,14 @@ function createGroup(group, index, container) {
  * @param  {type} levelName Name of the level's file
  * @returns {type}           Nothing
  */
-function createLinkLevel(groupName, levelName) {
+function createLinkLevel(groupName, level) {
 	var levelLink = document.createElement("div");
 
-	levelLink.textContent = levelName.replace("_"," ");
+	levelLink.textContent = translate(level.id);
 	levelLink.className = "levelLink";
+	levelLink.id = groupName + level.id;
 	levelLink.onclick = function() {
-		ajax("levels/"+groupName+"/"+levelName, loadLevel);
+		ajax("levels/"+groupName+"/"+level.file, loadLevel);
 		closeNav();
 	};
 

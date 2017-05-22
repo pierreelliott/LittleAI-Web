@@ -232,8 +232,8 @@
         f;
       if( (f = state._stmEvents[e])){
         this.log("stmOnEvent() > switching to: "+f.to+", e: "+e+", from: "+state._stmName+", action: "+!!f.action);
-        this._stmCurrentState = this._stmStates[f.to] ;
         this._stmAction(f.action);
+		this._stmCurrentState = this._stmStates[f.to] ;
       }
       else {
         this.log("stmOnEvent() no switch evt e: "+e+", from: "+state._stmName);
@@ -310,14 +310,6 @@
      */
     stmGetStatus: function(){
       return this._stmCurrentState._stmName;
-    },
-
-	/**
-     * @return string current state's name
-     */
-    createObsel: function(arg){
-		arg.state = this.stmGetStatus();
-	  	addObsel(arg);
     },
 
     /**
