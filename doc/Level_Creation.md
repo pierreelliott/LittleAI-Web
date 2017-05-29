@@ -38,7 +38,7 @@ Each button (represented with their ID) is an attribute of this field. And each 
 	"state_Machine's_State":"real_World's_State"
 
 "States grouper" example:
-	"states": {
+    <pre><code>"states": {
 		"btn1": {
 			"e1": "type1",
 			"e3": "type1",
@@ -49,7 +49,7 @@ Each button (represented with their ID) is an attribute of this field. And each 
 			"e2": "type2",
 			"e3": "type1"
 		}
-	}
+	}</code></pre>
 This code means that for the button 'btn1', the state machine's states 'e1' and 'e3' represent the same "real world's" state.
 
 ### State machine
@@ -76,4 +76,4 @@ The obsel to create's object contains:
 * a "valence" property, which is the integer used to calculate the score
 
 Example of an event:
-	{ "event": "btn1", "to": "e2", "action": {"f": "createObsel", "a": {"group": "btn1", "color": 2, "valence": 1} } }
+	<pre><code>{ "event": "btn1", "to": "e2", "action": {"f": "createObsel", "a": {"group": "btn1", "color": 2, "valence": 1} } }</code></pre>
