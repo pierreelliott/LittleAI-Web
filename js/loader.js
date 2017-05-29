@@ -3,6 +3,8 @@ window.addEventListener("load", function () {
 	setLanguage(userLang);
 	ajax("levels/levels.json", initializeMenu);
 	ajax("levels/group1/level_0.json", loadLevel);
+
+	document.getElementById("fileinput").onchange = loadFile();
 });
 
 /**
@@ -105,8 +107,15 @@ function exportSave() {
  *
  * @returns {type}  description
  */
-function importSave() {
-
+function importSave(file) {
+	var levelToLoad = JSON.parse(file);
+	var checksum = levelToLoad.hash;
+	delete levelToLoad.hash;
+	console.log("checksum : "+checksum);
+	console.log("hash : "+hashCode(JSON.stringify(levelToLoad)));
+	if(checksum === hashCode(JSON.stringify(levelToLoad))) {
+		console.log("It works !!");
+	}
 }
 
 /**
@@ -115,7 +124,21 @@ function importSave() {
  * @returns {type}  description
  */
 function loadFile() {
-	
+	console.log("Hello !");
+	var fileinput = document.getElementById("fileinput");
+	if(fileinput.files[0] != undefined) {
+		var file = fileinput.files[0];
+		console.log(file.type);
+
+		//if (file.type.match('application/json')) {
+			var reader = new FileReader();
+
+			reader.onload = importSave(data);
+			reader.readAsText(file);
+    	/*} else {
+			window.prompt("This file is not a JSON file and cannot therefore be open.");
+		}*/
+	}
 }
 
 /**
