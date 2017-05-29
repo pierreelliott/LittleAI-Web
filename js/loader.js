@@ -50,7 +50,6 @@ function loadLevel(level) {
 	}
 
 	menuLink.textContent = translate(level.id);
-	currentLevel = level;
 	currentLevel.finished = false;
 	currentLevel.levelid = level.id;
 }
@@ -87,8 +86,11 @@ function resetPlayground() {
 }
 
 function exportSave() {
-	console.log(currentLevel);
-	window.prompt(translate("saveLevelInstructions"), JSON.stringify(currentLevel));
+	var uri = 'data:text/json;charset=utf8,' + encodeURIComponent(JSON.stringify(currentLevel));
+	var dlAnchorElem = document.getElementById('downloadAnchorElem');
+	dlAnchorElem.setAttribute("href",     uri     );
+	dlAnchorElem.setAttribute("download", currentLevel.levelid+".json");
+	dlAnchorElem.click();
 }
 
 /**
