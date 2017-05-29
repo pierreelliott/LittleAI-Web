@@ -37,7 +37,7 @@ So, in order to simplify the state machine writing, this field links (for each b
 Each button (represented with their ID) is an attribute of this field. And each of them must link __every__ state machine's state to a "real world's" state using the following form:
 	"state_Machine's_State":"real_World's_State"
 
-*"States grouper" example:
+"States grouper" example:
 	"states": {
 		"btn1": {
 			"e1": "type1",
@@ -50,7 +50,7 @@ Each button (represented with their ID) is an attribute of this field. And each 
 			"e3": "type1"
 		}
 	}
-This code means that for the button 'btn1', the state machine's states 'e1' and 'e3' represent the same "real world's" state.*
+This code means that for the button 'btn1', the state machine's states 'e1' and 'e3' represent the same "real world's" state.
 
 ### State machine
 
@@ -75,6 +75,5 @@ The obsel to create's object contains:
 * a "color" property, which is the default color of this obsel
 * a "valence" property, which is the integer used to calculate the score
 
-*Example of an event:
+Example of an event:
 	{ "event": "btn1", "to": "e2", "action": {"f": "createObsel", "a": {"group": "btn1", "color": 2, "valence": 1} } }
-*
