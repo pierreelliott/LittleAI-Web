@@ -50,7 +50,6 @@ function loadLevel(level) {
 	}
 
 	menuLink.textContent = translate(level.id);
-	currentLevel = level;
 	currentLevel.finished = false;
 	currentLevel.levelid = level.id;
 }
@@ -86,9 +85,37 @@ function resetPlayground() {
 	currentLevel.score = 0;
 }
 
+/**
+ * exportSave - Export the current level in a JSON format
+ *
+ * @returns {type}  description
+ */
 function exportSave() {
-	console.log(currentLevel);
-	window.prompt(translate("saveLevelInstructions"), JSON.stringify(currentLevel));
+	var levelhash = hashCode(JSON.stringify(currentLevel));
+	currentLevel.hash = levelhash;
+	var uri = 'data:text/json;charset=utf8,' + encodeURIComponent(JSON.stringify(currentLevel));
+	var dlAnchorElem = document.getElementById('downloadAnchorElem');
+	dlAnchorElem.setAttribute("href",     uri     );
+	dlAnchorElem.setAttribute("download", currentLevel.levelid+".json");
+	dlAnchorElem.click();
+}
+
+/**
+ * importSave - Import a JSON file to load in the playground
+ *
+ * @returns {type}  description
+ */
+function importSave() {
+
+}
+
+/**
+ * loadFile - Load a file
+ *
+ * @returns {type}  description
+ */
+function loadFile() {
+	
 }
 
 /**
