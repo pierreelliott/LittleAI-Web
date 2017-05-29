@@ -51,8 +51,8 @@ function loadLevel(level) {
 
 	menuLink.textContent = translate(level.id);
 	currentLevel = level;
-	userSave.finished = false;
-	userSave.levelid = level.id;
+	currentLevel.finished = false;
+	currentLevel.levelid = level.id;
 }
 
 /**
@@ -82,13 +82,13 @@ function resetPlayground() {
 
 	/* To do : reset informations panel + world panel */
 
-	userSave.trace.length = 0;
-	userSave.score = 0;
+	currentLevel.trace.length = 0;
+	currentLevel.score = 0;
 }
 
 function exportSave() {
-	console.log(userSave);
-	window.prompt(translate("saveLevelInstructions"), JSON.stringify(userSave));
+	console.log(currentLevel);
+	window.prompt(translate("saveLevelInstructions"), JSON.stringify(currentLevel));
 }
 
 /**
