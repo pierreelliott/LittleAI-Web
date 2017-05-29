@@ -85,6 +85,11 @@ function resetPlayground() {
 	currentLevel.score = 0;
 }
 
+/**
+ * exportSave - Export the current level in a JSON format
+ *
+ * @returns {type}  description
+ */
 function exportSave() {
 	var levelhash = hashCode(JSON.stringify(currentLevel));
 	currentLevel.hash = levelhash;
@@ -93,6 +98,24 @@ function exportSave() {
 	dlAnchorElem.setAttribute("href",     uri     );
 	dlAnchorElem.setAttribute("download", currentLevel.levelid+".json");
 	dlAnchorElem.click();
+}
+
+/**
+ * importSave - Import a JSON file to load in the playground
+ *
+ * @returns {type}  description
+ */
+function importSave() {
+
+}
+
+/**
+ * loadFile - Load a file
+ *
+ * @returns {type}  description
+ */
+function loadFile() {
+	
 }
 
 /**
