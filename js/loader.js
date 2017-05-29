@@ -86,6 +86,8 @@ function resetPlayground() {
 }
 
 function exportSave() {
+	var levelhash = hashCode(JSON.stringify(currentLevel));
+	currentLevel.hash = levelhash;
 	var uri = 'data:text/json;charset=utf8,' + encodeURIComponent(JSON.stringify(currentLevel));
 	var dlAnchorElem = document.getElementById('downloadAnchorElem');
 	dlAnchorElem.setAttribute("href",     uri     );
