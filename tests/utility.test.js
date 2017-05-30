@@ -36,6 +36,6 @@ describe('getShape', function() {
 
 	//shapeResult = "fa-stop";
 	it('Should return fa-stop for 2', function() {
-        expect(getShape(2)).toBe(fa-stop);
+        expect(getShape(2)).toBe("fa-stop");
     });
 });
