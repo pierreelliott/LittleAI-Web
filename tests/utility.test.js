@@ -1,3 +1,8 @@
-test('simple test to check if everything (Travis and qunitjs) work', function(assert) {
-  assert.deepEqual(true, true);
+describe('getColor', function() {
+    var colorNumber = 1;
+	var colorResult = "white";
+
+    it('Should be white', function() {
+        expect(getColor(colorNumber)).toBe(colorResult);
+    });
 });

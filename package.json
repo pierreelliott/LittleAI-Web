@@ -1,11 +1,30 @@
 {
-    "name": "littleAI",
-    "author" : "Pierre-Elliott Thiboud",
-	"version": "0.1.0",
-	"devDependencies": {
-		"qunitjs": "2.3.2"
-	},
-	"scripts": {
-		"test": "./tests utility.test.js"
-	}
+  "name": "little-ai",
+  "author": "Pierre-Elliott Thiboud",
+  "version": "0.1.0",
+  "devDependencies": {
+    "karma": "^1.7.0",
+    "karma-chrome-launcher": "^2.1.1",
+    "karma-firefox-launcher": "^1.0.1",
+    "karma-jasmine": "^1.1.0"
+  },
+  "description": "Little A.I. is a free game (developed at the computer science department of the University of Lyon) which helps understand some of the challenges involved in developmental artificial intelligence.",
+  "directories": {
+    "doc": "doc",
+    "test": "tests"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pierreelliott/LittleAI-Web.git"
+  },
+  "keywords": [
+    "game",
+    "liris",
+    "developmental",
+    "ai"
+  ],
+  "bugs": {
+    "url": "https://github.com/pierreelliott/LittleAI-Web/issues"
+  },
+  "homepage": "https://github.com/pierreelliott/LittleAI-Web#readme"
 }
