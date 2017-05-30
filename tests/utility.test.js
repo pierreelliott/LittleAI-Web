@@ -23,19 +23,19 @@ describe('getShape', function() {
 	var shapeResult = "fa-circle";
 
     it('Should return fa-circle for 1', function() {
-        expect(getColor(1)).toBe(shapeResult);
+        expect(getShape(1)).toBe(shapeResult);
     });
 
 	it('Should return fa-circle for invalid string value', function() {
-        expect(getColor("hello")).toBe(shapeResult);
+        expect(getShape("hello")).toBe(shapeResult);
     });
 
 	it('Should return fa-circle for invalid integer value', function() {
-        expect(getColor(-1)).toBe(shapeResult);
+        expect(getShape(-1)).toBe(shapeResult);
     });
 
 	shapeResult = "fa-stop";
 	it('Should return fa-stop for 2', function() {
-        expect(getColor(2)).toBe(shapeResult);
+        expect(getShape(2)).toBe(shapeResult);
     });
 });
