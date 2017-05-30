@@ -1,8 +1,6 @@
 window.addEventListener("load", function () {
 	var userLang = navigator.language || navigator.userLanguage;
 	setLanguage(userLang);
-	ajax("levels/levels.json", initializeMenu);
-	ajax("levels/group1/level_0.json", loadLevel);
 
 	document.getElementById("fileinput").onchange = loadFile();
 });
@@ -21,6 +19,8 @@ function setLanguage(lang) {
 	console.log("'i18n/"+lang+".json'");
 	ajax("i18n/"+lang+".json", function (d) {
 		translate = i18n.create(d);
+		ajax("levels/levels.json", initializeMenu);
+		ajax("levels/group1/level_0.json", loadLevel);
 	});
 }
 

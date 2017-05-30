@@ -13,9 +13,9 @@ describe('getColor', function() {
         expect(getColor(-1)).toBe(colorResult);
     });
 
-	colorResult = "green";
+	//colorResult = "green";
 	it('Should return green for 2', function() {
-        expect(getColor(2)).toBe(colorResult);
+        expect(getColor(2)).toBe("green");
     });
 });
 
@@ -34,8 +34,8 @@ describe('getShape', function() {
         expect(getShape(-1)).toBe(shapeResult);
     });
 
-	shapeResult = "fa-stop";
+	//shapeResult = "fa-stop";
 	it('Should return fa-stop for 2', function() {
-        expect(getShape(2)).toBe(shapeResult);
+        expect(getShape(2)).toBe("fa-stop");
     });
 });

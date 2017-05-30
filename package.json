@@ -13,6 +13,9 @@
     "doc": "doc",
     "test": "tests"
   },
+  "scripts": {
+    "test": "karma start karma.conf.js"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/pierreelliott/LittleAI-Web.git"
