@@ -77,7 +77,7 @@ function addObsel(reaction) {
 
 	// Add the obsel to its group (i.e, obsels which come from the same button and the same interaction)
 	obsels.get(obsel.group).get(obsel.state).push(obsel);
-	userSave.trace.push(obsel);
+	currentLevel.trace.push(obsel);
 
 	// Update the score of the player, with the new obsel added
 	updateScore(obsel);
@@ -230,9 +230,9 @@ function updateScore(newObsel) {
 		}
 	}
 
-	userSave.score = scoreSum;
+	currentLevel.score = scoreSum;
 }
 
 function winLevel() {
-	userSave.finished = true;
+	currentLevel.finished = true;
 }

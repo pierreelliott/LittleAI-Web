@@ -1,8 +1,8 @@
 window.addEventListener("load", function () {
 	var userLang = navigator.language || navigator.userLanguage;
 	setLanguage(userLang);
-	ajax("levels/levels.json", initializeMenu);
-	ajax("levels/group1/level_0.json", loadLevel);
+
+	document.getElementById("fileinput").onchange = loadFile();
 });
 
 /**
@@ -19,6 +19,8 @@ function setLanguage(lang) {
 	console.log("'i18n/"+lang+".json'");
 	ajax("i18n/"+lang+".json", function (d) {
 		translate = i18n.create(d);
+		ajax("levels/levels.json", initializeMenu);
+		ajax("levels/group1/level_0.json", loadLevel);
 	});
 }
 
@@ -50,9 +52,8 @@ function loadLevel(level) {
 	}
 
 	menuLink.textContent = translate(level.id);
-	currentLevel = level;
-	userSave.finished = false;
-	userSave.levelid = level.id;
+	currentLevel.finished = false;
+	currentLevel.levelid = level.id;
 }
 
 /**
@@ -82,13 +83,62 @@ function resetPlayground() {
 
 	/* To do : reset informations panel + world panel */
 
-	userSave.trace.length = 0;
-	userSave.score = 0;
+	currentLevel.trace.length = 0;
+	currentLevel.score = 0;
 }
 
+/**
+ * exportSave - Export the current level in a JSON format
+ *
+ * @returns {type}  description
+ */
 function exportSave() {
-	console.log(userSave);
-	window.prompt(translate("saveLevelInstructions"), JSON.stringify(userSave));
+	var levelhash = hashCode(JSON.stringify(currentLevel));
+	currentLevel.hash = levelhash;
+	var uri = 'data:text/json;charset=utf8,' + encodeURIComponent(JSON.stringify(currentLevel));
+	var dlAnchorElem = document.getElementById('downloadAnchorElem');
+	dlAnchorElem.setAttribute("href",     uri     );
+	dlAnchorElem.setAttribute("download", currentLevel.levelid+".json");
+	dlAnchorElem.click();
+}
+
+/**
+ * importSave - Import a JSON file to load in the playground
+ *
+ * @returns {type}  description
+ */
+function importSave(file) {
+	var levelToLoad = JSON.parse(file);
+	var checksum = levelToLoad.hash;
+	delete levelToLoad.hash;
+	console.log("checksum : "+checksum);
+	console.log("hash : "+hashCode(JSON.stringify(levelToLoad)));
+	if(checksum === hashCode(JSON.stringify(levelToLoad))) {
+		console.log("It works !!");
+	}
+}
+
+/**
+ * loadFile - Load a file
+ *
+ * @returns {type}  description
+ */
+function loadFile() {
+	console.log("Hello !");
+	var fileinput = document.getElementById("fileinput");
+	if(fileinput.files[0] != undefined) {
+		var file = fileinput.files[0];
+		console.log(file.type);
+
+		//if (file.type.match('application/json')) {
+			var reader = new FileReader();
+
+			reader.onload = importSave(data);
+			reader.readAsText(file);
+    	/*} else {
+			window.prompt("This file is not a JSON file and cannot therefore be open.");
+		}*/
+	}
 }
 
 /**

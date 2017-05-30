@@ -39,12 +39,18 @@
 			<a onclick="closeNav()" class="closebtn">&times;</a>
 
 			<!-- Overlay content -->
-			<div id="menuTab" class="overlay-content">
-				<div id="menuTabIndex" class="tab">
+			<div class="overlay-content">
+				<div id="menuTab">
+					<div id="menuTabIndex" class="tab">
+					</div>
+				</div>
+
+				<div id="menuActions">
+					<input type="file" id="fileinput"/>
+					<a id="exportbtn" onclick="exportSave()" class="exportbtn fa fa-download fa-3x"></a>
+					<a id="downloadAnchorElem" style="display:none"></a>
 				</div>
 			</div>
-
-			<a onclick="exportSave()" class="exportbtn fa fa-download fa-3x"></a>
 
 	  	</div>
 

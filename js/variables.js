@@ -15,10 +15,10 @@ var translate;
 // Some sort of queue, to store the last 10 obsels
 var score = [];
 
-var userSave = {
+var currentLevel = {
 	levelid: "",
 	score: 0,
 	trace: []
 };
 
-var currentLevel;
+var userSave;
