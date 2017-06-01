@@ -1,10 +1,29 @@
-.informations {
+#infoPanel {
 	top: 10vh;
 	right: 5vh;
 	position: fixed;
-	height: 30vh;
-	width: 40vw;
-	border: 2px dashed yellow;
+	height: 40vh;
+	width: 45vw;
+	/*border: 2px dashed yellow;*/
+	border-radius: 0.5em;
+	background-color: white;
+	padding: 0.5em;
+	transition: 0.3s;
+	z-index: 10;
+}
 
-	visibility: hidden;
+#infoPanel .header {
+	color: yellow;
+	margin-bottom: 1em;
+}
+
+#infoPanel .header .close {
+	float: right;
+	cursor: pointer;
+}
+
+#infoPanel .content {
+	height: 85%;
+	overflow-y: auto;
+	overflow-x: hidden;
 }
