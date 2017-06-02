@@ -10,6 +10,8 @@
 	padding: 0.5em;
 	transition: 0.3s;
 	z-index: 10;
+
+	display: none;
 }
 
 #infoPanel .header {
@@ -26,4 +28,15 @@
 	height: 85%;
 	overflow-y: auto;
 	overflow-x: hidden;
+}
+
+#levelOptions {
+	position: fixed;
+	bottom: 30vh;
+	right: 15vw;
+	width: 10vw;
+}
+
+#levelOptions * {
+	cursor: pointer;
 }
