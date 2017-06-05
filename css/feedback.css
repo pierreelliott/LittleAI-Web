@@ -3,8 +3,9 @@
 	left: 10vw;
 	position: fixed;
 	height: 65vh;
-	width: 40vw;
+	width: 30vw;
 	min-width: 130px;
+	max-width: 200px;
 	/*border: 2px dashed pink;*/
 }
 
@@ -19,6 +20,7 @@
 	position: relative;
 	float: left;
 	height: 100%;
+	width: 50%;
 }
 
 .score {
@@ -32,7 +34,7 @@
 
 	font-size: 130%;
 	font-weight: bold;
-	min-width: 8vw;
+	width: 65%;
 }
 
 #score.finished {
