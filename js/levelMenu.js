@@ -107,9 +107,9 @@ function createLinkLevel(groupName, level) {
 
 	levelLink.textContent = translate(level.id);
 	levelLink.className = "levelLink";
-	levelLink.id = groupName + level.id;
-	levelLink.onclick = function() {
-		ajax("levels/"+groupName+"/"+level.file, loadLevel);
+	levelLink.id = level.id;
+	levelLink.onclick = function(async) {
+		ajax("levels/"+groupName+"/"+level.file, loadLevel, async);
 		closeNav();
 	};
 

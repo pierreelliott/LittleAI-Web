@@ -103,6 +103,7 @@ function exportSave() {
 /**
  * importSave - Import a JSON file to load in the playground
  *
+ * @param {type} file	String containing the JSON information
  * @returns {type}  description
  */
 function importSave(file) {
@@ -110,15 +111,13 @@ function importSave(file) {
 	var checksum = levelToLoad.hash;
 	delete levelToLoad.hash;
 	if(checksum === hashCode(JSON.stringify(levelToLoad))) {
-		if (levelToLoad.levelid === currentLevel.levelid) {
-			levelToLoad.trace.forEach(function(obsel) {
-				var button = document.getElementById(obsel.group);
-				button.click();
-			});
-			closeNav();
-		} else {
-			window.alert(translate("save_wrongLevel"));
-		}
+		console.log(document.getElementById(levelToLoad.levelid).onclick);
+		(document.getElementById(levelToLoad.levelid).onclick)(false);
+		//document.getElementById(levelToLoad.levelid).click(false);
+		levelToLoad.trace.forEach(function(obsel) {
+			var button = document.getElementById(obsel.group);
+			button.click();
+		});
 	} else {
 		window.alert(translate("save_notValid"));
 	}
@@ -152,11 +151,17 @@ function loadFile() {
  *
  * @param  {type} url      Relative URL where take the json
  * @param  {type} callback The function to use (and pass the file to) when the file is loaded
+ * @param  {type} async False to make it synchronous, true otherwise
  * @returns {type}          description
  */
-function ajax(url, callback) {
+function ajax(url, callback, async) {
+	if(async !== undefined && async === false) {
+		async = false;
+	} else {
+		async = true;
+	}
 	var req = new XMLHttpRequest();
-	req.open("GET", url);
+	req.open("GET", url, async);
 	req.onerror = function() {
 		console.log("Fail to load "+url);
 	};
