@@ -3,6 +3,25 @@ window.addEventListener("load", function () {
 	setLanguage(userLang);
 });
 
+function initializeGame() {
+	var location = window.location.hash.split("#")[0];
+	console.log(window.location.hash.split("#"));
+	if(location !== "" && document.getElementById(location) !== undefined) {
+		(document.getElementById(location).onclick)();
+	} else {
+		ajax("levels/group1/level_0.json", loadLevel);
+	}
+}
+
+window.onhashchange = function() {
+	var location = window.location.hash.split("#")[0];
+	if(location !== "" && document.getElementById(location) !== undefined) {
+		(document.getElementById(location).onclick)();
+	} else {
+		ajax("levels/group1/level_0.json", loadLevel);
+	}
+};
+
 /**
  * setLanguage - Define the language of the game
  * 					If the language isn't known, english language will be loaded
@@ -18,7 +37,7 @@ function setLanguage(lang) {
 	ajax("i18n/"+lang+".json", function (d) {
 		translate = i18n.create(d);
 		ajax("levels/levels.json", initializeMenu);
-		ajax("levels/group1/level_0.json", loadLevel);
+		initializeGame();
 	});
 }
 
@@ -52,6 +71,8 @@ function loadLevel(level) {
 	menuLink.textContent = translate(level.id);
 	currentLevel.finished = false;
 	currentLevel.levelid = level.id;
+
+	window.location.hash = level.id;
 }
 
 /**
