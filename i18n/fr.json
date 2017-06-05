@@ -10,6 +10,8 @@
 	"group1level3": "Niveau 3",
 	"group1level4": "Niveau 4",
 
-	"saveLevelInstructions": "Copiez dans le presse-papiers votre sauvegarde (fichier JSON): Ctrl+C, puis Entrée"
+	"save_wrongFormat": "Ce fichier n'est pas un JSON et ne peut donc pas être ouvert.",
+	"save_notValid": "Erreur, ce fichier n'est pas valide. Veuillez ne pas essayer de modifier les fichiers de sauvegarde si vous ne savez pas ce que vous faites.",
+	"save_wrongLevel": "Erreur. Vous essayez d'importer le mauvais niveau."
   }
 }
