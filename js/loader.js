@@ -1,8 +1,6 @@
 window.addEventListener("load", function () {
 	var userLang = navigator.language || navigator.userLanguage;
 	setLanguage(userLang);
-
-	document.getElementById("fileinput").onchange = loadFile();
 });
 
 /**
@@ -105,16 +103,23 @@ function exportSave() {
 /**
  * importSave - Import a JSON file to load in the playground
  *
+ * @param {type} file	String containing the JSON information
  * @returns {type}  description
  */
 function importSave(file) {
 	var levelToLoad = JSON.parse(file);
 	var checksum = levelToLoad.hash;
 	delete levelToLoad.hash;
-	console.log("checksum : "+checksum);
-	console.log("hash : "+hashCode(JSON.stringify(levelToLoad)));
 	if(checksum === hashCode(JSON.stringify(levelToLoad))) {
-		console.log("It works !!");
+		console.log(document.getElementById(levelToLoad.levelid).onclick);
+		(document.getElementById(levelToLoad.levelid).onclick)(false);
+		//document.getElementById(levelToLoad.levelid).click(false);
+		levelToLoad.trace.forEach(function(obsel) {
+			var button = document.getElementById(obsel.group);
+			button.click();
+		});
+	} else {
+		window.alert(translate("save_notValid"));
 	}
 }
 
@@ -124,20 +129,20 @@ function importSave(file) {
  * @returns {type}  description
  */
 function loadFile() {
-	console.log("Hello !");
 	var fileinput = document.getElementById("fileinput");
 	if(fileinput.files[0] != undefined) {
 		var file = fileinput.files[0];
-		console.log(file.type);
 
-		//if (file.type.match('application/json')) {
+		if (file.type.match('application/json')) {
 			var reader = new FileReader();
 
-			reader.onload = importSave(data);
+			reader.onload = function(){
+				importSave(reader.result);
+			};
 			reader.readAsText(file);
-    	/*} else {
-			window.prompt("This file is not a JSON file and cannot therefore be open.");
-		}*/
+    	} else {
+			window.alert(translate("save_wrongFormat"));
+		}
 	}
 }
 
@@ -146,11 +151,17 @@ function loadFile() {
  *
  * @param  {type} url      Relative URL where take the json
  * @param  {type} callback The function to use (and pass the file to) when the file is loaded
+ * @param  {type} async False to make it synchronous, true otherwise
  * @returns {type}          description
  */
-function ajax(url, callback) {
+function ajax(url, callback, async) {
+	if(async !== undefined && async === false) {
+		async = false;
+	} else {
+		async = true;
+	}
 	var req = new XMLHttpRequest();
-	req.open("GET", url);
+	req.open("GET", url, async);
 	req.onerror = function() {
 		console.log("Fail to load "+url);
 	};
