@@ -104,6 +104,10 @@ function resetPlayground() {
 
 	currentLevel.trace.length = 0;
 	currentLevel.score = 0;
+
+	replayModeCreated = false;
+	document.getElementById("replayModeContent").innerHTML = "";
+	closeInfoPanel();
 }
 
 /**
