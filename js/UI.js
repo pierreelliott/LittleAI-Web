@@ -13,5 +13,8 @@ function openReplayMode() {
 	document.getElementById("replayModeContent").style.display = "block";
 	document.getElementById("infoPanel").style.display = "block";
 
-	initializeReplayMode();
+	if(!replayModeCreated) {
+		initializeReplayMode();
+		replayModeCreated = true;
+	}
 }

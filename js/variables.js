@@ -11,6 +11,7 @@ var commands = new Map();
 
 var translate;
 
+var replayModeCreated = false;
 
 // Some sort of queue, to store the last 10 obsels
 var score = [];
