@@ -29,6 +29,9 @@
 	overflow-y: auto;
 	overflow-x: hidden;
 }
+#infoPanel #replayModeContent {
+	overflow: hidden;
+}
 
 #levelOptions {
 	position: fixed;
