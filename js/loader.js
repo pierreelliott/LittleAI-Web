@@ -4,18 +4,21 @@ window.addEventListener("load", function () {
 });
 
 function initializeGame() {
-	var location = window.location.hash.split("#")[0];
-	console.log(window.location.hash.split("#"));
-	if(location !== "" && document.getElementById(location) !== undefined) {
-		(document.getElementById(location).onclick)();
-	} else {
+	var location = window.location.hash.split("#")[1];
+	try {
+		var levelLink = document.getElementById(location);
+		levelLink.click();
+	} catch (e) {
+		console.log("Error: URL not recognized.");
 		ajax("levels/group1/level_0.json", loadLevel);
 	}
 }
 
 window.onhashchange = function() {
-	var location = window.location.hash.split("#")[0];
+	var location = window.location.hash.split("#")[1];
+	console.log(window.location.hash.split("#"));
 	if(location !== "" && document.getElementById(location) !== undefined) {
+		console.log("Location not empty");
 		(document.getElementById(location).onclick)();
 	} else {
 		ajax("levels/group1/level_0.json", loadLevel);
@@ -36,8 +39,10 @@ function setLanguage(lang) {
 	console.log("'i18n/"+lang+".json'");
 	ajax("i18n/"+lang+".json", function (d) {
 		translate = i18n.create(d);
-		ajax("levels/levels.json", initializeMenu);
-		initializeGame();
+		ajax("levels/levels.json", function(data) {
+			initializeMenu(data);
+			initializeGame();
+		});
 	});
 }
 
@@ -73,6 +78,8 @@ function loadLevel(level) {
 	currentLevel.levelid = level.id;
 
 	window.location.hash = level.id;
+
+	openReplayMode();
 }
 
 /**

@@ -9,6 +9,7 @@ function openInfoPanel() {
 }
 
 function openReplayMode() {
+	console.log("Open replay mode");
 	document.getElementById("infoContent").style.display = "none";
 	document.getElementById("replayModeContent").style.display = "block";
 	document.getElementById("infoPanel").style.display = "block";

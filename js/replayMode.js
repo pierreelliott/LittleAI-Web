@@ -13,13 +13,17 @@ function webGLSupported() {
 
 function initializeReplayMode() {
 	if (webGLSupported()) {
-	    init();
+		if(renderer === undefined) {
+	    	init();
+		}
+		launchScene();
 	} else {
-	    document.getElementById("replayModeContent").textContent("Your browser doesn't support WebGL. Please, update it to the later version.");
+	    document.getElementById("replayModeContent").textContent = "Your browser doesn't support WebGL. Please, update it to the later version.";
 	}
 }
 
 function init() {
+	console.log("Scene init");
 	replayContainer = document.getElementById("replayModeContent");
 	replayContainerRect = replayContainer.getBoundingClientRect();
 
@@ -34,6 +38,14 @@ function init() {
 	replayContainer.innerHTML = "";
 	replayContainer.appendChild( renderer.domElement );
 	controls = new THREE.OrbitControls( camera, renderer.domElement );
+
+	clock = new THREE.Clock();
+}
+
+function launchScene() {
+	console.log("Scene launched");
+	renderer.clear();
+	console.log("Scene cleared");
 
 	var box = new THREE.BoxGeometry( 1, 1, 1 );
 	var stick = new THREE.BoxGeometry( 1, 1.5, 1 );
@@ -57,8 +69,6 @@ function init() {
 	camera.position.set(0, 0, 3);
 	camera.lookAt(scene.position);
 
-	clock = new THREE.Clock();
-
 	goRight = new THREE.AnimationClip( null, 1, [ new THREE.NumberKeyframeTrack( ".position[x]", [ 0, 0.25, 0.5 ], [ 0, 0.5, 0 ] ) ] );
 	goLeft = new THREE.AnimationClip( null, 1, [ new THREE.NumberKeyframeTrack( ".position[x]", [ 0, 0.25, 0.5 ], [ 0, -0.5, 0 ] ) ] );
 
@@ -70,6 +80,11 @@ function init() {
 	document.getElementById("btn2").addEventListener("click", function() { move("right"); });
 
 	animate();
+
+	console.log("Objects added");
+	console.log(renderer);
+
+	closeInfoPanel();
 }
 
 function addObject(shape, material, position, rotation) {
