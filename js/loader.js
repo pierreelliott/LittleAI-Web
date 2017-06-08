@@ -17,11 +17,12 @@ function initializeGame() {
 window.onhashchange = function() {
 	var location = window.location.hash.split("#")[1];
 	console.log(window.location.hash.split("#"));
-	if(location !== "" && document.getElementById(location) !== undefined) {
-		console.log("Location not empty");
-		(document.getElementById(location).onclick)();
-	} else {
-		ajax("levels/group1/level_0.json", loadLevel);
+	if (location !== currentLevel.levelid) {
+		if(location !== "" && document.getElementById(location) !== undefined) {
+			(document.getElementById(location).onclick)();
+		} else {
+			ajax("levels/group1/level_0.json", loadLevel);
+		}
 	}
 };
 
