@@ -81,7 +81,7 @@ div.tab button.active {
 	height: 0;
 	width: 100%;
 	position: fixed; /* Stay in place */
-	z-index: 1; /* Sit on top */
+	z-index: 10; /* Sit on top */
 	left: 0;
 	bottom: 0;
 	overflow-y: hidden; /* Disable horizontal scroll */

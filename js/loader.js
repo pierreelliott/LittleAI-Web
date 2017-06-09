@@ -1,9 +1,30 @@
 window.addEventListener("load", function () {
 	var userLang = navigator.language || navigator.userLanguage;
 	setLanguage(userLang);
-
-	document.getElementById("fileinput").onchange = loadFile();
 });
+
+function initializeGame() {
+	var location = window.location.hash.split("#")[1];
+	try {
+		var levelLink = document.getElementById(location);
+		levelLink.click();
+	} catch (e) {
+		console.log("Error: URL not recognized.");
+		ajax("levels/group1/level_0.json", loadLevel);
+	}
+}
+
+window.onhashchange = function() {
+	var location = window.location.hash.split("#")[1];
+	console.log(window.location.hash.split("#"));
+	if (location !== currentLevel.levelid) {
+		if(location !== "" && document.getElementById(location) !== undefined) {
+			(document.getElementById(location).onclick)();
+		} else {
+			ajax("levels/group1/level_0.json", loadLevel);
+		}
+	}
+};
 
 /**
  * setLanguage - Define the language of the game
@@ -19,8 +40,10 @@ function setLanguage(lang) {
 	console.log("'i18n/"+lang+".json'");
 	ajax("i18n/"+lang+".json", function (d) {
 		translate = i18n.create(d);
-		ajax("levels/levels.json", initializeMenu);
-		ajax("levels/group1/level_0.json", loadLevel);
+		ajax("levels/levels.json", function(data) {
+			initializeMenu(data);
+			initializeGame();
+		});
 	});
 }
 
@@ -54,6 +77,10 @@ function loadLevel(level) {
 	menuLink.textContent = translate(level.id);
 	currentLevel.finished = false;
 	currentLevel.levelid = level.id;
+
+	window.location.hash = level.id;
+
+	openReplayMode();
 }
 
 /**
@@ -85,6 +112,10 @@ function resetPlayground() {
 
 	currentLevel.trace.length = 0;
 	currentLevel.score = 0;
+
+	replayModeCreated = false;
+	document.getElementById("replayModeContent").innerHTML = "";
+	closeInfoPanel();
 }
 
 /**
@@ -105,16 +136,23 @@ function exportSave() {
 /**
  * importSave - Import a JSON file to load in the playground
  *
+ * @param {type} file	String containing the JSON information
  * @returns {type}  description
  */
 function importSave(file) {
 	var levelToLoad = JSON.parse(file);
 	var checksum = levelToLoad.hash;
 	delete levelToLoad.hash;
-	console.log("checksum : "+checksum);
-	console.log("hash : "+hashCode(JSON.stringify(levelToLoad)));
 	if(checksum === hashCode(JSON.stringify(levelToLoad))) {
-		console.log("It works !!");
+		console.log(document.getElementById(levelToLoad.levelid).onclick);
+		(document.getElementById(levelToLoad.levelid).onclick)(false);
+		//document.getElementById(levelToLoad.levelid).click(false);
+		levelToLoad.trace.forEach(function(obsel) {
+			var button = document.getElementById(obsel.group);
+			button.click();
+		});
+	} else {
+		window.alert(translate("save_notValid"));
 	}
 }
 
@@ -124,20 +162,20 @@ function importSave(file) {
  * @returns {type}  description
  */
 function loadFile() {
-	console.log("Hello !");
 	var fileinput = document.getElementById("fileinput");
 	if(fileinput.files[0] != undefined) {
 		var file = fileinput.files[0];
-		console.log(file.type);
 
-		//if (file.type.match('application/json')) {
+		if (file.type.match('application/json')) {
 			var reader = new FileReader();
 
-			reader.onload = importSave(data);
+			reader.onload = function(){
+				importSave(reader.result);
+			};
 			reader.readAsText(file);
-    	/*} else {
-			window.prompt("This file is not a JSON file and cannot therefore be open.");
-		}*/
+    	} else {
+			window.alert(translate("save_wrongFormat"));
+		}
 	}
 }
 
@@ -146,11 +184,17 @@ function loadFile() {
  *
  * @param  {type} url      Relative URL where take the json
  * @param  {type} callback The function to use (and pass the file to) when the file is loaded
+ * @param  {type} async False to make it synchronous, true otherwise
  * @returns {type}          description
  */
-function ajax(url, callback) {
+function ajax(url, callback, async) {
+	if(async !== undefined && async === false) {
+		async = false;
+	} else {
+		async = true;
+	}
 	var req = new XMLHttpRequest();
-	req.open("GET", url);
+	req.open("GET", url, async);
 	req.onerror = function() {
 		console.log("Fail to load "+url);
 	};

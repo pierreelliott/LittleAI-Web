@@ -18,7 +18,7 @@ Do not forget to check already made levels if you're not sure of what you are do
 
 ### Level's ID
 
-As said before, it simply is a unique key identifying the level. It is concatenated from the group name and the level name, for example: "group1level1".
+As said before, it simply is a unique key identifying the level. It is concatenated from the group name and the level name separated by an underscore, for example: "group1_level1".
 
 ### Buttons array
 

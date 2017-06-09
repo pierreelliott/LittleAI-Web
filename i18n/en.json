@@ -4,12 +4,14 @@
     "group2": "Group 2",
     "group3": "Group 3",
 
-	"group1level0": "Level 0",
-	"group1level1": "Level 1",
-	"group1level2": "Level 2",
-	"group1level3": "Level 3",
-	"group1level4": "Level 4",
+	"group1_level0": "Level 0",
+	"group1_level1": "Level 1",
+	"group1_level2": "Level 2",
+	"group1_level3": "Level 3",
+	"group1_level4": "Level 4",
 
-	"saveLevelInstructions": "Copy the save to clipboard (JSON file): Ctrl+C, Enter"
+	"save_wrongFormat": "This file is not a JSON file and cannot therefore be open.",
+	"save_notValid": "Error, this file is not valid. Please, do not try to modify saves' files if you do not know what you are doing.",
+	"save_wrongLevel": "Error. You are trying to import the wrong level."
   }
 }

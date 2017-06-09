@@ -15,6 +15,8 @@
 		<!-- Import of Font Awesome library -->
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
+		<script type="text/javascript" src="js/three.js"></script>
+
 		<title>LittleAI</title>
 		<link rel="stylesheet" type="text/css" href="css/master.css">
 		<link rel="stylesheet" type="text/css" href="css/feedback.css">
@@ -47,6 +49,7 @@
 
 				<div id="menuActions">
 					<input type="file" id="fileinput"/>
+					<a id="importbtn" onclick="loadFile()" class="fa fa-upload fa-3x"></a>
 					<a id="exportbtn" onclick="exportSave()" class="exportbtn fa fa-download fa-3x"></a>
 					<a id="downloadAnchorElem" style="display:none"></a>
 				</div>
@@ -91,15 +94,28 @@
 				</span>
 			</div>
 
-			<!-- Toggleable panel displaying informations about a level -->
-			<div class="informations center">
-				Informations
+			<div id="levelOptions">
+				<div id="robotBtn">
+				</div>
+				<div id="infoBtn">
+					<span onclick="openInfoPanel()" class="fa fa-info-circle fa-3x" style="color:yellow"></span>
+				</div>
+				<div id="replayModeBtn">
+					<span onclick="openReplayMode()" class="fa fa-info-circle fa-3x" style="color:blue"></span>
+				</div>
 			</div>
 
-			<!-- A 3D (possible) representation of the level, to help players understand
-					It is only available after the player finished the level -->
-			<div class="replay-mode center">
-				World...
+			<!-- Toggleable panel displaying informations about a level -->
+			<div id="infoPanel">
+				<div class="header">
+					<span class="logo fa fa-info-circle fa-2x"></span>
+					<span onclick="closeInfoPanel()" class="close fa fa-close fa-2x"></span>
+				</div>
+				<div id="infoContent" class="content">
+					Informations : Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut sit amet posuere ligula, eget auctor odio. Aenean ut risus in eros condimentum luctus at non tellus. Nam auctor neque turpis, a efficitur massa consequat sed. Ut quis volutpat nunc, eu luctus quam. Vivamus a libero rutrum, fringilla nisl cursus, semper nulla. Sed nisi ante, semper a erat in, vehicula luctus quam. Aliquam tempor sed dolor ut ultrices. Nullam mauris nunc, aliquam et arcu vel, dictum interdum magna. Praesent condimentum, eros sit amet tristique dictum, lectus felis cursus quam, non rhoncus ipsum augue eget leo. Sed semper egestas pellentesque. Nullam in metus enim. Sed non iaculis tellus, sit amet fermentum odio.
+				</div>
+				<div id="replayModeContent" class="content">
+				</div>
 			</div>
 		</div>
 
@@ -113,6 +129,10 @@
 		<script type="text/javascript" src="js/game.js"></script>
 		<script type="text/javascript" src="js/loader.js"></script>
 		<script type="text/javascript" src="js/levelMenu.js"></script>
+		<script type="text/javascript" src="js/UI.js"></script>
+		<script type="text/javascript" src="js/replayMode.js"></script>
+
+		<script type="text/javascript" src="js/OrbitControls.js"></script>
 		<script type="text/javascript" src="js/stateMachine.js"></script>
 		<script type="text/javascript" src="js/i18n.js"></script>
 	</body>
