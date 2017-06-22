@@ -26,3 +26,7 @@ You can play a (really) old version of the game [right there](http://little-ai.c
 
 To learn more about developmental artificial intelligence and the science behind it, you can go at: [little-ai.com/science.html](http://little-ai.com/science.html).  
 There is also a MOOC (Massive Open Online Course) [on the subject](http://liris.cnrs.fr/ideal/mooc/).
+
+## Information
+
+This web version of Little AI was developed by Pierre-Elliott Thiboud in the [SMA team at the LIRIS](http://liris.cnrs.fr/equipes?id=74) during an internship for the [IUT Lyon 1](http://iut.univ-lyon1.fr/).
