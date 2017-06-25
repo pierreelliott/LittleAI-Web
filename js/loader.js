@@ -16,7 +16,7 @@ function initializeGame() {
 
 window.onhashchange = function() {
 	var location = window.location.hash.split("#")[1];
-	console.log(window.location.hash.split("#"));
+	//console.log(window.location.hash.split("#"));
 	if (location !== currentLevel.levelid) {
 		if(location !== "" && document.getElementById(location) !== undefined) {
 			(document.getElementById(location).onclick)();
@@ -37,7 +37,7 @@ function setLanguage(lang) {
 	if(!/(fr|en)/.test(lang)) {
 		lang = "en";
 	}
-	console.log("'i18n/"+lang+".json'");
+	console.log("Language: " + lang);
 	ajax("i18n/"+lang+".json", function (d) {
 		translate = i18n.create(d);
 		ajax("levels/levels.json", function(data) {
@@ -144,7 +144,7 @@ function importSave(file) {
 	var checksum = levelToLoad.hash;
 	delete levelToLoad.hash;
 	if(checksum === hashCode(JSON.stringify(levelToLoad))) {
-		console.log(document.getElementById(levelToLoad.levelid).onclick);
+		//console.log(document.getElementById(levelToLoad.levelid).onclick);
 		(document.getElementById(levelToLoad.levelid).onclick)(false);
 		//document.getElementById(levelToLoad.levelid).click(false);
 		levelToLoad.trace.forEach(function(obsel) {
@@ -187,8 +187,25 @@ function loadFile() {
  * @param  {type} async False to make it synchronous, true otherwise
  * @returns {type}          description
  */
-function ajax(url, callback, async) {
+function ajax(data_url, callback, async) {
 	if(async !== undefined && async === false) {
+		async = false;
+	} else {
+		async = true;
+	}
+
+	$.getJSON(data_url, function (data,status,xhr) {
+		if(status === "success") {
+			//var data_parsed = JSON.parse(data);
+			callback(data);
+		} else {
+			console.log("Error " + status);
+		}
+	});
+/*
+
+
+	/*if(async !== undefined && async === false) {
 		async = false;
 	} else {
 		async = true;
@@ -207,5 +224,5 @@ function ajax(url, callback, async) {
 			console.log("Error " + req.status);
 		}
 	};
-	req.send();
+	req.send();*/
 }
