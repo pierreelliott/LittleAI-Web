@@ -1,7 +1,14 @@
 window.addEventListener("load", function () {
+	initializeApp();
+});
+
+function initializeApp() {
+	initializeI18n();
 	var userLang = navigator.language || navigator.userLanguage;
 	setLanguage(userLang);
-});
+	initializeMenu();
+	initializeGame()
+}
 
 function initializeGame() {
 	var location = window.location.hash.split("#")[1];
@@ -10,7 +17,7 @@ function initializeGame() {
 		levelLink.click();
 	} catch (e) {
 		console.log("Error: URL not recognized.");
-		ajax("levels/group1/level_0.json", loadLevel);
+		loadLevel("group1_level0");
 	}
 }
 
@@ -21,10 +28,31 @@ window.onhashchange = function() {
 		if(location !== "" && document.getElementById(location) !== undefined) {
 			(document.getElementById(location).onclick)();
 		} else {
-			ajax("levels/group1/level_0.json", loadLevel);
+			loadLevel("group1_level0");
 		}
 	}
 };
+
+function loadObject(id) {
+	if (isStored(id)) {
+		return retrieveObject(id);
+	} else {
+		if (/^group\d+_level\d+$/.test(id)) {
+			var levelgroup = levelsInformations.get(id).group;
+			var levelfile = levelsInformations.get(id).file;
+
+			ajax("levels/"+levelgroup+"/"+levelfile, function(data) {
+				storeObject({key: data.id, object: data});
+				loadLevel(id);
+			});
+		} else if (/menu/.test(id)) {
+			ajax("levels/levels.json", function(data) {
+				storeObject({key: data.id, object: data});
+				initializeMenu();
+			});
+		}
+	}
+}
 
 /**
  * loadLevel - Load the given level in the playground
@@ -33,11 +61,13 @@ window.onhashchange = function() {
  * @param  {type} level JSON object (already parsed) with buttons and state machine data
  * @returns {void}       Nothing
  */
-function loadLevel(level) {
-	var levelsButtons, levelsFsm,
-		menuLink = document.getElementById("menuLink");
+function loadLevel(levelid) {
+	var level = loadObject(levelid);
 
 	resetPlayground();
+
+	var levelsButtons, levelsFsm,
+		menuLink = document.getElementById("menuLink");
 
 	levelsButtons = level.buttons;
 	levelsFsm = level.stateMachine;
@@ -53,7 +83,6 @@ function loadLevel(level) {
 		createButton(button, fsm);
 	}
 
-	menuLink.textContent = translate(level.id);
 	currentLevel.finished = false;
 	currentLevel.levelid = level.id;
 
@@ -92,8 +121,8 @@ function resetPlayground() {
 	currentLevel.trace.length = 0;
 	currentLevel.score = 0;
 
-	replayModeCreated = false;
-	document.getElementById("replayModeContent").innerHTML = "";
+	//replayModeCreated = false;
+	//document.getElementById("replayModeContent").innerHTML = "";
 	closeInfoPanel();
 }
 
@@ -156,52 +185,4 @@ function loadFile() {
 			window.alert(translate("save_wrongFormat"));
 		}
 	}
-}
-
-/**
- * ajax - Do ajax call. Retrieve the JSON at the url and send it to the callback function
- *
- * @param  {type} url      Relative URL where take the json
- * @param  {type} callback The function to use (and pass the file to) when the file is loaded
- * @param  {type} async False to make it synchronous, true otherwise
- * @returns {type}          description
- */
-function ajax(data_url, callback, async) {
-	if(async !== undefined && async === false) {
-		async = false;
-	} else {
-		async = true;
-	}
-
-	$.getJSON(data_url, function (data,status,xhr) {
-		if(status === "success") {
-			//var data_parsed = JSON.parse(data);
-			callback(data);
-		} else {
-			console.log("Error " + status);
-		}
-	});
-/*
-
-
-	/*if(async !== undefined && async === false) {
-		async = false;
-	} else {
-		async = true;
-	}
-	var req = new XMLHttpRequest();
-	req.open("GET", url, async);
-	req.onerror = function() {
-		console.log("Fail to load "+url);
-	};
-	req.onload = function() {
-		if (req.status === 200) {
-			//console.log("Rep : "+req.responseText);
-			var data = JSON.parse(req.responseText);
-			callback(data);
-		} else {
-			console.log("Error " + req.status);
-		}
-	};
-	req.send();*/
 }

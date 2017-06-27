@@ -3,7 +3,7 @@
  * @name Utility
  * @author Pierre-Elliott Thiboud <pierreelliott.thiboud@gmail.com>
  */
- 
+
 /**
  * getShape - Return the shape associated with the specified number
  *
@@ -91,3 +91,51 @@ function hashCode(text) {
   }
   return hash;
 };
+
+/**
+ * ajax - Do ajax call. Retrieve the JSON at the url and send it to the callback function
+ *
+ * @param  {type} url      Relative URL where take the json
+ * @param  {type} callback The function to use (and pass the file to) when the file is loaded
+ * @param  {type} async False to make it synchronous, true otherwise
+ * @returns {type}          description
+ */
+function ajax(data_url, callback, async) {
+	if(async !== undefined && async === false) {
+		async = false;
+	} else {
+		async = true;
+	}
+
+	$.getJSON(data_url, function (data,status,xhr) {
+		if(status === "success") {
+			//var data_parsed = JSON.parse(data);
+			callback(data);
+		} else {
+			console.log("Error " + status);
+		}
+	});
+/*
+
+
+	/*if(async !== undefined && async === false) {
+		async = false;
+	} else {
+		async = true;
+	}
+	var req = new XMLHttpRequest();
+	req.open("GET", url, async);
+	req.onerror = function() {
+		console.log("Fail to load "+url);
+	};
+	req.onload = function() {
+		if (req.status === 200) {
+			//console.log("Rep : "+req.responseText);
+			var data = JSON.parse(req.responseText);
+			callback(data);
+		} else {
+			console.log("Error " + req.status);
+		}
+	};
+	req.send();*/
+}

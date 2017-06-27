@@ -23,3 +23,10 @@ var currentLevel = {
 };
 
 var userSave;
+
+var levelsInformations = new Map();
+
+var configurationFiles = new Map();
+
+var UIRessources = new Map();
+var APP_LocalStorage;
