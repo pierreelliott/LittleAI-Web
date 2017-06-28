@@ -48,10 +48,11 @@
 				</div>
 
 				<div id="menuActions">
-					<input type="file" id="fileinput"/>
+					<input type="file" id="fileinput" title="file input"/>
 					<a id="importbtn" onclick="loadFile()" class="fa fa-upload fa-3x"></a>
 					<a id="exportbtn" onclick="exportSave()" class="exportbtn fa fa-download fa-3x"></a>
 					<a id="downloadAnchorElem" style="display:none"></a>
+					<a id="ifError" onclick="importApp()">Load static app</a>
 				</div>
 			</div>
 
@@ -125,6 +126,7 @@
 	    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 
 		<script type="text/javascript" src="js/variables.js"></script>
+		<script type="text/javascript" src="levels/app.js"></script>
 		<script type="text/javascript" src="js/storageManagement.js"></script>
 		<script type="text/javascript" src="js/utility.js"></script>
 		<script type="text/javascript" src="js/game.js"></script>

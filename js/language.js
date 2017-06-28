@@ -10,21 +10,28 @@ function setLanguage(lang) {
 		lang = "en";
 	}
 	console.log("Language: " + lang);
-	ajax("i18n/"+lang+".json", function (d) {
-		translate = i18n.create(d);
-		ajax("levels/levels.json", function(data) {
-			initializeMenu(data);
-			initializeGame();
-		});
+	ajax("i18n/"+lang+".json", function (data) {
+		storeObject({key: lang, object: data});
+		translate = i18n.create(data);
+		updateContent();
 	});
 }
 
 function initializeI18n() {
-	UIRessources.set(level.id, document.getElementById("menuLink"));
+	var menuLink = document.getElementById("menuLink");
+	// Doesn't work
+	menuLink.addEventListener("change", function () {
+		menuLink.textContent = translate(menuLink.textContent);
+	})
+
+	var userLang = navigator.language || navigator.userLanguage;
+	setLanguage(userLang);
 }
 
 function updateContent() {
-	for(key of UIRessources.keys) {
-		UIRessources.get(key).textContent = translate(key);
+	for(var key of UIRessources.keys()) {
+		if(/(^group\d+_level\d+$|^group\d+$)/.test(key)) {
+			UIRessources.get(key).textContent = translate(key);
+		}
 	}
 }

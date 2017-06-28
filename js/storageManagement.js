@@ -1,5 +1,6 @@
 function initializeStorage() {
 	if (typeof(Storage) === "undefined") {
+		console.log("HTML5 default local storage isn't supported");
 		localStorage = new Map();
 		localStorage.setItem = localStorage.set;
 		localStorage.getItem = localStorage.get;
@@ -37,9 +38,3 @@ function isStored(key) {
 		return true;
 	}
 }
-
-/*
-var storageSize = localStorage.length;
-for(var i = 0; i < storageSize; i++) {
-
-}*/

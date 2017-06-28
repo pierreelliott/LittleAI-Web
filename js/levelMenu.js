@@ -5,66 +5,20 @@
  */
 
 /**
- * openNav - Open the menu when the user click on the level's link
- *
- * @returns {void}  Nothing
- */
-function openNav() {
-	document.getElementById("levelMenu").style.height = "100%";
-}
-
-/**
- * closeNav - Close the menu when someone clicks on the "x" symbol inside the menu overlay
- *
- * @returns {void}  Nothing
- */
-function closeNav() {
-	document.getElementById("levelMenu").style.height = "0%";
-}
-
-/**
- * openTab - Open a tab (corresponding to a group of levels) in the menu overlay
- *
- * @param  {event} evt   The triggered event
- * @param  {string} group The ID of the tabcontent it will display
- * @returns {void}       Nothing
- */
-function openTab(evt, group) {
-    // Declare all variables
-    var i, tabcontent, tablinks;
-
-    // Get all elements with class="tabcontent" and hide them
-    tabcontent = document.getElementsByClassName("tabcontent");
-    for (i = 0; i < tabcontent.length; i++) {
-        tabcontent[i].style.display = "none";
-    }
-
-    // Get all elements with class="tablinks" and remove the class "active"
-    tablinks = document.getElementsByClassName("tablinks");
-    for (i = 0; i < tablinks.length; i++) {
-        tablinks[i].className = tablinks[i].className.replace(" active", "");
-    }
-
-    // Show the current tab, and add an "active" class to the button that opened the tab
-    document.getElementById(group).style.display = "block";
-    evt.currentTarget.className += " active";
-}
-
-/**
  * initializeMenu - Creates the tab navigation of the menu based on the configuration file
  *
  * @param  {json} levels Configuration file. It describes the groups and the levels inside each of them
  * @returns {type}        Nothing
  */
-function initializeMenu() {
-	var levels = loadObject("menu");
-
+function initializeMenu(levels) {
 	var index = document.getElementById("menuTabIndex"),
 		container = document.getElementById("menuTab");
 
 	for(var group of levels.groups) {
 		createGroup(group, index, container);
 	}
+
+	initializeGame();
 
 	// Open the tab content of the first group
 	index.querySelector(".tablinks").click();
@@ -109,7 +63,6 @@ function createLinkLevel(groupName, level) {
 	var levelLink = document.createElement("div");
 
 	UIRessources.set(level.id, levelLink);
-	levelLink.textContent = translate(level.id);
 	levelLink.className = "levelLink";
 	levelLink.id = level.id;
 	levelLink.onclick = function() {
@@ -121,7 +74,7 @@ function createLinkLevel(groupName, level) {
 		storeObject({key: data.id, object: data});
 	});
 
-	levelsInformations.set(level.id, {group: groupName, file: level.file});
+	levelsInformations.set(level.id, {id: level.id, group: groupName, file: level.file});
 
 	return levelLink;
 }

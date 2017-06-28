@@ -9,7 +9,7 @@ var obsels = new Map(); // To store all obsels currently in the trace
 						// Obsels are stored by groups (a group is the button which created the obsel and the interaction associated)
 var commands = new Map();
 
-var translate;
+var translate = function (a) { return a; };
 
 var replayModeCreated = false;
 

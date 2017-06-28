@@ -1,23 +1,15 @@
 window.addEventListener("load", function () {
-	initializeApp();
-});
-
-function initializeApp() {
+	loadObject("","menu", initializeMenu);
 	initializeI18n();
-	var userLang = navigator.language || navigator.userLanguage;
-	setLanguage(userLang);
-	initializeMenu();
-	initializeGame()
-}
+});
 
 function initializeGame() {
 	var location = window.location.hash.split("#")[1];
-	try {
-		var levelLink = document.getElementById(location);
-		levelLink.click();
-	} catch (e) {
-		console.log("Error: URL not recognized.");
-		loadLevel("group1_level0");
+
+	if(isLevel(location)) {
+		loadObject(location, "level", loadLevel);
+	} else {
+		loadObject("group1_level0", "level", loadLevel);
 	}
 }
 
@@ -25,31 +17,45 @@ window.onhashchange = function() {
 	var location = window.location.hash.split("#")[1];
 	//console.log(window.location.hash.split("#"));
 	if (location !== currentLevel.levelid) {
-		if(location !== "" && document.getElementById(location) !== undefined) {
-			(document.getElementById(location).onclick)();
+		if(isLevel(location)) {
+			loadObject(location, "level", loadLevel);
 		} else {
-			loadLevel("group1_level0");
+			loadObject("group1_level0", "level", loadLevel);
 		}
 	}
 };
 
-function loadObject(id) {
+function loadObject(id = "", type, callback) {
+	/* If the object we try to load is stored locally, we return it
+	 * Otherwise, we do an ajax call to get, store the object and callback the data
+	*/
+	console.log(localStorage);
 	if (isStored(id)) {
-		return retrieveObject(id);
+		console.log("Object already stored");
+		callback(retrieveObject(id));
 	} else {
-		if (/^group\d+_level\d+$/.test(id)) {
-			var levelgroup = levelsInformations.get(id).group;
-			var levelfile = levelsInformations.get(id).file;
+		switch (type) {
+			case "level":
+				var levelgroup = levelsInformations.get(id).group;
+				var levelfile = levelsInformations.get(id).file;
 
-			ajax("levels/"+levelgroup+"/"+levelfile, function(data) {
-				storeObject({key: data.id, object: data});
-				loadLevel(id);
-			});
-		} else if (/menu/.test(id)) {
-			ajax("levels/levels.json", function(data) {
-				storeObject({key: data.id, object: data});
-				initializeMenu();
-			});
+				console.log("Loading level file");
+
+				ajax("levels/"+levelgroup+"/"+levelfile, function(data) {
+					storeObject({key: data.id, object: data});
+					callback(data);
+				});
+				break;
+			case "menu":
+				console.log("Loading menu file");
+
+				ajax("levels/levels.json", function(data) {
+					storeObject({key: "menu", object: data});
+					callback(data);
+				});
+				break;
+			default:
+
 		}
 	}
 }
@@ -61,9 +67,7 @@ function loadObject(id) {
  * @param  {type} level JSON object (already parsed) with buttons and state machine data
  * @returns {void}       Nothing
  */
-function loadLevel(levelid) {
-	var level = loadObject(levelid);
-
+function loadLevel(level) {
 	resetPlayground();
 
 	var levelsButtons, levelsFsm,
@@ -82,6 +86,8 @@ function loadLevel(levelid) {
 	for (var button of levelsButtons) {
 		createButton(button, fsm);
 	}
+
+	menuLink.textContent = translate(level.id);
 
 	currentLevel.finished = false;
 	currentLevel.levelid = level.id;

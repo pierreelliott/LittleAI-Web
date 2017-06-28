@@ -115,27 +115,13 @@ function ajax(data_url, callback, async) {
 			console.log("Error " + status);
 		}
 	});
-/*
+}
 
-
-	/*if(async !== undefined && async === false) {
-		async = false;
-	} else {
-		async = true;
-	}
-	var req = new XMLHttpRequest();
-	req.open("GET", url, async);
-	req.onerror = function() {
-		console.log("Fail to load "+url);
-	};
-	req.onload = function() {
-		if (req.status === 200) {
-			//console.log("Rep : "+req.responseText);
-			var data = JSON.parse(req.responseText);
-			callback(data);
-		} else {
-			console.log("Error " + req.status);
+function isLevel(id) {
+	for(var levelid of levelsInformations.keys()) {
+		if(levelid === id) {
+			return true;
 		}
-	};
-	req.send();*/
+	}
+	return false;
 }
