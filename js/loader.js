@@ -36,6 +36,13 @@ window.onhashchange = function() {
 function setLanguage(lang) {
 	if(!/(fr|en)/.test(lang)) {
 		lang = "en";
+	} else {
+		if(/(en)/.test(lang)) {
+			lang = "en";
+		}
+		if(/(fr)/.test(lang)) {
+			lang = "fr";
+		}
 	}
 	console.log("Language: " + lang);
 	ajax("i18n/"+lang+".json", function (d) {
