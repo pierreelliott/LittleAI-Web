@@ -1,3 +1,183 @@
+function Game() {
+	this._constructor_.apply(this, args);
+}
+
+Game.prototype = {
+	configuration: {},
+	buttons: {},
+	types: {}, // Assocative array between "obselType" and "color"
+	trace: [],
+	score: [], // Store last 10 obsel
+	finished: false,
+	fsm: "",
+	DOMelem: "",
+	
+	scoreContainer: "",
+	traceContainer: "",
+	buttonsContainer: "",
+	
+	_constructor_: function (domElem) {
+		if(domElem === undefined) {
+			// Initialize the playground by creating all placeholders for score, trace, ...
+		}
+	},
+	
+	init: function (config) {
+		this.resetGame(); // Reset playfield
+		if(config === undefined) {
+			throw new Error("Configuration file needed");
+		}
+		// Loop through config to verify everything's here
+		// and put everything in this.configuration
+		
+		// Create StateMachine
+		// Add callback function to StateMachine
+		
+		// Loop to create buttons (see levelExample.json)
+	},
+	
+	resetGame: function () {
+		this.scoreContainer.textContent = "0";
+		this.scoreContainer.classList.toggle("finished", false);
+		this.scoreContainer.classList.toggle("alreadyFinished", false);
+		this.score.length = 0;
+		// this.buttons = {};
+		// this.trace.length = 0;
+		this.traceContainer.textContent = "";
+		this.buttonsContainer.textContent = "";
+	},
+	
+	changeShape: function () {
+		
+	},
+	
+	changeColor: function () {
+		
+	},
+	
+	addButton: function () {
+		domElem = this._createButton(id)
+	},
+	
+	_createButton: function (id) {
+		var icon = document.createElement("span"); // Node which will hold the FA icon
+		var div = document.createElement("div");
+		
+		icon.id = id;
+		icon.className = "shape fa fa-5x " + getShape(this.buttons[id].shape);
+		icon.addEventListener("click", function() {
+			this.fsm.stmOnEvent(id);
+		 });
+		icon.addEventListener("contextmenu", function(e) {
+			e.preventDefault();
+			//changeShape(btn, (btn.shape+1)%3+1);
+		});
+		
+		div.className = "command";
+		div.append(icon);
+		
+		return div;
+	},
+	
+	addObsel: function (btn, type, valence) {
+		newObsel = new Obsel(btn, type, valence, this.buttons[btn].shape, this.types[type]);
+		this.trace.push(newObsel);
+		this.updateScore(newObsel);
+		this.traceContainer.append(newObsel.DOMelem);
+	},
+	
+	updateObsels: function () {
+		
+	},
+	
+	updateScore: function () {
+		
+	},
+	
+	saveGame: function () {
+		var userSave;
+		userSave.levelid = this.configuration.levelid;
+		userSave.trace = this.trace;
+		userSave.score = this.score;
+		userSave.finished = this.finished;
+		userSave.types = this.types;
+		
+		return userSave;
+	},
+	
+	importSave: function () {
+		
+	}
+}
+
+function Button() {
+	this._constructor_.apply(this, args);
+}
+
+Button.prototype = {
+	id: "",
+	DOMelem: "",
+	
+	_constructor_: function () {
+		
+	},
+	
+	_createButton: function () {
+		
+	},
+	
+	activate: function () {
+		
+	}
+}
+
+function Obsel() {
+	this._constructor_.apply(this, args);
+}
+
+Obsel.prototype = {
+	btn: "",
+	type: "",
+	valence: "",
+	DOMelem: "",
+	
+	_constructor_: function (btn, type, valence, shape, color) {
+		this.DOMelem = this._createObsel(btn, type, valence, shape, color);
+		this.btn = btn;
+		this.type = type;
+		this.valence = valence;
+	},
+	
+	_createObsel: function (btn, type, valence, shape, color) {
+		var obselContainer = document.createElement("div");
+		var iconContainer = document.createElement("span");
+		var valenceContainer = document.createElement("span");
+		
+		iconContainer.className = btn + " " + type + " obsel fa fa-2x " + getShape(shape) + " " + getColor(color);
+		valenceContainer.textContent = obsel.valence;
+		valenceContainer.className = "valence " + this.checkValence(valence); // Change the color of the text depending of the valence (positive, negative or null)
+		obselContainer.className = "interactionResult";
+		obselContainer.append(iconContainer);
+		obselContainer.append(valenceContainer);
+		
+		return obselContainer;
+	},
+	
+	checkValence: function (valence) {
+		var color = "";
+
+		if(valence < 0) {
+			color = "red";
+		} else if (valence > 0) {
+			color = "green";
+		} else {
+			color = "white";
+		}
+
+		return color;
+	}
+}
+
 /**
  * createButton - Creates the buttons (the DOM element and the object)
  *
