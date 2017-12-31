@@ -1,178 +1,310 @@
-function Game() {
-	this._constructor_.apply(this, args);
-}
-
-Game.prototype = {
-	configuration: {},
-	buttons: {},
-	types: {}, // Assocative array between "obselType" and "color"
-	trace: [],
-	score: [], // Store last 10 obsel
-	finished: false,
-	fsm: "",
-	DOMelem: "",
+function LittleAIGame(domElem, i18n_function) {
+	var configuration = {};
+	var obsels = {};
+	var buttons = {};
+	var types = {}; // Assocative array between "obselType" and "color"
+	var trace = [];
+	var scoreObsels = []; // Store last 10 obsel
+	var score;
+	var finished = false;
+	var fsm;
 	
-	scoreContainer: "",
-	traceContainer: "",
-	buttonsContainer: "",
+	var scoreContainer, traceContainer, buttonsContainer,
+	levelInformationsContainer, replayModeContainer;
+	var menuLink;
 	
-	_constructor_: function (domElem) {
+	var i18n = i18n_function;
+	
+	initPlayground(domElem);
+	
+	function initPlayground(domElem) {
+		// Initialize the playground by creating all placeholders for score, trace, ...
 		if(domElem === undefined) {
-			// Initialize the playground by creating all placeholders for score, trace, ...
+			domElem = document.createElement("div");
 		}
-	},
+		domElem.classList.toggle("container", true);
+		$(document).append(domElem);
+		
+		var menuLinkContainer = $("<div>", {class: 'openbtn', onclick: 'openNav();'});
+		menuLink = $("<div>", {id: 'menuLink'});
+		$(menuLinkContainer).append(menuLink);
+		$(domElem).append(menuLinkContainer);
+		
+		// Create and append the "feedback" diplay (ie, trace and score)
+		scoreContainer = $("<div>", {id: 'score', class: 'score center'});
+		traceContainer = $("<div>", {id: 'traceContainer', class: 'traceContainer'});
+		$(domElem).append(
+			($("<div>", {class: 'feedback'})).append(
+				($("<div>", {id: 'scorePositionner'})).append(
+					scoreContainer
+				)
+			).append(
+				($("<div>", {id: 'tracePositionner'})).append(
+					traceContainer
+				)
+			)
+		);
+		
+		// Create and append the commands display (ie, where the buttons will go)
+		buttonsContainer = $("<div>", {id: 'commands', class: 'commands'});
+		$(domElem).append(
+			buttonsContainer
+		);
+		
+		// Create and append buttons to manage information panel and replay mode
+		$(domElem).append(
+			($("<div>", {id: 'levelOptions'})).append(
+				$("<div>", {id: 'robotBtn'})
+			).append(
+				($("<div>", {id: 'infoBtn'})).append(
+					$("<span>", {onclick: "openInfoPanel();", class: 'fa fa-info-circle fa-3x'})
+				)
+			).append(
+				($("<div>", {id: 'replayModeBtn'})).append(
+					$("<span>", {onclick: "openReplayMode();", class: 'fa fa-info-circle fa-3x'})
+				)
+			)
+		);
+		
+		// Need to create the panel in question
+		
+		
+	}
 	
-	init: function (config) {
-		this.resetGame(); // Reset playfield
+	this.initLevel = function(levelConfig) {
+		resetGame(); // Reset playfield
 		if(config === undefined) {
 			throw new Error("Configuration file needed");
 		}
 		// Loop through config to verify everything's here
-		// and put everything in this.configuration
+		// ...
+		// and put everything in 'configuration'
+		configuration = levelConfig;
+		types = configuration.types;
 		
-		// Create StateMachine
 		// Add callback function to StateMachine
+		StateMachine.prototype.createObsel = function(arg){
+			arg.state = configuration.types[arg.group][this.stmGetStatus()];
+			addObsel(arg);
+		};
+		// Create StateMachine
+		fsm = new StateMachine(configuration.stateMachine);
 		
-		// Loop to create buttons (see levelExample.json)
-	},
+		// Loop to create buttons
+		for (var id of configuration.buttons) {
+			addButton(id, types[id].shape);
+		}
+	}
 	
-	resetGame: function () {
-		this.scoreContainer.textContent = "0";
-		this.scoreContainer.classList.toggle("finished", false);
-		this.scoreContainer.classList.toggle("alreadyFinished", false);
-		this.score.length = 0;
-		// this.buttons = {};
-		// this.trace.length = 0;
-		this.traceContainer.textContent = "";
-		this.buttonsContainer.textContent = "";
-	},
-	
-	changeShape: function () {
+	function resetGame() {
+		scoreContainer.textContent = "0";
+		scoreContainer.classList.toggle("finished", false);
+		scoreContainer.classList.toggle("alreadyFinished", false);
 		
-	},
-	
-	changeColor: function () {
+		scoreObsels.length = 0;
+		score = 0;
+		trace = [];
+		buttons = {};
+		obsels = {};
+		types = {};
+		configuration = {};
 		
-	},
+		traceContainer.textContent = "";
+		buttonsContainer.textContent = "";
+	}
 	
-	addButton: function () {
-		domElem = this._createButton(id)
-	},
+	function changeShape(btn, newShape) {
+		var obselsToChange = obsels[btn.id];
+		
+		obselsToChange.forEach(function(obselsType) {
+			// We get multiple arrays of obsels grouped by type
+			obselsType.forEach(function(ob) {
+				ob.changeShape(newShape);
+			});
+		});
+		
+		types[btn.id].shape  newShape;
+	}
 	
-	_createButton: function (id) {
+	function changeColor(obsel, newColor) {		
+		var obselsToChange = obsels[obsel.getBtn()][obsel.getType()];
+		
+		obselsToChange.forEach(function(ob) {
+			ob.changeColor(newColor);
+		});
+	}
+	
+	function addButton(id, shape) {
+		var btn = new Button(id, shape, fsm, changeShape);
+		buttonsContainer.append(btn.DOMelem);
+		buttons[id+""] = btn; // Associative array between IDs and buttons
+	}
+	
+	// Need attention
+	function addObsel(btn_id, type, valence) {
+		// /!\ Need to look how I handle the "type" and the "color"
+		var newObsel = new Obsel(btn_id, type, valence, buttons[btn_id].getShape(), types[type]);
+		
+		obsels[btn_id][type].push(newObsel);
+		trace.push(newObsel);
+		traceContainer.append(newObsel.DOMelem);
+		
+		updateScore(newObsel);
+	}
+	
+	function updateScore(newObsel) {
+		var scoreSum = 0;
+		var scoreColor = "";
+
+		scoreObsels.push(newObsel);
+		while(score.length > 10) {
+			scoreObsels.shift();	// This method isn't a perfect implementation for a queue
+							// but it's more practical and works well with small sized arrays
+		}
+
+		for (var obsel of scoreObsels) {
+			scoreSum += obsel.valence;
+		}
+		scoreContainer.textContent = scoreSum;
+		score = scoreSum;
+
+
+		if(score >= 10) { // "10" might be replaced by "configuration.winningScore"
+			scoreContainer.classList.toggle("finished", true);
+			scoreContainer.classList.toggle("alreadyFinished", false);
+			finished = true;
+		} else {
+			if(finished) {
+				scoreContainer.classList.toggle("alreadyFinished", true);
+				scoreContainer.classList.toggle("finished", false);
+			}
+		}
+	}
+	
+	this.saveGame = function() {
+		var userSave;
+		userSave.levelid = configuration.levelid;
+		userSave.trace = trace;
+		userSave.score = score;
+		userSave.finished = finished;
+		userSave.types = types;
+		/* To store obsels change of color
+		userSave.colors = {
+			
+		}*/
+		
+		return userSave;
+	}
+	
+	this.importSave = function(saveFile, levelToLoad) {
+		// Load the level
+		// ...
+		
+		var checksum = saveFile.hash;
+		delete saveFile.hash;
+		if(checksum === hashCode(JSON.stringify(saveFile))) {
+			//console.log(document.getElementById(levelToLoad.levelid).onclick);
+					//(document.getElementById(saveFile.levelid).onclick)(false); (??)
+			//document.getElementById(levelToLoad.levelid).click(false);
+			saveFile.trace.forEach(function(obsel) {
+				var button = document.getElementById(obsel.group);
+				button.click();
+			});
+		} else {
+			window.alert(i18n("save_notValid"));
+		}
+	}
+}
+
+function Button(id, shape, fsm, changingShape_callback) {
+	this.id = id;
+	this.DOMelem = _createButton(id);
+	var shape = shape;
+	
+	this.getShape = function() {
+		return shape;
+	}
+	
+	function _createButton(id) {
 		var icon = document.createElement("span"); // Node which will hold the FA icon
 		var div = document.createElement("div");
 		
 		icon.id = id;
-		icon.className = "shape fa fa-5x " + getShape(this.buttons[id].shape);
+		icon.className = "shape fa fa-5x " + getShape(shape);
 		icon.addEventListener("click", function() {
-			this.fsm.stmOnEvent(id);
+			fsm.stmOnEvent(id);
 		 });
 		icon.addEventListener("contextmenu", function(e) {
 			e.preventDefault();
-			//changeShape(btn, (btn.shape+1)%3+1);
+			changingShape_callback(btn, (btn.shape+1)%3+1);
 		});
 		
 		div.className = "command";
 		div.append(icon);
 		
 		return div;
-	},
-	
-	addObsel: function (btn, type, valence) {
-		newObsel = new Obsel(btn, type, valence, this.buttons[btn].shape, this.types[type]);
-		this.trace.push(newObsel);
-		this.updateScore(newObsel);
-		this.traceContainer.append(newObsel.DOMelem);
-	},
-	
-	updateObsels: function () {
-		
-	},
-	
-	updateScore: function () {
-		
-	},
-	
-	saveGame: function () {
-		var userSave;
-		userSave.levelid = this.configuration.levelid;
-		userSave.trace = this.trace;
-		userSave.score = this.score;
-		userSave.finished = this.finished;
-		userSave.types = this.types;
-		
-		return userSave;
-	},
-	
-	importSave: function () {
-		
 	}
 }
 
-function Button() {
-	this._constructor_.apply(this, args);
-}
+function Obsel(p_btn, p_type, p_valence, p_shape, p_color) {
+	var btn = p_btn;
+	var type = p_type;
+	var valence = p_valence;
+	var color = p_color;
+	
+	this.DOMelem = _createObsel(p_btn, p_type, p_valence, p_shape, p_color);
+	
+	this.changeColor = function(newColor) {
+		// If the new color is the same than the old, do nothing
+		if(color == newColor) { return;	}
 
-Button.prototype = {
-	id: "",
-	DOMelem: "",
-	
-	_constructor_: function () {
-		
-	},
-	
-	_createButton: function () {
-		
-	},
-	
-	activate: function () {
-		
+		// Replace the old class color with the new one
+		DOMelem.className = DOMelem.className.replace(getColor(color), getColor(newColor)); // Change its color
+		color = newColor; // Change the value of its color
 	}
-}
-
-function Obsel() {
-	this._constructor_.apply(this, args);
-}
-
-Obsel.prototype = {
-	btn: "",
-	type: "",
-	valence: "",
-	DOMelem: "",
 	
-	_constructor_: function (btn, type, valence, shape, color) {
-		this.DOMelem = this._createObsel(btn, type, valence, shape, color);
-		this.btn = btn;
-		this.type = type;
-		this.valence = valence;
-	},
+	this.changeShape = function(newShape) {
+		// If the new shape is the same than the old, then do nothing
+		if(shape == newShape) { return; }
+
+		DOMelem.className = DOMelem.className.replace(getShape(shape), getShape(newShape)); // Change its visual shape
+		shape = newShape; // Change the value of its shape
+	}
 	
-	_createObsel: function (btn, type, valence, shape, color) {
+	this.getCode = function() {
+		// Return the "code" of the obsel (the code is a concatenation of 'btn' and 'type')
+		return btn + "_" + type;
+	}
+	
+	this.getBtn = function() {
+		return "" + btn;
+	}
+	
+	this.getType = function() {
+		return "" + type;
+	}
+	
+	function _createObsel(btn, type, valence, shape, color) {
 		var obselContainer = document.createElement("div");
 		var iconContainer = document.createElement("span");
 		var valenceContainer = document.createElement("span");
 		
 		iconContainer.className = btn + " " + type + " obsel fa fa-2x " + getShape(shape) + " " + getColor(color);
-		valenceContainer.textContent = obsel.valence;
-		valenceContainer.className = "valence " + this.checkValence(valence); // Change the color of the text depending of the valence (positive, negative or null)
+		valenceContainer.textContent = valence;
+		valenceContainer.className = "valence " + checkValence(valence); // Change the color of the text depending of the valence (positive, negative or null)
 		obselContainer.className = "interactionResult";
 		obselContainer.append(iconContainer);
 		obselContainer.append(valenceContainer);
 		
 		return obselContainer;
-	},
+	}
 	
-	checkValence: function (valence) {
+	function checkValence(valence) {
 		var color = "";
 
-		if(valence < 0) {
-			color = "red";
-		} else if (valence > 0) {
-			color = "green";
-		} else {
-			color = "white";
-		}
+		if(valence < 0) { color = "red"; }
+		else if (valence > 0) {	color = "green"; }
+		else { color = "white";	}
 
 		return color;
 	}
