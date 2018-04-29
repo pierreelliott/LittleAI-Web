@@ -5,39 +5,93 @@
  * @returns {void}       Nothing
  */
 function createButton(buttonInfo, fsm) {
-	var icon = document.createElement("span"); // Node which will hold the FA icon
-	var div = document.createElement("div");
-	var func = buttonInfo.id;
-
-	/**
-	 * @name {button} button
-	 * @description JS object containing informations about a button like : its DOM element, its shape
-	 */
-	var btn = {id: buttonInfo.id, element: icon, shape: buttonInfo.shape}; // To see all shapes, shape is initialized with btnId (just for tests)
-	// A button is an element in the DOM + a shape
-
-	commands.set(btn.id, btn);
-
-	btn.element.id = btn.id;
-	btn.element.className = "shape fa fa-5x " + getShape(btn.shape);
-
-	// On click, print its shape in the trace
-	btn.element.addEventListener("click", function() {
+	var btn = createButtonModel(buttonInfo.id, buttonInfo.shape);
+	var onClickCallback = function() {
 		fsm.stmOnEvent(btn.id);
-	 });
-	// On right click, change the shape of the button
-	btn.element.addEventListener("contextmenu", function(e) {
+	};
+	var onContextMenuCallback = function() {
 		e.preventDefault();
 		changeShape(btn, (btn.shape+1)%3+1);
-	});
+	};
+	var btnView = createButtonView(btn, onClickCallback, onContextMenuCallback);
+
+	commands.set(btn.id, btn);
 
 	// Initialize the obsel's Map
 	obsels.set(btn.id, new Map() );
 
-	div.className = "command";
+	document.getElementById("commands").append(btnView); // Add the button element in the DOM
+}
 
-	div.append(btn.element);
-	document.getElementById("commands").append(div); // Add the button element in the DOM
+/**
+ * createButtonView - Create the visual of a button
+ *
+ * @param  {type} buttonModel           description
+ * @param  {type} onClickCallback       description
+ * @param  {type} onContextMenuCallback description
+ * @return {type}                       description
+ */
+function createButtonView(buttonModel, onClickCallback, onContextMenuCallback) {
+	var icon = document.createElement("span"); // Node which will hold the FA icon
+	var div = document.createElement("div");
+
+	icon.id = buttonModel.id;
+	icon.className = "shape fa fa-5x " + getShape(buttonModel.shape);
+
+	icon.addEventListener("click", onClickCallback);
+	icon.addEventListener("contextmenu", onContextMenuCallback);
+
+	buttonModel.element = icon;
+	div.className = "command";
+	div.append(icon);
+
+	return div;
+}
+
+/**
+ * createButtonModel - Create a JS object containing all information about a button
+ *
+ * @param  {type} buttonId    ID of the button
+ * @param  {type} buttonShape Shape of the button
+ * @return {type}
+ */
+function createButtonModel(buttonId, buttonShape) {
+	var btn = {id: buttonId, element: "", shape: buttonShape};
+	return btn;
+}
+
+function createObselModel(obShape, obColor, obGroup, obState, obValence) {
+	var obsel = {
+		element: "",
+		color: obColor,
+		shape: obShape,
+		group: obGroup,
+		state: obState,
+		valence: obValence
+	};
+	return obsel;
+}
+
+function createObselView(obModel, onContextMenuCallback, onClickCallback) {
+	var obselContainer = document.createElement("div");
+	var icon = document.createElement("span");
+	var valence = document.createElement("span");
+
+	// Put a class with the button's id to track its shapes in the trace
+	icon.className = obModel.group + " " + obModel.state + " obsel fa fa-2x "
+		+ getShape(obModel.shape) + " " + getColor(obModel.color);
+	icon.addEventListener("contextmenu", onContextMenuCallback);
+	obModel.element = icon;
+
+	valence.textContent = obModel.valence;
+	valence.className = "valence " + checkValence(obsel.valence);
+
+	// Add the obsel and the valence to their container in the trace
+	obselContainer.className = "interactionResult";
+	obselContainer.append(obsel.element);
+	obselContainer.append(valence);
+
+	return obselContainer;
 }
 
 /**
@@ -49,31 +103,20 @@ function createButton(buttonInfo, fsm) {
 function addObsel(reaction) {
 	var traceContainer = document.getElementById("traceContainer");
 
-	// Create the element which will host the icon
-	var obselContainer = document.createElement("div");
-	var icon = document.createElement("span");
-	var valence = document.createElement("span");
-	var color = getSameObselsColor(reaction.group, reaction.state),
-		shape = commands.get(reaction.group).shape;
+	var color = getSameObselsColor(reaction.group, reaction.state);
+	var shape = commands.get(reaction.group).shape;
 
 	if(color == undefined) {
 		color = reaction.color;
 		obsels.get(reaction.group).set(reaction.state, []);
 	}
 
-	// Put a class with the button's id to track its shapes in the trace
-	icon.className = reaction.group + " " + reaction.state + " obsel fa fa-2x " + getShape(shape) + " " + getColor(color);
-
-	/**
-	 * @name {obsel} obsel
-	 * @description JS object containing informations about an obsel like : its DOM element, its color, its group (ie, which button created it), its valence
-	 */
-	var obsel = {element: icon, color: color, shape: shape, group: reaction.group, state: reaction.state, valence: reaction.valence};
-	valence.textContent = obsel.valence;
-	valence.className = "valence " + checkValence(obsel.valence); // Change the color of the text depending of the valence (positive, negative or null)
-
-	// On right click, change the color of the obsel (+ all obsels in the same group)
-	obsel.element.addEventListener("contextmenu", function(e) { e.preventDefault(); changeColor(obsel, (obsel.color+1)%5+1); });
+	var obsel = createObselModel(shape, color, reaction.group, reaction.state, reaction.valence);
+	var onContextMenuCallback = function() {
+		e.preventDefault();
+		changeColor(obsel, (obsel.color+1)%5+1);
+	};
+	var obselView = createObselView(obsel, onContextMenuCallback, null);
 
 	// Add the obsel to its group (i.e, obsels which come from the same button and the same interaction)
 	obsels.get(obsel.group).get(obsel.state).push(obsel);
@@ -82,12 +125,7 @@ function addObsel(reaction) {
 	// Update the score of the player, with the new obsel added
 	updateScore(obsel);
 
-	// Add the obsel and the valence to their container in the trace
-	obselContainer.className = "interactionResult";
-	obselContainer.append(obsel.element);
-	obselContainer.append(valence);
-
-	traceContainer.append(obselContainer); // Add the obsel's container to the trace
+	traceContainer.append(obselView); // Add the obsel's container to the trace
 	traceContainer.scrollTop = traceContainer.scrollHeight; // To scroll down the trace
 }
 
@@ -100,10 +138,10 @@ function addObsel(reaction) {
 function getSameObselsColor(id, state) {
 	var groupObsels = obsels.get(id), sameObsels, firstObsel;
 
-	if(typeof groupObsels !== 'undefined') {
+	if(typeof groupObsels !== undefined) {
 		sameObsels = groupObsels.get(state);
 
-		if(typeof sameObsels !== 'undefined' && sameObsels.length > 0) {
+		if(typeof sameObsels !== undefined && sameObsels.length > 0) {
 			firstObsel = sameObsels[0];
 			return firstObsel.color;
 		} else {
