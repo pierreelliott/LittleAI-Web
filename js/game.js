@@ -1,3 +1,48 @@
+var trace, score;
+
+function Trace(DOMElem) {
+	var dom = DOMElem;
+	var array = [];
+	var obselsMap = new Map();
+
+	Object.defineProperties( this, { "dom": {
+      get() { return dom; }
+    }});
+
+	this.reset = function() {
+		dom.textContent = "";
+		obselsMap.clear();
+	}
+
+	this.add = function(obsel) {
+		dom.append(obsel.view);
+		dom.scrollTop = dom.scrollHeight; // To scroll down the trace
+
+		array.push(obsel);
+		obselsMap.get(obsel.group).map.get(obsel.state).array.push(obsel);
+	}
+
+	this.defineMap = function(file) {
+		for(btn in file) {
+			obselsMap.set(btn, {shape : "", map: new Map()});
+			for(state in file[btn]) {
+				var map = obselsMap.get(btn).map;
+				map.set(state, {color: "", array: []});
+			}
+		}
+	}
+
+	this.setShape = function(button, newShape) {
+		obselsMap.get(button.id).shape = newShape;
+		// TODO Update every obsel
+	}
+
+	this.setColor = function(obsel, newColor) {
+		obselsMap.get(obsel.group).map.get(obsel.state).color = newColor;
+		// TODO Update every obsel
+	}
+}
+
 /**
  * createButton - Creates the buttons (the DOM element and the object)
  *
@@ -5,7 +50,7 @@
  * @returns {void}       Nothing
  */
 function createButton(buttonInfo, fsm) {
-	var btn = createButtonModel(buttonInfo.id, buttonInfo.shape);
+	var btn = new Button(buttonInfo.id, buttonInfo.shape);
 	var onClickCallback = function() {
 		fsm.stmOnEvent(btn.id);
 	};
@@ -13,85 +58,126 @@ function createButton(buttonInfo, fsm) {
 		e.preventDefault();
 		changeShape(btn, (btn.shape+1)%3+1);
 	};
-	var btnView = createButtonView(btn, onClickCallback, onContextMenuCallback);
+	btn.createView(onContextMenuCallback, onClickCallback);
 
 	commands.set(btn.id, btn);
 
 	// Initialize the obsel's Map
 	obsels.set(btn.id, new Map() );
 
-	document.getElementById("commands").append(btnView); // Add the button element in the DOM
+	document.getElementById("commands").append(btn.view); // Add the button element in the DOM
 }
 
-/**
- * createButtonView - Create the visual of a button
- *
- * @param  {type} buttonModel           description
- * @param  {type} onClickCallback       description
- * @param  {type} onContextMenuCallback description
- * @return {type}                       description
- */
-function createButtonView(buttonModel, onClickCallback, onContextMenuCallback) {
-	var icon = document.createElement("span"); // Node which will hold the FA icon
-	var div = document.createElement("div");
+function Button(buttonID, buttonShape) {
+	var id = buttonID, shape = buttonShape;
+	var view = "!";
 
-	icon.id = buttonModel.id;
-	icon.className = "shape fa fa-5x " + getShape(buttonModel.shape);
+	Object.defineProperties( this, { "id": {
+      get() { return id; }, set(newValue) { id = newValue; }
+    }});
+	Object.defineProperties( this, { "shape": {
+      get() { return shape; }, set(newValue) { shape = newValue; }
+    }});
+	Object.defineProperties( this, { "element": {
+      get() { return element; }, set(newValue) { element = newValue; }
+    }});
+	Object.defineProperties( this, { "view": {
+      get() { return view; }, set(newValue) { view = newValue; }
+    }});
 
-	icon.addEventListener("click", onClickCallback);
-	icon.addEventListener("contextmenu", onContextMenuCallback);
+	var self = this;
 
-	buttonModel.element = icon;
-	div.className = "command";
-	div.append(icon);
+	this.createView = function(onContextMenuCallback, onClickCallback) {
+		self.element = document.createElement("span"); // Node which will hold the FA icon
+		self.view = document.createElement("div");
 
-	return div;
+		self.element.id = self.id;
+		self.element.className = "shape fa fa-5x " + getShape(self.shape);
+
+		self.element.addEventListener("click", onClickCallback);
+		self.element.addEventListener("contextmenu", onContextMenuCallback);
+
+		self.view.className = "command";
+		self.view.append(self.element);
+	}
+
+	this.changeShape = function(newShape) {
+		// TODO
+	}
 }
 
-/**
- * createButtonModel - Create a JS object containing all information about a button
- *
- * @param  {type} buttonId    ID of the button
- * @param  {type} buttonShape Shape of the button
- * @return {type}
- */
-function createButtonModel(buttonId, buttonShape) {
-	var btn = {id: buttonId, element: "", shape: buttonShape};
-	return btn;
+function isHTMLElement(element) {
+	return (HTMLElement && element instanceof HTMLElement);
 }
 
-function createObselModel(obShape, obColor, obGroup, obState, obValence) {
-	var obsel = {
-		element: "",
-		color: obColor,
-		shape: obShape,
-		group: obGroup,
-		state: obState,
-		valence: obValence
+function Obsel(obShape, obColor, obGroup, obState, obValence) {
+	var shape = obShape, color = obColor, group = obGroup,
+	state = obState, valence = obValence, element = "";
+	var view = "";
+	var isInTrace = false;
+
+	Object.defineProperties( this, { "shape": {
+      get() { return shape; }, set(newValue) { shape = newValue; }
+    }});
+	Object.defineProperties( this, { "color": {
+      get() { return color; }, set(newValue) { color = newValue; }
+    }});
+	Object.defineProperties( this, { "group": {
+      get() { return group; }, set(newValue) { group = newValue; }
+    }});
+	Object.defineProperties( this, { "state": {
+      get() { return state; }, set(newValue) { state = newValue; }
+    }});
+	Object.defineProperties( this, { "valence": {
+      get() { return valence; }, set(newValue) { valence = newValue; }
+    }});
+	Object.defineProperties( this, { "element": {
+      get() { return element; }, set(newValue) { element = newValue; }
+    }});
+	Object.defineProperties( this, { "view": {
+      get() { return view; }, set(newValue) { view = newValue; }
+    }});
+	Object.defineProperties( this, { "isInTrace": {
+      get() { return isInTrace; }, set(newValue) { isInTrace = newValue; }
+    }});
+
+	var self = this;
+
+	// FIXME
+	// (not used)
+	this.getView = function(onContextMenuCallback, onClickCallback) {
+		if( isHTMLElement(element) ) {
+			return element;
+		} else {
+			self.createView(onContextMenuCallback, onClickCallback);
+			return self.view;
+		}
 	};
-	return obsel;
-}
 
-function createObselView(obModel, onContextMenuCallback, onClickCallback) {
-	var obselContainer = document.createElement("div");
-	var icon = document.createElement("span");
-	var valence = document.createElement("span");
+	// FIXME Put this method in conformity with the new way it is handled
+		// (ie, by the Trace object)
+	this.changeColor = function(newColor) {
+		changeColor(self, newColor);
+	}
 
-	// Put a class with the button's id to track its shapes in the trace
-	icon.className = obModel.group + " " + obModel.state + " obsel fa fa-2x "
-		+ getShape(obModel.shape) + " " + getColor(obModel.color);
-	icon.addEventListener("contextmenu", onContextMenuCallback);
-	obModel.element = icon;
+	this.createView = function(onContextMenuCallback, onClickCallback) {
+		self.view = document.createElement("div");
+		self.element = document.createElement("span");
+		var valence = document.createElement("span");
 
-	valence.textContent = obModel.valence;
-	valence.className = "valence " + checkValence(obsel.valence);
+		// Put a class with the button's id to track its shapes in the trace
+		self.element.className = self.group + " " + self.state + " obsel fa fa-2x "
+			+ getShape(self.shape) + " " + getColor(self.color);
+		self.element.addEventListener("contextmenu", onContextMenuCallback);
 
-	// Add the obsel and the valence to their container in the trace
-	obselContainer.className = "interactionResult";
-	obselContainer.append(obsel.element);
-	obselContainer.append(valence);
+		valence.textContent = self.valence;
+		valence.className = "valence " + checkValence(self.valence);
 
-	return obselContainer;
+		// Add the obsel and the valence to their container in the trace
+		self.view.className = "interactionResult";
+		self.view.append(self.element);
+		self.view.append(valence);
+	}
 }
 
 /**
@@ -101,7 +187,9 @@ function createObselView(obModel, onContextMenuCallback, onClickCallback) {
  * @returns {void}     Nothing
  */
 function addObsel(reaction) {
-	var traceContainer = document.getElementById("traceContainer");
+	if(trace === undefined || trace === null) {
+		trace = new Trace(document.getElementById("traceContainer"));
+	}
 
 	var color = getSameObselsColor(reaction.group, reaction.state);
 	var shape = commands.get(reaction.group).shape;
@@ -111,12 +199,12 @@ function addObsel(reaction) {
 		obsels.get(reaction.group).set(reaction.state, []);
 	}
 
-	var obsel = createObselModel(shape, color, reaction.group, reaction.state, reaction.valence);
+	var obsel = new Obsel(shape, color, reaction.group, reaction.state, reaction.valence);
 	var onContextMenuCallback = function() {
 		e.preventDefault();
-		changeColor(obsel, (obsel.color+1)%5+1);
+		obsel.changeColor((obsel.color+1)%5+1);
 	};
-	var obselView = createObselView(obsel, onContextMenuCallback, null);
+	obsel.createView(onContextMenuCallback, null);
 
 	// Add the obsel to its group (i.e, obsels which come from the same button and the same interaction)
 	obsels.get(obsel.group).get(obsel.state).push(obsel);
@@ -125,8 +213,7 @@ function addObsel(reaction) {
 	// Update the score of the player, with the new obsel added
 	updateScore(obsel);
 
-	traceContainer.append(obselView); // Add the obsel's container to the trace
-	traceContainer.scrollTop = traceContainer.scrollHeight; // To scroll down the trace
+	trace.add(obsel); // Add the obsel's container to the trace
 }
 
 /**
@@ -138,7 +225,7 @@ function addObsel(reaction) {
 function getSameObselsColor(id, state) {
 	var groupObsels = obsels.get(id), sameObsels, firstObsel;
 
-	if(typeof groupObsels !== undefined) {
+	if(typeof groupObsels !== undefined && groupObsels.size !== 0) {
 		sameObsels = groupObsels.get(state);
 
 		if(typeof sameObsels !== undefined && sameObsels.length > 0) {

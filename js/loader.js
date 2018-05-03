@@ -4,6 +4,10 @@ window.addEventListener("load", function () {
 });
 
 function initializeGame() {
+	if(trace === undefined || trace === null) {
+		trace = new Trace(trace = document.getElementById("traceContainer"));
+	}
+
 	var location = window.location.hash.split("#")[1];
 	try {
 		var levelLink = document.getElementById(location);
@@ -30,23 +34,25 @@ window.onhashchange = function() {
  * setLanguage - Define the language of the game
  * 					If the language isn't known, english language will be loaded
  *
- * @param  {type} lang The string code of the language to set (like "fr", "en", ...)
+ * @param  {type} lang_code The string code of the language to set (like "fr", "en", ...)
  * @returns {void}      Nothing
  */
-function setLanguage(lang) {
-	if(!/(fr|en)/.test(lang)) {
-		lang = "en";
-	} else {
-		if(/(en)/.test(lang)) {
-			lang = "en";
-		}
-		if(/(fr)/.test(lang)) {
-			lang = "fr";
-		}
+function setLanguage(lang_code) {
+	lang = "en";
+	if(/(fr)/.test(lang_code)) {
+		lang = "fr";
 	}
 	console.log("Language: " + lang);
 	ajax("i18n/"+lang+".json", function (d) {
-		translate = i18n.create(d);
+		var translateFunction = i18n.create(d);
+		translate = function(text, element) {
+			if(element === undefined || element === null) {
+				return translateFunction(text);
+			} else {
+				element.setAttribute("translate", text);
+				element.textContent = translateFunction(text);
+			}
+		};
 		ajax("levels/levels.json", function(data) {
 			initializeMenu(data);
 			initializeGame();
@@ -67,6 +73,8 @@ function loadLevel(level) {
 
 	resetPlayground();
 
+	trace.defineMap(level.states);
+
 	levelsButtons = level.buttons;
 	levelsFsm = level.stateMachine;
 
@@ -81,13 +89,15 @@ function loadLevel(level) {
 		createButton(button, fsm);
 	}
 
-	menuLink.textContent = translate(level.id);
+	translate(level.id, menuLink);
+	// menuLink.textContent = translate(level.id);
+	// menuLink.setAttribute("translate", level.id);
 	currentLevel.finished = false;
 	currentLevel.levelid = level.id;
 
 	window.location.hash = level.id;
 
-	openReplayMode();
+	//openReplayMode();
 }
 
 /**
@@ -96,21 +106,15 @@ function loadLevel(level) {
  * @returns {type}  description
  */
 function resetPlayground() {
-	var scoreContainer = document.getElementById("score"),
-		trace = document.getElementById("traceContainer"),
-		commandsContainer = document.getElementById("commands"),
-		commandtip = document.getElementById("commandtip");
+	resetScore();
 
-	scoreContainer.textContent = "0";
-	scoreContainer.classList.toggle("finished", false);
-	scoreContainer.classList.toggle("alreadyFinished", false);
-	// Empty the queue of the score to reset the score's count
-	score.length = 0;
+	var commandsContainer = document.getElementById("commands"),
+		commandtip = document.getElementById("commandtip");
 
 	commands.clear();
 	obsels.clear();
 
-	trace.textContent = "";
+	trace.reset();
 
 	commandsContainer.textContent = "";
 	commandsContainer.append(commandtip);
@@ -123,6 +127,18 @@ function resetPlayground() {
 	replayModeCreated = false;
 	document.getElementById("replayModeContent").innerHTML = "";
 	closeInfoPanel();
+}
+
+function resetScore() {
+	resetScoreView();
+	// Empty the queue of the score to reset the score's count
+	score.length = 0;
+}
+function resetScoreView() {
+	var scoreContainer = document.getElementById("score");
+	scoreContainer.textContent = "0";
+	scoreContainer.classList.toggle("finished", false);
+	scoreContainer.classList.toggle("alreadyFinished", false);
 }
 
 /**
