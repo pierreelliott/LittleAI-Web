@@ -1,13 +1,9 @@
-window.addEventListener("load", function () {
+window.addEventListener("load", () => {
 	var userLang = navigator.language || navigator.userLanguage;
 	setLanguage(userLang);
 });
 
 function initializeGame() {
-	if(trace === undefined || trace === null) {
-		trace = new Trace(trace = document.getElementById("traceContainer"));
-	}
-
 	var location = window.location.hash.split("#")[1];
 	try {
 		var levelLink = document.getElementById(location);
@@ -18,17 +14,18 @@ function initializeGame() {
 	}
 }
 
-window.onhashchange = function() {
+window.addEventListener("onhashchange", () => {
 	var location = window.location.hash.split("#")[1];
 	//console.log(window.location.hash.split("#"));
 	if (location !== currentLevel.levelid) {
 		if(location !== "" && document.getElementById(location) !== undefined) {
+			// FIXME Doesn't work
 			(document.getElementById(location).onclick)();
 		} else {
 			ajax("levels/group1/level_0.json", loadLevel);
 		}
 	}
-};
+});
 
 /**
  * setLanguage - Define the language of the game
@@ -53,6 +50,7 @@ function setLanguage(lang_code) {
 				element.textContent = translateFunction(text);
 			}
 		};
+		
 		ajax("levels/levels.json", function(data) {
 			initializeMenu(data);
 			initializeGame();

@@ -1,4 +1,4 @@
-var trace, score;
+const trace = Object.freeze(new Trace(document.getElementById("traceContainer")));
 
 function Trace(DOMElem) {
 	var dom = DOMElem;
@@ -12,6 +12,7 @@ function Trace(DOMElem) {
 	this.reset = function() {
 		dom.textContent = "";
 		obselsMap.clear();
+		array.length = 0;
 	}
 
 	this.add = function(obsel) {
@@ -22,6 +23,7 @@ function Trace(DOMElem) {
 		obselsMap.get(obsel.group).map.get(obsel.state).array.push(obsel);
 	}
 
+	// Correctly generate the map containing all obsels
 	this.defineMap = function(file) {
 		for(btn in file) {
 			obselsMap.set(btn, {shape : "", map: new Map()});
@@ -41,6 +43,14 @@ function Trace(DOMElem) {
 		obselsMap.get(obsel.group).map.get(obsel.state).color = newColor;
 		// TODO Update every obsel
 	}
+
+	this.getColorOf = function(group, state) {
+		return obselsMap.get(group).map.get(state).color;
+	}
+
+	this.getShapeOf = function(group) {
+		return obselsMap.get(group).shape;
+	}
 }
 
 /**
@@ -54,7 +64,7 @@ function createButton(buttonInfo, fsm) {
 	var onClickCallback = function() {
 		fsm.stmOnEvent(btn.id);
 	};
-	var onContextMenuCallback = function() {
+	var onContextMenuCallback = function(e) {
 		e.preventDefault();
 		changeShape(btn, (btn.shape+1)%3+1);
 	};
@@ -187,10 +197,6 @@ function Obsel(obShape, obColor, obGroup, obState, obValence) {
  * @returns {void}     Nothing
  */
 function addObsel(reaction) {
-	if(trace === undefined || trace === null) {
-		trace = new Trace(document.getElementById("traceContainer"));
-	}
-
 	var color = getSameObselsColor(reaction.group, reaction.state);
 	var shape = commands.get(reaction.group).shape;
 
@@ -200,20 +206,26 @@ function addObsel(reaction) {
 	}
 
 	var obsel = new Obsel(shape, color, reaction.group, reaction.state, reaction.valence);
-	var onContextMenuCallback = function() {
+	var onContextMenuCallback = function(e) {
 		e.preventDefault();
+		console.log(obsel.color);
+		console.log(nextColor(obsel.color));
 		obsel.changeColor((obsel.color+1)%5+1);
 	};
 	obsel.createView(onContextMenuCallback, null);
 
 	// Add the obsel to its group (i.e, obsels which come from the same button and the same interaction)
-	obsels.get(obsel.group).get(obsel.state).push(obsel);
+	// obsels.get(obsel.group).get(obsel.state).push(obsel);
 	currentLevel.trace.push(obsel);
 
 	// Update the score of the player, with the new obsel added
 	updateScore(obsel);
 
 	trace.add(obsel); // Add the obsel's container to the trace
+}
+
+function nextColor(color) {
+	return (color+1)%5 + 1;
 }
 
 /**
@@ -223,20 +235,22 @@ function addObsel(reaction) {
  * @returns {type}    The number of the color of same group obsels or WHITE otherwise
  */
 function getSameObselsColor(id, state) {
-	var groupObsels = obsels.get(id), sameObsels, firstObsel;
+	return trace.getColorOf(id, state);
 
-	if(typeof groupObsels !== undefined && groupObsels.size !== 0) {
-		sameObsels = groupObsels.get(state);
-
-		if(typeof sameObsels !== undefined && sameObsels.length > 0) {
-			firstObsel = sameObsels[0];
-			return firstObsel.color;
-		} else {
-			return undefined;
-		}
-	} else {
-		return undefined;
-	}
+	// var groupObsels = obsels.get(id), sameObsels, firstObsel;
+	//
+	// if(typeof groupObsels !== undefined && groupObsels.size !== 0) {
+	// 	sameObsels = groupObsels.get(state);
+	//
+	// 	if(typeof sameObsels !== undefined && sameObsels.length > 0) {
+	// 		firstObsel = sameObsels[0];
+	// 		return firstObsel.color;
+	// 	} else {
+	// 		return undefined;
+	// 	}
+	// } else {
+	// 	return undefined;
+	// }
 }
 
 /**
@@ -254,7 +268,10 @@ function changeColor(obsel, newColor) {
 	// Replace the old class color with the new one
 	obsel.element.className = obsel.element.className.replace(getColor(obsel.color), getColor(newColor)); // Change its color
 	updateObselsColor(obsel, newColor); // Update all obsels in the same group
+	console.log("Changing color");
+	console.log(obsel.color);
 	obsel.color = newColor; // Change the value of its color
+	console.log(obsel.color);
 }
 
 /**
