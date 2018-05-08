@@ -3,7 +3,7 @@
  * @name Utility
  * @author Pierre-Elliott Thiboud <pierreelliott.thiboud@gmail.com>
  */
- 
+
 /**
  * getShape - Return the shape associated with the specified number
  *
@@ -79,6 +79,14 @@ function checkValence(valence) {
 	}
 
 	return color;
+}
+
+function nextColor(color) {
+	return (color)%5 + 1;
+}
+
+function nextShape(shape) {
+	return (shape)%3 + 1 ;
 }
 
 function hashCode(text) {
