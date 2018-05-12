@@ -396,3 +396,137 @@ function updateScore(newObsel) {
 function winLevel() {
 	currentLevel.finished = true;
 }
+
+function Ressources() {
+	var stock;
+	if(typeof(Storage) !== "undefined") {
+		stock = window.localStorage;
+		stock.get = stock.getItem;
+		stock.set = stock.setItem;
+	} else {
+		stock = new Map();
+	}
+
+	var self = this;
+
+	this.contains = function(param) {
+		if(Array.isArray(param)) {
+			var response = [];
+			for(var valName in param) {
+				if(!stock.get(valName)) {
+					response.push(false);
+				} else {
+					response.push(true);
+				}
+			}
+			return reponse;
+		} else {
+			if(!stock.get(param)) {
+				return false;
+			} else {
+				return true;
+			}
+		}
+	}
+
+	this.set = function(valueName, value, doNotErase) {
+		if(doNotErase && !!stock.get(valueName)) {
+			console.warn("Value for '" + valueName + "' already exists");
+			return false;
+		} else {
+			stock.set(valueName, value);
+			return true;
+		}
+	};
+
+	this.get = function() {
+		return stock.get(valueName);
+	}
+
+	this.get2 = function(valueName) {
+		return new Promise((resolve, reject) => {
+			var value = stock.get(valueName);
+			if(value !== undefined) {
+				resolve(value);
+			} else {
+				reject(valueName);
+			}
+		});
+	}
+
+	this.load = function(valueName, urlValue, doNotStore) {
+		var value = self.get(valueName);
+		if(value !== undefined) {
+			return value;
+		}
+
+		return ajax({method: "POST", url: urlValue})
+			.then((data) => {
+				console.log("Data loaded");
+				var value = tryParseJSON(data);
+				if(doNotStore) {
+					return value;
+				}
+
+				self.set(valueName, value);
+				return value;
+			}, (error) => {
+				console.warn("Problem when loading " + valueName);
+				console.warn(error);
+				return undefined;
+			});
+	}
+
+	function tryParseJSON (jsonString){
+    try {
+      var o = JSON.parse(jsonString);
+      if (o && typeof o === "object") {
+          return o;
+      }
+    } catch (e) { }
+
+    return jsonString;
+	};
+
+	function ajax (options) {
+		// Thanks to SomeKittens on Stackoverflow
+	  return new Promise(function (resolve, reject) {
+	    var xhr = new XMLHttpRequest();
+	    xhr.open(options.method, options.url);
+	    xhr.onload = function () {
+	      if (this.status >= 200 && this.status < 300) {
+	        resolve(xhr.response);
+	      } else {
+	        reject({
+	          status: this.status,
+	          statusText: xhr.statusText
+	        });
+	      }
+	    };
+	    xhr.onerror = function () {
+	      reject({
+	        status: this.status,
+	        statusText: xhr.statusText
+	      });
+	    };
+	    if (options.headers) {
+	      Object.keys(options.headers).forEach(function (key) {
+	        xhr.setRequestHeader(key, options.headers[key]);
+	      });
+	    }
+	    var params = options.params;
+	    // We'll need to stringify if we've been given an object
+	    // If we have a string, this is skipped.
+	    if (params && typeof params === 'object') {
+	      params = Object.keys(params).map(function (key) {
+	        return encodeURIComponent(key) + '=' + encodeURIComponent(params[key]);
+	      }).join('&');
+	    }
+	    xhr.send(params);
+	  });
+	}
+}
+
+function loadRessources() {
+
+}
