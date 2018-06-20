@@ -17,6 +17,18 @@ exports.Trace = function(DOMElem) {
 
 })));
 
+function Level(levelFile) {
+	var trace = new Trace();
+
+	trace.defineMap(level.states);
+}
+
+function TraceView() {
+	Texture.call( this ); // Puis rajouter paramètres de 'Trace'
+}
+
+TraceView.prototype = Object.create( Trace.prototype );
+TraceView.prototype.constructor = TraceView;
 
 const trace = Object.freeze(new Trace(document.getElementById("traceContainer")));
 
@@ -25,6 +37,7 @@ function Trace(DOMElem) {
 	var array = [];
 	var obselsMap = new Map();
 	var manageView = true;
+	var scope = this;
 
 	Object.defineProperties( this, {
 		"dom": {
@@ -41,6 +54,26 @@ function Trace(DOMElem) {
 		}
 		obselsMap.clear();
 		array.length = 0;
+	}
+
+	this.addObsel = function(group, type, valence, defaultColor) {
+		var color = scope.getColorOf(group, type) || defaultColor;
+		var shape = scope.getShapeOf(group);
+
+		var obsel = new Obsel(shape, color, group, type, valence);
+		var onContextMenuCallback = function(e) {
+			e.preventDefault();
+			changeColor(obsel, nextColor(obsel.color));
+		};
+		obsel.createView(onContextMenuCallback, null);
+
+		// FIXME Update score doit être géré différemment
+		currentLevel.trace.push(obsel);
+
+		// Update the score of the player, with the new obsel added
+		updateScore(obsel);
+
+		scope.add(obsel); // Add the obsel's container to the trace
 	}
 
 	this.add = function(obsel) {
@@ -307,6 +340,7 @@ function changeShape(btnObject, newShape) {
 }
 
 function Score(DOMElem, options) {
+	options = options || {};
 	var dom = DOMElem;
 	var queue = [];
 	var value = options.valueByDefault || 0;
@@ -439,7 +473,7 @@ function Ressources() {
 		}
 	};
 
-	this.get = function() {
+	this.get = function(valueName) {
 		return stock.get(valueName);
 	}
 

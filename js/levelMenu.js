@@ -57,6 +57,20 @@ function openTab(evt, group) {
  * @returns {type}        Nothing
  */
 function initializeMenu(levels) {
+	levelsIndex = {
+		"levels": levels,
+		contains : function(group, level) {
+			for(var g of levels.groups) {
+				if(g.id === group) {
+					for(var l of g.levels) {
+						if(l.id === group + "_" + level) { return true; }
+					}
+					return false;
+				}
+			}
+			return false;
+		}
+	};
 	var index = document.getElementById("menuTabIndex"),
 		container = document.getElementById("menuTab");
 

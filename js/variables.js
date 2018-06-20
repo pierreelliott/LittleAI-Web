@@ -23,3 +23,8 @@ var currentLevel = {
 };
 
 var userSave;
+
+// Used to store information about all levels in application
+var levelsIndex;
+
+var elementsToTranslate = [];

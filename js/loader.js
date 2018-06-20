@@ -5,25 +5,36 @@ window.addEventListener("load", () => {
 
 function initializeGame() {
 	var location = window.location.hash.split("#")[1];
-	try {
-		var levelLink = document.getElementById(location);
-		levelLink.click();
-	} catch (e) {
-		console.log("Error: URL not recognized.");
+	if(verifyHash(location)) {
+		// FIXME J'aime pas cette manière de charger le niveau
+		document.getElementById(location).click();
+	} else {
 		ajax("levels/group1/level_0.json", loadLevel);
 	}
 }
 
-window.addEventListener("onhashchange", () => {
-	var location = window.location.hash.split("#")[1];
-	//console.log(window.location.hash.split("#"));
-	if (location !== currentLevel.levelid) {
-		if(location !== "" && document.getElementById(location) !== undefined) {
-			// FIXME Doesn't work
-			(document.getElementById(location).onclick)();
+function verifyHash(location) {
+	if(location) {
+		var loc = location.split("_");
+		if(levelsIndex.contains(loc[0], loc[1])) {
+			console.log("Niveau trouvé !");
+			return true;
 		} else {
-			ajax("levels/group1/level_0.json", loadLevel);
+			console.log("Niveau inconnu");
+			return false;
 		}
+	} else {
+		return false;
+	}
+}
+
+window.addEventListener("hashchange", () => {
+	console.log("Location hash changed !");
+	var location = window.location.hash.split("#")[1];
+	if(verifyHash(location)) {
+		document.getElementById(location).click();
+	} else {
+		ajax("levels/group1/level_0.json", loadLevel);
 	}
 });
 
@@ -48,9 +59,10 @@ function setLanguage(lang_code) {
 			} else {
 				element.setAttribute("translate", text);
 				element.textContent = translateFunction(text);
+				elementsToTranslate.push(element);
 			}
 		};
-		
+
 		ajax("levels/levels.json", function(data) {
 			initializeMenu(data);
 			initializeGame();
@@ -77,9 +89,9 @@ function loadLevel(level) {
 	levelsFsm = level.stateMachine;
 
 	StateMachine.prototype.createObsel = function(arg){
-		arg.state = level.states[arg.group][this.stmGetStatus()];
-	  	addObsel(arg);
-    };
+		arg.type = level.states[arg.group][this.stmGetStatus()];
+  	trace.addObsel(arg.group, arg.type, arg.valence, arg.color);
+  };
 
 	fsm = new StateMachine(levelsFsm);
 
