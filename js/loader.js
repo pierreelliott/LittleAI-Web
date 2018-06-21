@@ -88,12 +88,8 @@ function loadLevel(level) {
 	levelsButtons = level.buttons;
 	levelsFsm = level.stateMachine;
 
-	StateMachine.prototype.createObsel = function(arg){
-		arg.type = level.states[arg.group][this.stmGetStatus()];
-  	trace.addObsel(arg.group, arg.type, arg.valence, arg.color);
-  };
-
-	fsm = new StateMachine(levelsFsm);
+	fsm = new LittleAI.StateMachine();
+	fsm.init(trace, level.states, levelsFsm);
 
 	for (var button of levelsButtons) {
 		createButton(button, fsm);

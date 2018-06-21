@@ -6,6 +6,26 @@
 				(factory( (global.LittleAI = global.LittleAI || {}) ));
 }(this, (function (exports) { 'use strict';
 
+function StateMachine() {
+	var fsm;
+	var trace;
+
+	this.onEvent = function(event) {
+		fsm.stmOnEvent(event);
+	};
+	this.stmOnEvent = this.onEvent;
+
+	this.init = function(traceVar, states, levelFsm) {
+		trace = traceVar;
+		StateMachine.prototype.createObsel = function(arg){
+			arg.type = states[arg.group][this.stmGetStatus()];
+	  	trace.addObsel(arg.group, arg.type, arg.valence, arg.color);
+	  };
+		fsm = new StateMachine(levelFsm);
+	};
+	this.stmInit = this.init;
+}
+
 var trace;
 
 exports.Trace = function(DOMElem) {
@@ -14,6 +34,8 @@ exports.Trace = function(DOMElem) {
 	}
 	return trace;
 }
+
+exports.StateMachine = StateMachine;
 
 })));
 
@@ -24,7 +46,7 @@ function Level(levelFile) {
 }
 
 function TraceView() {
-	Texture.call( this ); // Puis rajouter paramètres de 'Trace'
+	Trace.call( this ); // Puis rajouter paramètres de 'Trace'
 }
 
 TraceView.prototype = Object.create( Trace.prototype );
