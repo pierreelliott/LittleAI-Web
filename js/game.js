@@ -10,23 +10,41 @@ function StateMachine() {
 	var fsm;
 	var trace;
 
-	this.onEvent = function(event) {
-		fsm.stmOnEvent(event);
-	};
-	this.stmOnEvent = this.onEvent;
+	this.onEvent = onEvent;
+	this.stmOnEvent = onEvent;
 
-	this.init = function(traceVar, states, levelFsm) {
+	this.init = init;
+	this.stmInit = init;
+
+	function onEvent(event) {
+		fsm.stmOnEvent(event);
+	}
+
+	function init(traceVar, states, levelFsm) {
 		trace = traceVar;
 		StateMachine.prototype.createObsel = function(arg){
 			arg.type = states[arg.group][this.stmGetStatus()];
 	  	trace.addObsel(arg.group, arg.type, arg.valence, arg.color);
 	  };
 		fsm = new StateMachine(levelFsm);
-	};
-	this.stmInit = this.init;
+	}
 }
 
-var trace;
+function GameLevel(levelFile, options) {
+	var trace;
+
+	init();
+	initView();
+
+	function init() {
+		trace = new Trace();
+		trace.defineMap(level.states);
+	}
+
+	function initView() {
+
+	}
+}
 
 exports.Trace = function(DOMElem) {
 	if(trace === undefined || trace === null) {
@@ -36,17 +54,30 @@ exports.Trace = function(DOMElem) {
 }
 
 exports.StateMachine = StateMachine;
+exports.GameLevel = GameLevel;
 
 })));
 
-function Level(levelFile) {
-	var trace = new Trace();
 
-	trace.defineMap(level.states);
+
+function TraceView(traceVar, options) {
+	var trace = traceVar || new Trace();
+	var DOMElem = options.dom || createDOM();
+
+	Object.defineProperties( this, {
+		"dom": {
+      get() { return dom; },
+			set(newDOM) { DOMElem = newDOM; }
+  }});
+
+	function createDOM() {
+
+	}
 }
 
-function TraceView() {
-	Trace.call( this ); // Puis rajouter paramètres de 'Trace'
+function inherits(baseclass, superclass) {
+	baseclass.prototype = Object.create( superclass.prototype );
+	baseclass.prototype.constructor = baseclass;
 }
 
 TraceView.prototype = Object.create( Trace.prototype );
